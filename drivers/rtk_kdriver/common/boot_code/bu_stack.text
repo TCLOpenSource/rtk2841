@@ -1,0 +1,89 @@
+
+bu_stack.o:     file format elf32-bigmips
+
+
+Disassembly of section .text:
+
+80003000 <_test_pass>:
+80003000:	1000000f 	b	80003040 <bu_test_pass>
+80003004:	00000000 	nop
+80003008:	beefbeef 	cache	0xf,-16657(s7)
+8000300c:	beefbeef 	cache	0xf,-16657(s7)
+80003010:	beefbeef 	cache	0xf,-16657(s7)
+80003014:	beefbeef 	cache	0xf,-16657(s7)
+80003018:	beefbeef 	cache	0xf,-16657(s7)
+8000301c:	beefbeef 	cache	0xf,-16657(s7)
+
+80003020 <_test_fail>:
+80003020:	10000020 	b	800030a4 <bu_test_fail>
+80003024:	00000000 	nop
+80003028:	deaddead 	0xdeaddead
+8000302c:	deaddead 	0xdeaddead
+80003030:	deaddead 	0xdeaddead
+80003034:	deaddead 	0xdeaddead
+80003038:	deaddead 	0xdeaddead
+8000303c:	deaddead 	0xdeaddead
+
+80003040 <bu_test_pass>:
+80003040:	3c08a000 	lui	t0,0xa000
+80003044:	35082100 	ori	t0,t0,0x2100
+80003048:	8d090020 	lw	t1,32(t0)
+8000304c:	8d0a000c 	lw	t2,12(t0)
+80003050:	24010001 	li	at,1
+80003054:	15210003 	bne	t1,at,80003064 <bu_test_pass+0x24>
+80003058:	00000000 	nop
+8000305c:	01400008 	jr	t2
+80003060:	00000000 	nop
+80003064:	3c08a000 	lui	t0,0xa000
+80003068:	35082200 	ori	t0,t0,0x2200
+8000306c:	8d090020 	lw	t1,32(t0)
+80003070:	8d0a000c 	lw	t2,12(t0)
+80003074:	24010001 	li	at,1
+80003078:	15210003 	bne	t1,at,80003088 <bu_test_pass+0x48>
+8000307c:	00000000 	nop
+80003080:	01400008 	jr	t2
+80003084:	00000000 	nop
+80003088:	3c09b801 	lui	t1,0xb801
+8000308c:	3529a600 	ori	t1,t1,0xa600
+80003090:	3c0adead 	lui	t2,0xdead
+80003094:	ad2a0000 	sw	t2,0(t1)
+80003098:	00000000 	nop
+8000309c:	1000ffff 	b	8000309c <bu_test_pass+0x5c>
+800030a0:	00000000 	nop
+
+800030a4 <bu_test_fail>:
+800030a4:	3c0bdead 	lui	t3,0xdead
+800030a8:	356bdead 	ori	t3,t3,0xdead
+800030ac:	3c08a000 	lui	t0,0xa000
+800030b0:	35082100 	ori	t0,t0,0x2100
+800030b4:	8d090020 	lw	t1,32(t0)
+800030b8:	8d0a000c 	lw	t2,12(t0)
+800030bc:	24010001 	li	at,1
+800030c0:	15210004 	bne	t1,at,800030d4 <bu_test_fail+0x30>
+800030c4:	00000000 	nop
+800030c8:	ad0b0004 	sw	t3,4(t0)
+800030cc:	01400008 	jr	t2
+800030d0:	00000000 	nop
+800030d4:	3c08a000 	lui	t0,0xa000
+800030d8:	35082200 	ori	t0,t0,0x2200
+800030dc:	8d090020 	lw	t1,32(t0)
+800030e0:	8d0a000c 	lw	t2,12(t0)
+800030e4:	24010001 	li	at,1
+800030e8:	15210004 	bne	t1,at,800030fc <bu_test_fail+0x58>
+800030ec:	00000000 	nop
+800030f0:	ad0b0004 	sw	t3,4(t0)
+800030f4:	01400008 	jr	t2
+800030f8:	00000000 	nop
+800030fc:	ad0b0004 	sw	t3,4(t0)
+80003100:	3c09b801 	lui	t1,0xb801
+80003104:	3529a600 	ori	t1,t1,0xa600
+80003108:	3c0adead 	lui	t2,0xdead
+8000310c:	354a0001 	ori	t2,t2,0x1
+80003110:	ad2a0000 	sw	t2,0(t1)
+80003114:	00000000 	nop
+80003118:	1000ffff 	b	80003118 <bu_test_fail+0x74>
+8000311c:	00000000 	nop
+	...
+
+80003ffc <_stack>:
+80003ffc:	cafecafe                                ....

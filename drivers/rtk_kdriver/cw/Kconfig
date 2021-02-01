@@ -1,0 +1,18 @@
+menu "CW control world support"
+
+config RTK_KDRV_CW
+       bool "CW(Control World) Driver."
+       depends on RTK_KDRIVER_SUPPORT
+       select RTK_KDRIVER
+       default n
+       help
+         provide a mechanism to manage the use of cw region
+         
+config RTK_KDRV_CW_SIGNEL_CPU
+       bool "SCPU to manager Control World singlely."
+       depends on RTK_KDRV_CW
+       select RTK_KDRIVER
+       default n
+       help
+         SCPU to manager Control World singlely.
+endmenu

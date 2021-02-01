@@ -1,0 +1,57 @@
+
+bu_stack_mips.o:     file format elf32-littlemips
+
+Disassembly of section .text:
+
+ffffffff80003000 <_test_pass>:
+ffffffff80003000:	1000000f 	b	ffffffff80003040 <bu_test_pass>
+ffffffff80003004:	00000000 	nop
+ffffffff80003008:	beefbeef 	cache	0xf,-16657($s7)
+ffffffff8000300c:	beefbeef 	cache	0xf,-16657($s7)
+ffffffff80003010:	beefbeef 	cache	0xf,-16657($s7)
+ffffffff80003014:	beefbeef 	cache	0xf,-16657($s7)
+ffffffff80003018:	beefbeef 	cache	0xf,-16657($s7)
+ffffffff8000301c:	beefbeef 	cache	0xf,-16657($s7)
+
+ffffffff80003020 <_test_fail>:
+ffffffff80003020:	10000012 	b	ffffffff8000306c <bu_test_fail>
+ffffffff80003024:	00000000 	nop
+ffffffff80003028:	deaddead 	ldc3	$13,-8531($s5)
+ffffffff8000302c:	deaddead 	ldc3	$13,-8531($s5)
+ffffffff80003030:	deaddead 	ldc3	$13,-8531($s5)
+ffffffff80003034:	deaddead 	ldc3	$13,-8531($s5)
+ffffffff80003038:	deaddead 	ldc3	$13,-8531($s5)
+ffffffff8000303c:	deaddead 	ldc3	$13,-8531($s5)
+
+ffffffff80003040 <bu_test_pass>:
+ffffffff80003040:	3c08a000 	lui	$t0,0xa000
+ffffffff80003044:	35082000 	ori	$t0,$t0,0x2000
+ffffffff80003048:	8d090020 	lw	$t1,32($t0)
+ffffffff8000304c:	8d0a000c 	lw	$t2,12($t0)
+ffffffff80003050:	24010001 	li	$at,1
+ffffffff80003054:	15210003 	bne	$t1,$at,ffffffff80003064 <bu_test_pass+0x24>
+ffffffff80003058:	00000000 	nop
+ffffffff8000305c:	01400008 	jr	$t2
+ffffffff80003060:	00000000 	nop
+ffffffff80003064:	01400008 	jr	$t2
+ffffffff80003068:	00000000 	nop
+
+ffffffff8000306c <bu_test_fail>:
+ffffffff8000306c:	3c0bdead 	lui	$t3,0xdead
+ffffffff80003070:	356bdead 	ori	$t3,$t3,0xdead
+ffffffff80003074:	3c08a000 	lui	$t0,0xa000
+ffffffff80003078:	35082000 	ori	$t0,$t0,0x2000
+ffffffff8000307c:	8d090020 	lw	$t1,32($t0)
+ffffffff80003080:	8d0a000c 	lw	$t2,12($t0)
+ffffffff80003084:	24010001 	li	$at,1
+ffffffff80003088:	15210004 	bne	$t1,$at,ffffffff8000309c <bu_test_fail+0x30>
+ffffffff8000308c:	00000000 	nop
+ffffffff80003090:	ad0b0004 	sw	$t3,4($t0)
+ffffffff80003094:	01400008 	jr	$t2
+ffffffff80003098:	00000000 	nop
+ffffffff8000309c:	01400008 	jr	$t2
+ffffffff800030a0:	00000000 	nop
+	...
+
+ffffffff80003ffc <_stack>:
+ffffffff80003ffc:	cafecafe                                ....

@@ -1,0 +1,1995 @@
+// lconfig configuration form for LX5280
+// 
+// Copyright 1997-2001, Lexra Inc.
+// ALL RIGHTS RESERVED
+// 
+// lconfig configuration form for LX5280-release-1.4
+// 
+// This form is processed by the lconfig tool to configure the
+// LX5280 RTL source code for user specific options.  To
+// configure the RTL source code, edit this form to indicate the
+// desired options, and execute the lconfig utility within the
+// include directory.
+// 
+// A starting form with properly configured default values can be
+// obtained with the command
+// 
+//   "lconfig -blank_form <output_filename>"
+// 
+// To configure the RTL, review each of the sections in the new form
+// and fill in the desired values based on your application
+// requirements.  Then process the form with the lconfig tool.
+// The tool will produce the symbol file (lxr_symbols.vh) that is
+// used for RTL simulation and also by the synthesis process.
+// lconfig also produces a configuration dependent tests list,
+// lxr_tests.vh, this is used by the regesssion script to test
+// the RTL configuration in the Lexra supplied simulation testbed.
+// 
+// DO NOT EDIT THE RESULTING LXR_SYMBOLS.VH FILE BY HAND.
+// 
+// A summary of the configurable elements appears below.  Following
+// this summary are the detailed sections for each configurable
+// element.
+//
+//            PRODUCT -- Lexra Processor
+//       PRODUCT_TYPE -- indicates product type
+//       REGFILE_TECH -- 
+//         TECHNOLOGY -- identifies target technology
+//        TESTBED_ENV -- identifies simulation testbed environment type
+//         RESET_TYPE -- flip-flop reset method
+//         RESET_DIST -- reset distribution method
+//           SEN_DIST -- Scan Enable Distribution Method
+//        SEN_BUFFERS -- Scan Enable Buffering at lx2
+// EXPORT_TRACE_PORTS -- Export essential signals in LX5280 to outputs
+//              SLEEP -- include clock SLEEP support
+//      RESET_BUFFERS -- Reset buffers at the lx2 module level
+//      CLOCK_BUFFERS -- clock buffers at lx2 module level
+//  RAM_CLOCK_BUFFERS -- LMI RAM clock distribution method
+//               COP1 -- coprocessor interface 1
+//               COP2 -- coprocessor interface 2
+//               COP3 -- coprocessor interface 3
+//                CE0 -- custom engine 0
+//                CE1 -- custom engine 1
+//        M16_SUPPORT -- 16-bit opcode support
+//     MEM_LINE_ORDER -- cache line fill beat ordering
+//     MEM_FIRST_WORD -- cache line fill first word
+//    MEM_GRANULARITY -- main memory system partial word write support
+//   SYSTEM_INTERFACE -- system bus interface type
+//           LBC_WBUF -- Lexra Bus Controller write buffer depth
+//           LBC_RBUF -- Lexra Bus Controller read buffer depth
+//       LBC_RDBYPASS -- Lexra Bus Controller read bypass enable
+//      LBC_SYNC_MODE -- LBC synchronous/asynchronous selection
+//          LINE_SIZE -- cache line size, in words
+//             ICACHE -- instruction cache size
+//             DCACHE -- data cache size
+//               IMEM -- local instruction RAM
+//               IROM -- local instruction ROM
+//        IMEM_IS_ROM -- declare local instruction RAM is actually ROM
+//               DMEM -- local scratch pad data RAM
+// LMI_DATA_GRANULARITY -- DCACHE and DMEM write granularity
+//   LMI_RANGE_SOURCE -- source of LMI address ranges
+//        LMI_RAM_ARB -- allow external agents to arbitrate for LMI RAMs
+//       DMEM_CYC_STL -- DMEM CYCLE STEALING.
+//               JTAG -- Internal JTAG Tap controller with EJTAG support
+//              EJTAG -- EJTAG Debug Support
+//   EJTAG_INST_BREAK -- Number of instruction breaks to be compiled
+//   EJTAG_DATA_BREAK -- Number of data breaks to be compiled
+//   JTAG_TRST_IS_TPC -- TRST pin is used as TPC out to eliminate TDO/TPC mux
+//           PC_TRACE -- EJTAG PC trace pins
+//     PCTB_SEQ_WIDTH -- Number of bits in an internal PC trace buffer entry allocated to the seqential instruction count
+// PCTB_STL_MAN_WIDTH -- Number of bits in an internal PC trace buffer entry allocated to the mantissa field of the stall count
+// PCTB_STL_EXP_WIDTH -- Number of bits in an internal PC trace buffer entry allocated to the exponent field of the stall count
+//         PCTB_DEPTH -- Log base 2 of number of entries in internal PC trace buffer.
+//       EJTAG_DCLK_N -- EJTAG PCTrace DCLK N parameter
+//        EJTAG_TPC_M -- EJTAG PCTrace TPC M parameter
+//      EJTAG_XV_BITS -- EJTAG PCTrace Number of Exception Vector bits
+//    EJTAG_PC_ISABIT -- EJTAG PCTrace Include ISA as PC Bit0
+//        SCAN_INSERT -- Controls scan insertion and synthesis
+//    SCAN_MIX_CLOCKS -- Scan Chains can cross clock boundaries with lock-up latches
+//    SCAN_NUM_CHAINS -- Number of scan chains in LX5280 design
+//           SCAN_SCL -- A Scan collar will be inserted on RAM interfaces
+//       RAM_BIST_MUX -- include test RAM mux and ports on lx2 module
+
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// PRODUCT -- Lexra Processor
+//
+// configuration choices:  LX4189 LX4187 LX4280 LX4287 LX5180 LX5187 LX5280 LX5287 LX8000
+//
+//     "LX4189"  --  LX4189 Processor
+//     "LX4187"  --  LX4187 Processor
+//     "LX4280"  --  LX4280 Processor
+//     "LX4287"  --  LX4287 Processor
+//     "LX5180"  --  LX5180 Processor
+//     "LX5187"  --  LX5187 Processor
+//     "LX5280"  --  LX5280 Processor
+//     "LX5287"  --  LX5287 Processor
+//     "LX8000"  --  LX8000 Processor
+//
+// The following settings are required when PRODUCT = LX4189:
+//
+//               CE0 = CE_MAC, CE_HL or NONE
+//
+//
+// The following settings are required when PRODUCT = LX4187:
+//
+//               CE0 = CE_MAC, CE_HL or NONE
+//
+//
+// The following settings are required when PRODUCT = LX4280:
+//
+//      EJTAG_DCLK_N = 2, 4 or EXPORT
+//               CE0 = CE_MAC, CE_HL or NONE
+//
+//
+// The following settings are required when PRODUCT = LX4287:
+//
+//      EJTAG_DCLK_N = 2, 4 or EXPORT
+//               CE0 = CE_MAC, CE_HL or NONE
+//
+//
+// The following settings are required when PRODUCT = LX5180:
+//
+//       M16_SUPPORT = YES
+//               CE0 = CE_MACD
+//
+//
+// The following settings are required when PRODUCT = LX5187:
+//
+//       M16_SUPPORT = YES
+//               CE0 = CE_MACD
+//
+//
+// The following settings are required when PRODUCT = LX5280:
+//
+//      EJTAG_DCLK_N = 2, 4 or EXPORT
+//               CE0 = CE_MACD
+//
+//
+// The following settings are required when PRODUCT = LX5287:
+//
+//      EJTAG_DCLK_N = 2, 4 or EXPORT
+//               CE0 = CE_MACD
+//
+//
+// The following settings are required when PRODUCT = LX8000:
+//
+//       M16_SUPPORT = NO
+//               CE0 = CE_HL or NONE
+//             SLEEP = NO
+//
+//
+// default: PRODUCT = "LX5280";
+//
+//////////////////////////////////////////////////////////////////////
+
+PRODUCT = "LX5280";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// PRODUCT_TYPE -- indicates product type
+//
+// configuration choices:  RTL PLD
+//
+//        "RTL"  --  RTL source product
+//        "PLD"  --  Programmable Logic Device implementation
+//
+// The following settings are required when PRODUCT_TYPE = RTL:
+//
+//       SCAN_INSERT = YES or NO
+//
+//
+// The following settings are required when PRODUCT_TYPE = PLD:
+//
+//        TECHNOLOGY = CUSTOM
+//        RESET_TYPE = ASYNCHRONOUS
+//        RESET_DIST = GLOBAL
+// RAM_CLOCK_BUFFERS = NO
+//             SLEEP = NO
+//       SCAN_INSERT = NO
+//      RAM_BIST_MUX = NO
+//
+//
+// default: PRODUCT_TYPE = "RTL";
+//
+//////////////////////////////////////////////////////////////////////
+
+PRODUCT_TYPE = "RTL";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// REGFILE_TECH -- 
+//
+// configuration choices:  RAM FLOP
+//
+//        "RAM"  --  Regfile implemented in RAM (or similar vendor provided core)
+//       "FLOP"  --  Regfile synthesizable as flops
+//
+// The following settings are required when REGFILE_TECH = RAM:
+//
+//           PRODUCT = LX8000
+//
+//
+// If an appropriate RAM or regfile core exists for a chosen target technology,
+// it may be used to implement the register file of the CPU.  Otherwise the
+// regfile will be synthesized from standard flip-flop cells.
+//
+// default: REGFILE_TECH = "FLOP";
+//
+//////////////////////////////////////////////////////////////////////
+
+REGFILE_TECH = "FLOP";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// TECHNOLOGY -- identifies target technology
+//
+// configuration choices:  CUSTOM LSI_G12P ST_HCMOS9 ARTISAN_TSMC18 ARTISAN_TSMC25E NURLOGIC_TSMC18
+//
+//     "CUSTOM"  --  customer defined technology (any name beginning with CUSTOM)
+//   "LSI_G12P"  --  LSI G12p
+//  "ST_HCMOS9"  --  ST HCMOS9
+// "ARTISAN_TSMC18"  --  Artisan TSMC 0.18 micron
+// "ARTISAN_TSMC25E"  --  Artisan TSMC Enhanced 0.25 micron
+// "NURLOGIC_TSMC18"  --  Nurlogic TSMC 0.18 micron
+//
+// The following settings are required when TECHNOLOGY = LSI_G12P:
+//
+//      REGFILE_TECH = RAM
+//
+//
+// The following settings are required when TECHNOLOGY = ARTISAN_TSMC18:
+//
+//      REGFILE_TECH = FLOP
+//
+//
+// The following settings are required when TECHNOLOGY = ARTISAN_TSMC25E:
+//
+//      REGFILE_TECH = FLOP
+//
+//
+// The following settings are required when TECHNOLOGY = NURLOGIC_TSMC18:
+//
+//      REGFILE_TECH = FLOP
+//
+//
+// You may define custom technologies by choosing a technology name that begins
+// with the string "CUSTOM", and consisting of all uppercase characters,
+// numbers and an underscore.  Within the LX5280 project directory,
+// sub-directories with this same name, but in lowercase form, can then be used
+// to hold custom versions of the RTL files as needed.
+//
+// default: TECHNOLOGY = "CUSTOM";
+//
+//////////////////////////////////////////////////////////////////////
+
+TECHNOLOGY = "CUSTOM";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// TESTBED_ENV -- identifies simulation testbed environment type
+//
+// configuration choices:  CHIP DEVBOARD
+//
+//       "CHIP"  --  minimum chip level simulation environment
+//   "DEVBOARD"  --  Lexra development board environment
+//
+// The following settings are required when TESTBED_ENV = CHIP:
+//
+//              COP3 = COPTC3, NONE, COPSTUB, CUSTOM or EXPORT
+//
+//
+// The following settings are required when TESTBED_ENV = DEVBOARD:
+//
+//               CE1 = NONE or EXPORT
+//              COP1 = NONE, CUSTOM or EXPORT
+//              COP2 = NONE, CUSTOM or EXPORT
+//              COP3 = NONE, CUSTOM, EXPORT or COPTC3
+//         LINE_SIZE = 4
+//
+//
+// Lexra supplies a Verilog simulation environment for this release
+// of the LX5280.  You must select CHIP for this option.
+// 
+// The chip level environment is a minimal simulation testbench for
+// a configurable LX5280 chip design, with a simple memory
+// responder attached to the Lexra processor.  This provides you
+// with a working simulation environment that can grow with your
+// design.
+// 
+//
+// default: TESTBED_ENV = "CHIP";
+//
+//////////////////////////////////////////////////////////////////////
+
+TESTBED_ENV = "CHIP";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// RESET_TYPE -- flip-flop reset method
+//
+// configuration choices:  SYNCHRONOUS ASYNCHRONOUS
+//
+// "SYNCHRONOUS"  --  use synchronous resetable flip-flops
+// "ASYNCHRONOUS"  --  use asynchronous resetable flip-flops
+//
+// default: RESET_TYPE = "SYNCHRONOUS";
+//
+//////////////////////////////////////////////////////////////////////
+
+RESET_TYPE = "ASYNCHRONOUS";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// RESET_DIST -- reset distribution method
+//
+// configuration choices:  LOCAL_SAMPLED LOCAL_BUFFERED GLOBAL
+//
+// "LOCAL_SAMPLED"  --  distribute reset from local flip-flops
+// "LOCAL_BUFFERED"  --  distribute reset from local buffers
+//     "GLOBAL"  --  distribute reset from global driver
+//
+// The RESET_DIST option determines how the signals are distributed
+// from lx2/lx1/lx0/reset_dist module.  Because reset signals are
+// high fanout, they may require special treatment in some ASIC
+// flows, which this setting accomodates.
+// 
+// Choose GLOBAL if your ASIC design flow will completely handle
+// buffering and fanout of reset signals.  This setting results
+// in pure wires and port connections being used throughout
+// the LX5280 heirarchy.
+// 
+// Choose LOCAL_BUFFERED to insert buffers in each major LX5280
+// module.  This provides buffering throughout the hierarchy,
+// and may be practical for most applications.
+// 
+// Choose LOCAL_SAMPLED to insert a flop that samples reset coming
+// into each major LX5280 module, which is then distributed within
+// the module.  This provides purely local timing requirements for reset
+// within each module, and is easier to achieve than LOCAL_BUFFERED.
+//
+// default: RESET_DIST = "LOCAL_SAMPLED";
+//
+//////////////////////////////////////////////////////////////////////
+
+RESET_DIST = "GLOBAL";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// SEN_DIST -- Scan Enable Distribution Method
+//
+// configuration choices:  GLOBAL LOCAL_BUFFERED NONE
+//
+//     "GLOBAL"  --  Global Scan Enable Distribution
+// "LOCAL_BUFFERED"  --  Locally Buffered Scan Enable Distribution
+//       "NONE"  --  Do Not Distribute Scan Enable
+//
+// The following settings are required when SEN_DIST = GLOBAL:
+//
+//       SCAN_INSERT = YES
+//
+//
+// The following settings are required when SEN_DIST = LOCAL_BUFFERED:
+//
+//       SCAN_INSERT = YES
+//
+//
+// The following settings are required when SEN_DIST = NONE:
+//
+//       SCAN_INSERT = NO
+//
+//
+// 
+//
+// default: SEN_DIST = "NONE";
+//
+//////////////////////////////////////////////////////////////////////
+
+SEN_DIST = "GLOBAL";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// SEN_BUFFERS -- Scan Enable Buffering at lx2
+//
+// configuration choices:  LX2 EXTERNAL NONE
+//
+//        "LX2"  --  Buffer Scan Enable at lx2
+//   "EXTERNAL"  --  Buffer Scan Enable outside of lx2
+//       "NONE"  --  Do Not Buffer Scan Enable
+//
+// The following settings are required when SEN_BUFFERS = LX2:
+//
+//       SCAN_INSERT = YES
+//
+//
+// The following settings are required when SEN_BUFFERS = EXTERNAL:
+//
+//       SCAN_INSERT = YES
+//
+//
+// 
+//
+// default: SEN_BUFFERS = "NONE";
+//
+//////////////////////////////////////////////////////////////////////
+
+SEN_BUFFERS = "NONE";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// EXPORT_TRACE_PORTS -- Export essential signals in LX5280 to outputs
+//
+// configuration choices:  YES NO
+//
+//        "YES"  --  Include trace ports in LX5280
+//         "NO"  --  Do not include trace ports in LX5280
+//
+// The following settings are required when EXPORT_TRACE_PORTS = YES:
+//
+//           PRODUCT = LX5280
+//      REGFILE_TECH = FLOP
+//
+//
+// 
+//   When EXPORT_TRACE_PORTS is set to YES, the following singlas will be export to 
+//   output directly:
+// 
+//   TRACE_I0_RETIRE       : indicates a valid instruction retirement.
+//   TRACE_I0_IVADDR[31:0] : address of retired instruction.
+//   TRACE_I1_RETIRE       : indicates sencond valid instruction retirement (for dual issue)
+//   TRACE_I1_IVADDR[31:0] : address of second retired instruciton
+// 
+//   TRACE_CP0_EPC[31:0]       : current CP0 EPC register value.
+//   TRACE_CP0_CAUSE[31:0]     : current CP0 CAUSE register value.
+//   TRACE_CP0_STATUS[31:0]    : current CP0 STATUS register value.
+//   TRACE_CP0_ECAUSE[31:0]    : current CP0 ECAUSE regsiter value.
+//   TRACE_CP0_ESTATUS[31:0]   : current CP0 ESTATUS regsiter value.
+//   TRACE_CP0_INTVEC[31:0]    : current CP0 INTVEC regsiter value.
+// 
+//   TRACE_GPR_SP[31:0]        : current stack register (SP, #29) value.
+//   TRACE_GPR_RA[31:0]        : current link register (SP, #29) value.
+// 
+//   When EXPORT_TRACE_PORTS is set to NO, TRACE_* ports will not be exported.
+// 
+//
+// default: EXPORT_TRACE_PORTS = "NO";
+//
+//////////////////////////////////////////////////////////////////////
+
+EXPORT_TRACE_PORTS = "NO";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// SLEEP -- include clock SLEEP support
+//
+// configuration choices:  YES NO EXPORT
+//
+//        "YES"  --  include clock SLEEP support
+//         "NO"  --  do not include clock SLEEP support
+//     "EXPORT"  --  clock SLEEP support, with CFG_SLEEP_ENABLE pin
+//
+// An optional sleep mode can be accessed via software or hardware if
+// enabled via this option.  The LX5280 uses clock gating to implement
+// its sleep mode.  Users who do not allow clock gating should select
+// "NO" for option, and will not have access to the LX5280 sleep mode.
+// 
+// Sleep mode is implemented in the lx2/lx1/lx0/reset_dist module,
+// when enabled by this setting, and can be accessed via software or
+// hardware as described in the LX5280 data sheet.
+// 
+// The clock gating for sleep mode is implemented in the clock buffers.
+// For the LX5280 RTL product, these buffers reside either inside or
+// outside the lx2 module, as determined by the CLOCK_BUFFERS setting
+// below.  When sleep is enabled, clock sleep terms are sourced by
+// the reset_dist module and received by the clock buffers for gating
+// with the free running input clock.
+// 
+// If you choose EXPORT and you are simulating with the evaulation
+// board model (eb) supplied by Lexra (which would be the case if
+// you select TESTBED_ENV = "EVAL_BOARD" or "TEST_CHIP" with this form),
+// then you must also provide a default setting for the jumper on the
+// board.  This is done with the CFGEXP_SLEEPENABLE Verilog `define
+// symbol.  For  example, you can add any of the following statements to
+// your lconfig form input file, which will produce the required
+// `defines in lxr_symbols.vh:
+// 
+//    SYMBOL `define CFGEXP_SLEEPENABLE 1'b0 // DISABLED
+// 
+//              or
+// 
+//    SYMBOL `define CFGEXP_SLEEPENABLE 1'b1 // ENABLED
+// 
+//
+// default: SLEEP = "NO";
+//
+//////////////////////////////////////////////////////////////////////
+
+SLEEP = "NO";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// RESET_BUFFERS -- Reset buffers at the lx2 module level
+//
+// configuration choices:  EXTERNAL LX2
+//
+//   "EXTERNAL"  --  user supplies external reset buffers
+//        "LX2"  --  include reset buffers in the lx2 module
+//
+// This setting controls the method used to buffer resets used in the LX5280
+// hierarchy.
+// 
+// Choosing LX2 will cause buffers to be instanced in the lx2 module.
+// Each reset brought into the lx2 module will be passed through an 
+// lx2 buffer, and the buffered copy is passed down throughout the 
+// hierarchy.
+// 
+// Choosing EXTERNAL will export each reset brought into the lx2 module.
+// You may then connect your own buffers to these outputs.
+//
+// default: RESET_BUFFERS = "EXTERNAL";
+//
+//////////////////////////////////////////////////////////////////////
+
+RESET_BUFFERS = "LX2";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// CLOCK_BUFFERS -- clock buffers at lx2 module level
+//
+// configuration choices:  EXTERNAL LX2
+//
+//   "EXTERNAL"  --  user supplies external clock buffers
+//        "LX2"  --  include clock buffers in lx2 module
+//
+// This setting controls the method used to buffer clocks used in the LX5280
+// hiearchy.  
+// 
+// Choosing LX2 will cause buffers to be instanced in the lx2.
+// Each clock brought into the lx2 module will be passed through an lx2 
+// buffer, and the buffered copy is passed as pure wire througout the
+// hierarchy.  This option should be used for physical design flows that
+// can turn the input buffer and clock wires into a balanced clock tree
+// distributed throughout the lx2/lx1/lx0 module hiearchy.  If LX2
+// is chosen for this option, lconfig will select generic buffer
+// modules for RTL simulation, and identify them to allow users to
+// define technology specific versions.
+// 
+// Choosing EXTERNAL will cause pure wires to be used for clock connections
+// throughout the lx2/lx1/lx0 hierarchy.  This option should be chosen
+// if the user's ASIC flow cannot properly interpret the clock buffers
+// on the lx2 inputs, or if the user desires to handle tree synthesis
+// and layout at higher level than lx2.
+// 
+// Note that for Lexra products that support sleep, if sleep mode is enabled
+// (SLEEP="YES"), then the clock buffers for SYSCLK (and optionally BUSCLK)
+// will include clock sleep terms sourced by the sleep logic.
+// 
+// For RAM clock tuning, the user can also use RAM clock buffers instanced
+// within each LMI that controls RAMs.  See RAM_CLOCK_BUFFERS below.
+//
+// default: CLOCK_BUFFERS = "EXTERNAL";
+//
+//////////////////////////////////////////////////////////////////////
+
+CLOCK_BUFFERS = "LX2";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// RAM_CLOCK_BUFFERS -- LMI RAM clock distribution method
+//
+// configuration choices:  YES NO
+//
+//        "YES"  --  compile RAM clock buffers into LMI modules
+//         "NO"  --  use system level clock for RAMs
+//
+// This option determines how clocks are distributed to the RAMs
+// attached to the LMI controllers.  Select YES to drive the output
+// of the local clock buffer in each LMI to the clock inputs
+// of the RAMs attached to each LMI.  This method should be
+// should be used if the application uses a hierarchical clock
+// tree as specified in  the LX5280 layout guidelines.
+// Select NO to drive the system wide clock directly to the RAMs.
+// This method should be used if the application employs its
+// own clock distribution method.
+//
+// default: RAM_CLOCK_BUFFERS = "NO";
+//
+//////////////////////////////////////////////////////////////////////
+
+RAM_CLOCK_BUFFERS = "NO";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// COP1 -- coprocessor interface 1
+//
+// configuration choices:  NONE COPSTUB CUSTOM EXPORT
+//
+//       "NONE"  --  coprocessor 1 not present
+//    "COPSTUB"  --  coprocessor 1 present, copstub behavioral model (not for synthesis)
+//     "CUSTOM"  --  coprocessor 1 present, customer supplied module
+//     "EXPORT"  --  export COP1 interface from lx2.v
+//
+// default: COP1 = "NONE";
+//
+//////////////////////////////////////////////////////////////////////
+
+COP1 = "NONE";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// COP2 -- coprocessor interface 2
+//
+// configuration choices:  NONE COPSTUB CUSTOM EXPORT
+//
+//       "NONE"  --  coprocessor 2 not present
+//    "COPSTUB"  --  coprocessor 2 present, copstub behavioral model (not for synthesis)
+//     "CUSTOM"  --  coprocessor 2 present, customer supplied module
+//     "EXPORT"  --  export COP2 interface from lx2.v
+//
+// default: COP2 = "NONE";
+//
+//////////////////////////////////////////////////////////////////////
+
+COP2 = "NONE";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// COP3 -- coprocessor interface 3
+//
+// configuration choices:  COPTC3
+//
+//     "COPTC3"  --  coprocessor 3 present, Lexra tc_cop
+//
+// default: COP3 = "COPTC3";
+//
+//////////////////////////////////////////////////////////////////////
+
+COP3 = "COPTC3";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// CE0 -- custom engine 0
+//
+// configuration choices:  NONE CE_MAC CE_MACD CE_HL
+//
+//       "NONE"  --  custom engine 0 not present
+//     "CE_MAC"  --  Lexra mul/div/MAC module
+//    "CE_MACD"  --  Lexra Dual mul/div/MAC module
+//      "CE_HL"  --  Lexra MFHI/MFLO/MTHI/MTLO module
+//
+// default: CE0 = "CE_MACD";
+//
+//////////////////////////////////////////////////////////////////////
+
+CE0 = "CE_MACD";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// CE1 -- custom engine 1
+//
+// configuration choices:  NONE CE_DVT EXPORT
+//
+//       "NONE"  --  custom engine 1 not present
+//     "CE_DVT"  --  Lexra simulation testbed custom engine
+//     "EXPORT"  --  export CE1 interface from LX module
+//
+// The following settings are required when CE1 = NONE:
+//
+//               CE0 = CE_MAC, CE_MACD or CE_HL
+//
+//
+// default: CE1 = "NONE";
+//
+//////////////////////////////////////////////////////////////////////
+
+CE1 = "EXPORT";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// M16_SUPPORT -- 16-bit opcode support
+//
+// configuration choices:  YES NO
+//
+//        "YES"  --  enable decode and execution of 16-bit opcodes
+//         "NO"  --  disable decode and execution of 16-bit opcodes
+//
+// M16 code compression can be used to improve code density for systems in
+// which on-chip instruction storage is a premium.  In some configurations and
+// technologies M16 support may have a negative effect on the system clock rate.
+// A small amount of die area is consumed by M16 so for applications that have
+// no need for code compression it is best to disable M16 support.
+//
+// default: M16_SUPPORT = "YES";
+//
+//////////////////////////////////////////////////////////////////////
+
+M16_SUPPORT = "NO";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// MEM_LINE_ORDER -- cache line fill beat ordering
+//
+// configuration choices:  INTERLEAVE SEQUENTIAL EXPORT
+//
+// "INTERLEAVE"  --  interleave ordering, low bit toggles
+// "SEQUENTIAL"  --  increment ordering, wrap to zero
+//     "EXPORT"  --  external logic drives CFG_MEMSEQUENTIAL port of LX module
+//
+// This setting declares the line read word ordering policy of the
+// user's main memory implementation, and configures the LX5280
+// to correctly work with that policy.
+// 
+// You must configure the LX5280 to match the line order policy of your
+// main memory controller.  This ensures that the LX5280 performs a line
+// read from memory that the words will be stored in the correct offsets
+// within the cache line.
+// 
+// The first two choices result in hardwired setting of this attribute.
+// The third choice allows application specific logic to drive a
+// configuration value onto the CFG_MEMSEQUENTIAL port of lx2.v to specify
+// the attribute setting.  Sourcing a logic one on the wire results
+// in the SEQUENTIAL mode of operation, and sourcing a logic zero on the
+// wire results in the INTERLEAVE mode of operation.
+// 
+// If you choose EXPORT and you are simulating with the evaulation
+// board model (eb) supplied by Lexra (which would be the case if
+// you select TESTBED_ENV = "EVAL_BOARD" or "TEST_CHIP" with this form),
+// then you must also provide a default setting for the jumper on the
+// board.  This is done with the CFGEXP_MEMSEQUENTIAL Verilog `define symbol.  For
+// example, you can add any of the following statements to your lconfig
+// form input file, which will produce the required `define in
+// lxr_symbols.vh:
+// 
+//    SYMBOL `define CFGEXP_MEMSEQUENTIAL 1'b0  // INTERLEAVE
+// 
+//              or
+// 
+//    SYMBOL `define CFGEXP_MEMSEQUENTIAL 1'b1  // SEQUENTIAL
+//
+// default: MEM_LINE_ORDER = "SEQUENTIAL";
+//
+//////////////////////////////////////////////////////////////////////
+
+MEM_LINE_ORDER = "SEQUENTIAL";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// MEM_FIRST_WORD -- cache line fill first word
+//
+// configuration choices:  DESIRED ZERO EXPORT
+//
+//    "DESIRED"  --  desired word first
+//       "ZERO"  --  word 0 first
+//     "EXPORT"  --  external logic drives CFG_MEMZEROFIRST port of LX module
+//
+// This setting declares the line read first word policy of the
+// user's main memory implementation, and configures the LX5280
+// to correctly work with that policy.
+// 
+// You must configure the LX5280 to match the first word policy of your
+// main memory controller.  This ensures that the LX5280 performs a line
+// read from memory that the words will be stored in the correct offsets
+// within the cache line.
+// 
+// The first two choices result in hardwired setting of this attribute.
+// The third choice allows application specific logic to drive a
+// configuration value onto the CFG_MEMZEROFIRST port of lx2.v to specify
+// the attribute setting.  Sourcing a logic one on the wire results
+// in the ZERO mode of operation, and sourcing a logic zero on the
+// wire results in the DESIRED mode of operation.
+// 
+// If you choose EXPORT and you are simulating with the evaulation
+// board model (eb) supplied by Lexra (which would be the case if
+// you select TESTBED_ENV = "EVAL_BOARD" or "TEST_CHIP" with this form),
+// then you must also provide a default setting for the jumper on the
+// board.  This is done with the CFGEXP_MEMZEROFIRST Verilog `define symbol.  For
+// example, you can add any of the following statements to your lconfig
+// form input file, which will produce the required `define in
+// lxr_symbols.vh:
+// 
+//    SYMBOL `define CFGEXP_MEMZEROFIRST 1'b0  // DESIRED
+// 
+//              or
+// 
+//    SYMBOL `define CFGEXP_MEMZEROFIRST 1'b1  // ZERO
+//
+// default: MEM_FIRST_WORD = "DESIRED";
+//
+//////////////////////////////////////////////////////////////////////
+
+MEM_FIRST_WORD = "DESIRED";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// MEM_GRANULARITY -- main memory system partial word write support
+//
+// configuration choices:  WORD BYTE EXPORT
+//
+//       "WORD"  --  main memory has word granularity
+//       "BYTE"  --  main memory has byte granularity
+//     "EXPORT"  --  external logic drives CFG_MEMFULLWORD port of LX module
+//
+// This setting declares the write granularity of the
+// user's main memory implementation, and configures the LX5280
+// to correctly work with that policy.
+// 
+// This setting declares the main memory write granularity.  See the
+// LMI_DATA_GRANULARITY option to specify DCACHE and DMEM write granularity.
+// 
+// If main memory supports byte writes, selecting BYTE for this option
+// allows store byte and store half-word instructions to complete
+// without requiring the affected memory word to be resident in the
+// data cache.
+// 
+// If main memory does not support byte writes, you must select WORD
+// for this option, and all byte and half-word stores will allocate
+// a line in the data cache if the data is not already resident.  This
+// is necessary for the cache to construct a full word of data to
+// write to main memory.
+// 
+// The first two choices result in hardwired setting of this attribute.
+// The third choice allows application specific logic to drive a
+// configuration value onto the CFG_MEMFULLWORD port of lx2.v to specify
+// the attribute setting.  Sourcing a logic one on the wire results
+// in the WORD mode of operation, and sourcing a logic zero on the
+// wire results in the BYTE mode of operation.
+// 
+// If you choose EXPORT and you are simulating with the evaulation
+// board model (eb) supplied by Lexra (which would be the case if
+// you select TESTBED_ENV = "EVAL_BOARD" or "TEST_CHIP" with this form),
+// then you must also provide a default setting for the jumper on the
+// board.  This is done with the CFGEXP_MEMFULLWORD Verilog `define symbol.  For
+// example, you can add any of the following statements to your lconfig
+// form input file, which will produce the required `define in
+// lxr_symbols.vh:
+// 
+//    SYMBOL `define CFGEXP_MEMFULLWORD 1'b0  // BYTE
+// 
+//              or
+// 
+//    SYMBOL `define CFGEXP_MEMFULLWORD 1'b1  // WORD
+//
+// default: MEM_GRANULARITY = "WORD";
+//
+//////////////////////////////////////////////////////////////////////
+
+MEM_GRANULARITY = "BYTE";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// SYSTEM_INTERFACE -- system bus interface type
+//
+// configuration choices:  LBUS CBUS
+//
+//       "LBUS"  --  Lexra system bus with Lexra bus controller
+//       "CBUS"  --  Lexra cache bus with processor bus interface
+//
+// The following settings are required when SYSTEM_INTERFACE = CBUS:
+//
+//      PRODUCT_TYPE = RTL or PLD
+//     LBC_SYNC_MODE = SYNCHRONOUS
+//
+//
+// The Lexra processor can either connect to the system through the
+// standard Lexra bus or through a customer defined bus interface.
+// If the Lexra bus is selected then the Lexra bus master controller
+// (LBC) will be instanciated.  If the cache bus is selected then
+// an external interface must be designed to connect to the Lexra
+// cache bus.
+//
+// default: SYSTEM_INTERFACE = "LBUS";
+//
+//////////////////////////////////////////////////////////////////////
+
+SYSTEM_INTERFACE = "LBUS";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// LBC_WBUF -- Lexra Bus Controller write buffer depth
+//
+// configuration choices:  <integer>
+//
+//    <integer>  --  number of write buffer entries (2 to 16)
+//
+// Adding more write buffers could improve system performance
+// at a cost of additional real estate.  16 write buffers may
+// improve performance by as much as 5 percent over 4 buffers.
+// The minimum setting is 2.  Each write buffer adds about 67
+// flip flops and compare logic for 33 bits.
+//
+// default: LBC_WBUF = 4;
+//
+//////////////////////////////////////////////////////////////////////
+
+LBC_WBUF = 4;
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// LBC_RBUF -- Lexra Bus Controller read buffer depth
+//
+// configuration choices:  <integer>
+//
+//    <integer>  --  number of read buffer entries (2 to 2*line size)
+//
+// Typically, the number of read buffer entries should be 8.  This is enough
+// to hold two 4-word lines of read data which are needed if there are
+// simultaneous I-cache and D-cache misses.  The read buffer allows the system
+// memory to transfer lines as fast as possible without having to wait for cache
+// to absorb the data.  The read buffer will never overflow when set to 8
+// (two lines).
+// 
+// However, to save area, the number of entries can be reduced with some cost to
+// bus utilization.  If the read buffer fills while memory is trying to send
+// read data, the LBC will deassert IRDY until it can accept more data, thus
+// reducing bus utilization.  By reducing the number of entries to 4, the buffer
+// will still be able to accomodate one full line, so IRDY would be deasserted
+// only in the relatively infrequent case where there are simultaneous I-cache
+// and D-cache misses.  By reducing the depth to 2 -- the minimum -- area is
+// optimized in favor of bus utilization.
+// 
+// Note: 2 read buffer entries are all that are needed for a synchronous LBC.
+//
+// default: LBC_RBUF = 8;
+//
+//////////////////////////////////////////////////////////////////////
+
+LBC_RBUF = 2;
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// LBC_RDBYPASS -- Lexra Bus Controller read bypass enable
+//
+// configuration choices:  YES NO EXPORT
+//
+//        "YES"  --  enable read bypass of LBC write buffer
+//         "NO"  --  disable read bypass of LBC write buffer
+//     "EXPORT"  --  external logic drives CFG_LBCWBDISABLE port of LX module
+//
+// The LBC's write buffer normally allows read operations presented
+// by the processor to bypass write operations that are pending
+// in the write buffer.  If the line address of a read operation
+// matches the line address of any writes pending in the write
+// buffer, the LBC will stall the read until the writes
+// are completed.  This type of operation is achieved by
+// setting LBC_RDBYPASS to YES.
+// 
+// The read bypass acceleration can be disabled by setting
+// LBC_RDBYPASS to NO.  This will cause all reads presented
+// to the LBC to wait for the write buffer empty.
+// 
+// The first two choices result in hardwired setting of bypass control.
+// The third choice allows application specific logic to drive a
+// configuration value onto the CFG_LBCWBDISABLE port of lx2.v 
+// to specify the attribute setting.  Sourcing a logic one on
+// the wire results in read bypass being disabled, and sourcing a
+// logic zero on the wire results in read bypass being enabled.
+// 
+// If you choose EXPORT and you are simulating with the evaulation
+// board model (eb) supplied by Lexra (which would be the case if
+// you select TESTBED_ENV = "EVAL_BOARD" or "TEST_CHIP" with this form),
+// then you must also provide a default setting for the jumper on the
+// board.  This is done with the CFGEXP_LBCWBDISABLE Verilog `define
+// symbol.  For example, you can add any of the following statements to
+// your lconfig form input file, which will produce the required
+// `defines in lxr_symbols.vh:
+// 
+//    SYMBOL `define CFGEXP_LBCWBDISABLE 1'b0 // ENABLED
+// 
+//              or
+// 
+//    SYMBOL `define CFGEXP_LBCWBDISABLE 1'b1 // DISABLED
+// 
+//
+// default: LBC_RDBYPASS = "YES";
+//
+//////////////////////////////////////////////////////////////////////
+
+LBC_RDBYPASS = "YES";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// LBC_SYNC_MODE -- LBC synchronous/asynchronous selection
+//
+// configuration choices:  SYNCHRONOUS ASYNCHRONOUS
+//
+// "SYNCHRONOUS"  --  Same clock used for SysClk and BusClk
+// "ASYNCHRONOUS"  --  Different clock used for SysClk and BusClk
+//
+// By default, the LBC is asynchronous and allows the SysClk and the
+// BusClk to be driven from two independent clock generators.  The
+// BusClk frequency can be anywhere between DC and twice the frequency
+// of the SysClk.  If the SysClk and the BusClk will be generated from
+// the same source, select "SYNCHRONOUS" mode.  This will cause the
+// asynchronous interface to be bypassed and will greatly reduce the
+// latency caused by the asynchronous interface.
+//
+// default: LBC_SYNC_MODE = "ASYNCHRONOUS";
+//
+//////////////////////////////////////////////////////////////////////
+
+LBC_SYNC_MODE = "SYNCHRONOUS";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// LINE_SIZE -- cache line size, in words
+//
+// configuration choices:  4 8 16 32
+//
+//          "4"  --  line size is 4 words
+//          "8"  --  line size is 8 words
+//         "16"  --  line size is 16 words
+//         "32"  --  line size is 32 words
+//
+// The following settings are required when LINE_SIZE = 8:
+//
+//      PRODUCT_TYPE = RTL or PLD
+//
+//
+// The following settings are required when LINE_SIZE = 16:
+//
+//      PRODUCT_TYPE = RTL or PLD
+//
+//
+// The following settings are required when LINE_SIZE = 32:
+//
+//      PRODUCT_TYPE = RTL or PLD
+//
+//
+// This setting declares the line size, in words, of the ICACHE, DCACHE,
+// IMEM and LBC.  Your memory system must supply this number of words in
+// reponse to a system bus line read command.
+//
+// default: LINE_SIZE = "4";
+//
+//////////////////////////////////////////////////////////////////////
+
+LINE_SIZE = "8";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// ICACHE -- instruction cache size
+//
+// configuration choices:  NONE 64K_2 32K_2 16K_2 8K_2 4K_2 2K_2 1K_2 64K_1 32K_1 16K_1 8K_1 4K_1 2K_1 1K_1
+//
+//       "NONE"  --  no instruction cache
+//      "64K_2"  --  64K byte 2-way set associative instruction cache
+//      "32K_2"  --  32K byte 2-way set associative instruction cache
+//      "16K_2"  --  16K byte 2-way set associative instruction cache
+//       "8K_2"  --  8K byte 2-way set associative instruction cache
+//       "4K_2"  --  4K byte 2-way set associative instruction cache
+//       "2K_2"  --  2K byte 2-way set associative instruction cache
+//       "1K_2"  --  1K byte 2-way set associative instruction cache
+//      "64K_1"  --  64K byte direct mapped instruction cache
+//      "32K_1"  --  32K byte direct mapped instruction cache
+//      "16K_1"  --  16K byte direct mapped instruction cache
+//       "8K_1"  --  8K byte direct mapped instruction cache
+//       "4K_1"  --  4K byte direct mapped instruction cache
+//       "2K_1"  --  2K byte direct mapped instruction cache
+//       "1K_1"  --  1K byte direct mapped instruction cache
+//
+// default: ICACHE = "2K_1";
+//
+//////////////////////////////////////////////////////////////////////
+
+ICACHE = "16K_2";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// DCACHE -- data cache size
+//
+// configuration choices:  NONE 64K_1 32K_1 16K_1 8K_1 4K_1 2K_1 1K_1
+//
+//       "NONE"  --  no data cache
+//      "64K_1"  --  64K byte direct mapped data cache
+//      "32K_1"  --  32K byte direct mapped data cache
+//      "16K_1"  --  16K byte direct mapped data cache
+//       "8K_1"  --  8K byte direct mapped data cache
+//       "4K_1"  --  4K byte direct mapped data cache
+//       "2K_1"  --  2K byte direct mapped data cache
+//       "1K_1"  --  1K byte direct mapped data cache
+//
+// The following settings are required when DCACHE = NONE:
+//
+//   MEM_GRANULARITY = BYTE
+//
+//
+// default: DCACHE = "2K_1";
+//
+//////////////////////////////////////////////////////////////////////
+
+DCACHE = "4K_1";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// IMEM -- local instruction RAM
+//
+// configuration choices:  NONE RANGE
+//
+//                           "NONE"  --  not present
+// RANGE (0xMMMM_LLL0, 0xMMMM_TTTf)  --  BASE and TOP values
+//
+// The decode logic for this LMI is configured with a base and top address
+// range (inclusive).  The addressable region defined by this pair must be
+// a power of 2 in size, from 1K bytes up to 256K bytes.  The region must
+// be naturally aligned.  That is, a 1K byte region must be aligned at a
+// modulo 1K byte address, a 2K byte region must be aligned at a modulo 2K
+// byte address, etc.  The restrictions are imposed by the  LMI
+// address decode logic to optimize for timing.
+//  
+// These address ranges are specified within the PHYSICAL address space.
+// Keep in mind that the LX5280 transforms logical addresses to physical
+// addresses before accessing local memory or sourcing transactions on the
+// system bus. This translation affects the upper three bits of the address,
+// and is shown here for convenience:
+// 
+//    LOGICAL      PHYSICAL        SEGMENT NAME
+//     000           010           kuseg (cached)
+//     001           011           kuseg (cached)
+//     010           100           kuseg (cached)
+//     011           101           kuseg (cached)
+//     100           000           kseg0 (cached)
+//     101           000           kseg1 (uncached)
+//     110           110           kseg2 (cached)
+//     111           111           kseg2 (cached)
+// 
+// Note that kseg0 and kseg1 map to the same physical address region.
+// Also, the physical address region with the upper three bits = 001 is
+// unreachable, i.e. there is no logical address that maps to that region.
+// Example RANGE speficiations:
+// 
+//     RANGE (0x4004_1000, 0x4004_17ff)
+//     RANGE (0xa000_0000, 0xa000_03ff)
+//
+// default: IMEM = "NONE";
+//
+//////////////////////////////////////////////////////////////////////
+
+IMEM = "NONE";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// IROM -- local instruction ROM
+//
+// configuration choices:  NONE RANGE
+//
+//                           "NONE"  --  not present
+// RANGE (0xMMMM_LLL0, 0xMMMM_TTTf)  --  BASE and TOP values
+//
+// The following settings are required when IROM = RANGE:
+//
+//       IMEM_IS_ROM = NO
+//
+//
+// See the IRAM section above for details on setting the range bounds.
+//
+// default: IROM = "NONE";
+//
+//////////////////////////////////////////////////////////////////////
+
+IROM = "NONE";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// IMEM_IS_ROM -- declare local instruction RAM is actually ROM
+//
+// configuration choices:  NO YES
+//
+//         "NO"  --  IMEM, if present, is truly a RAM
+//        "YES"  --  IMEM, if present, is actually a ROM
+//
+// This is an obsolete option that is supported for backward compatibility only.
+// For new applications that require ROM, IMEM_IS_ROM should be set to NO,
+// and IROM = RANGE (<base>, <top>) should be specified.  See section above.
+// 
+// The rest of this documentation describes IMEM_IS_ROM for backward
+// compatible appplications.
+// 
+// When IMEM is present, it normally responds only to cacheable references.
+// The IMEM will not respond to any Kseg1 references.  This behavior is
+// ensured by setting IMEM_IS_ROM = "NO".
+// 
+// Alternatively, IMEM may be configured as a ROM controller by setting
+// IMEM_IS_ROM = "YES".  This setting allows the IMEM controller to respond
+// to Kseg1 (uncacheable) address, and should be used if you wish to
+// execute boot code (starting at physical address 1fc0_0000) in the ROM.
+// Choosing this setting will cause the IMEM instruction store to be
+// instanced in the lx2 layer.
+//
+// default: IMEM_IS_ROM = "NO";
+//
+//////////////////////////////////////////////////////////////////////
+
+IMEM_IS_ROM = "NO";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// DMEM -- local scratch pad data RAM
+//
+// configuration choices:  NONE RANGE
+//
+//                           "NONE"  --  not present
+// RANGE (0xMMMM_LLL0, 0xMMMM_TTTf)  --  BASE and TOP values
+//
+// See the IMEM section above for details on setting the range bounds.
+//
+// default: DMEM = "NONE";
+//
+//////////////////////////////////////////////////////////////////////
+
+DMEM = RANGE (0x1000_0000, 0x1000_ffff);
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// LMI_DATA_GRANULARITY -- DCACHE and DMEM write granularity
+//
+// configuration choices:  WORD BYTE
+//
+//       "WORD"  --  DCACHE and DMEM have word write granularity
+//       "BYTE"  --  DCACHE and DMEM have byte write granularity
+//
+// The following settings are required when LMI_DATA_GRANULARITY = BYTE:
+//
+//   MEM_GRANULARITY = BYTE
+//
+//
+// This setting determines the DCACHE and DMEM write granularity.  See
+// the MEM_GRANULARITY option to specify system memory write granularity.
+// 
+// Selecting BYTE for this option allows store byte and store half-word
+// instructions that hit the DCACHE or DMEM to complete in one cycle.  In
+// this case the application specific SRAMs that are used must provide
+// a byte write capability.
+// 
+// If the SRAMs do not provide a byte-write capability, you must select WORD
+// for this option.  All byte and half-word stores that hit the DCACHE or
+// DMEM will result in read-modify-write operations to DMEM, which require
+// two cycle to complete.
+//
+// default: LMI_DATA_GRANULARITY = "WORD";
+//
+//////////////////////////////////////////////////////////////////////
+
+LMI_DATA_GRANULARITY = "BYTE";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// LMI_RANGE_SOURCE -- source of LMI address ranges
+//
+// configuration choices:  HARDWIRED COPTC3
+//
+//  "HARDWIRED"  --  hardwired values derived from configuration RANGE values
+//     "COPTC3"  --  Setting IMEM/DMEM base/top by COPTC3 registers.
+//
+// Selecting HARDWIRED will force the LMI address ranges to those entered above
+// under IMEM and DMEM 'RANGE' settings.  Otherwise, selecting COPTC3 will enable
+// application specific logic to drive configuration values onto IWC_BASE[31:16],
+// IWC_TOP[15:4], DWC_BASE[31:16], and DWC_TOP[15:4] from COPTC3. See the description 
+// for IMEM and DMEM, and the LX5280 data sheet for additional information.
+//
+// default: LMI_RANGE_SOURCE = "COPTC3";
+//
+//////////////////////////////////////////////////////////////////////
+
+LMI_RANGE_SOURCE = "HARDWIRED";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// LMI_RAM_ARB -- allow external agents to arbitrate for LMI RAMs
+//
+// configuration choices:  NO YES
+//
+//         "NO"  --  do not provide arbitration for LMI RAMs
+//        "YES"  --  provide arbitration for LMI RAMs
+//
+// Selecting YES allows external agents to request access to the RAMs that
+// that are normally controlled by the LX5280 LMIs.  Each LMI supplies
+// a request line input and grant line output.  When a given LMI's request
+// input is asserted, the LMI will assert its grant line to the external
+// agent when it is safe to allow the agent to access the RAMs.  The LMI
+// will inhibit its own accesses to the RAMs until the external request
+// line is de-asserted.
+// 
+// The request/grant lines are ports on the lx2 module, and are present
+// only if LMI_RAM_ARB is set to YES and the corresponding LMI is populated.
+// An input in the list below is an input to the LX5280, at the lx2 module
+// level.  An output is an output from the lx2 module level.
+// 
+//   input  EXT_IWREQRAM_R; // external agent drives 1'b1 to request IMEM
+//   output IW_GNTRAM_R;    // IMEM LMI drives 1'b1 to grant external agent
+// 
+//   input  EXT_DWREQRAM_R; // external agent drives 1'b1 to request DMEM
+//   output DW_GNTRAM_R;    // DMEM LMI drives 1'b1 to grant external agent
+// 
+//   input  EXT_ICREQRAM_R; // external agent drives 1'b1 to request ICACHE
+//   output IC_GNTRAM_R;    // ICACHE LMI drives 1'b1 to grant external agent
+// 
+//   input  EXT_DCREQRAM_R; // external agent drives 1'b1 to request DCACHE
+//   output DC_GNTRAM_R;    // DCACHE LMI drives 1'b1 to grant external agent
+//
+// default: LMI_RAM_ARB = "NO";
+//
+//////////////////////////////////////////////////////////////////////
+
+LMI_RAM_ARB = "YES";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// DMEM_CYC_STL -- DMEM CYCLE STEALING.
+//
+// configuration choices:  NO YES
+//
+//         "NO"  --  do not provide DMEM cycle-stealing to DMEM
+//        "YES"  --  provide DMEM cycle-stealing to DMEM
+//
+// The following settings are required when DMEM_CYC_STL = YES:
+//
+//              DMEM = RANGE
+//
+//
+// 
+//   If YES, MUX used to control DMEM access will be inserted in lx2 module.
+//   Moreover, the following ports will be poped @ lx2 module:
+// 
+//   output                             DMEM_CORERW;    // Indicating LX5280 core is accessing 
+//                                                      // the DMEM
+//   output [`DW_DATA_HI:0]             DMEM_DATARD;    // Data read from DMEM
+//   input  [`DWR_ADDR_HI:`DWR_ADDR_LO] DMEM_EXT_DATAINDEX; // External write index to DMEM
+//   input  [`DW_DATA_HI:0]             DMEM_EXT_DATAWR;    // External write data
+//   input                              DMEM_EXT_CS;    // External DMEM CS
+//   input                              DMEM_EXT_RE;    // External DMEM RE
+//   input  [`DW_WE_HI:0]               DMEM_EXT_WE;    // External DMEM WE
+// 
+//
+// default: DMEM_CYC_STL = "NO";
+//
+//////////////////////////////////////////////////////////////////////
+
+DMEM_CYC_STL = "NO";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// JTAG -- Internal JTAG Tap controller with EJTAG support
+//
+// configuration choices:  NO EXPORT EXPORT_EXTENDED
+//
+//         "NO"  --  EJTAG support is NOT added
+//     "EXPORT"  --  JTAG tap is added, tap wires exported to outside of lx2
+// "EXPORT_EXTENDED"  --  JTAG tap IS added, tap wires and additional state signals exported to outside of chip
+//
+// This option controls instancing of the internal JTAG Tap controller.
+// 
+// Select "EXPORT" if you wish to use the Lexra supplied TAP controller with
+// EJTAG, and you do not require additional scan chains.  The TAP ports will
+// be exported from the lx2 layer.
+// 
+// Select "EXPORT_EXTENDED" to instance the TAP conroller in lx1 and export
+// additional scan chain ports that you can connect to your own scan chains.
+// The standard TAP ports and additional chains will be exported from the
+// lx2 layer.
+// 
+// Select "NO" if you do not wish to use Lexra's TAP controller.  If you
+// you choose NO and your configuration includes EJTAG, then the EJTAG
+// scan chain ports will be exported from the lx2 layer, and you must
+// connect them to your own TAP controller.
+//
+// default: JTAG = "NO";
+//
+//////////////////////////////////////////////////////////////////////
+
+JTAG = "EXPORT";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// EJTAG -- EJTAG Debug Support
+//
+// configuration choices:  NO YES
+//
+//         "NO"  --  EJTAG support is NOT added
+//        "YES"  --  EJTAG support IS added
+//
+// The following settings are required when EJTAG = YES:
+//
+//              JTAG = EXPORT or EXPORT_EXTENDED
+//
+//
+// This includes the EJTAG Debug Support hardware, including breakpoint support
+// of the instruction, data, and Lexra busses, as well as the PC Trace facility, EJTAG DMA
+// facility, and EJTAG interrupts.  You must select YES if configuring any breakpoint
+// support.  (See the next three options.)  If you select YES but do not specify
+// breakpoint support, the resulting configuration will support PC Trace,
+// EJTAG DMA and EJTAG interrupts.  Selecting NO removes all support for these items.
+//
+// default: EJTAG = "NO";
+//
+//////////////////////////////////////////////////////////////////////
+
+EJTAG = "YES";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// EJTAG_INST_BREAK -- Number of instruction breaks to be compiled
+//
+// configuration choices:  <integer>
+//
+//    <integer>  --  number of instruction breaks (0 to 15)
+//
+// This is the number of EJTAG instruction breakpoints to be compiled.
+// If the number of breakpoints is non-zero, the ejtag_imatch module
+// will be instanced in the chip module.
+//
+// default: EJTAG_INST_BREAK = 0;
+//
+//////////////////////////////////////////////////////////////////////
+
+EJTAG_INST_BREAK = 2;
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// EJTAG_DATA_BREAK -- Number of data breaks to be compiled
+//
+// configuration choices:  <integer>
+//
+//    <integer>  --  number of data breaks (0 to 15)
+//
+// This is the number of EJTAG data breakpoints to be compiled.
+// If the number of breakpoints is non-zero, the ejtag_dmatch module
+// will be instanced in the chip module.
+//
+// default: EJTAG_DATA_BREAK = 0;
+//
+//////////////////////////////////////////////////////////////////////
+
+EJTAG_DATA_BREAK = 1;
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// JTAG_TRST_IS_TPC -- TRST pin is used as TPC out to eliminate TDO/TPC mux
+//
+// configuration choices:  YES NO
+//
+//        "YES"  --  TRST input replaced by TPC output
+//         "NO"  --  TDI/DINT and TDO/TPC are muxed as in the EJTAG spec
+//
+// The following settings are required when JTAG_TRST_IS_TPC = YES:
+//
+//       TESTBED_ENV = CHIP or DEVBOARD
+//
+//
+// Normally, when PCRACE is enabled, the meaning of the TDI and TDO pins change 
+// to DINT and TPC.  On a multiprocessor system with multiple TAP controllers
+// cascaded, if one CPU goes into PCTRACE modes, the scan chain is broken. 
+// Furthemore, any attempt to scan will likely generate an unwanted DINT.
+// 
+// When this option is "YES", TPC becomes a seperate output signal to the
+// probe.  Since there  are no extra pins available, TRST is sacrificed.  This
+// is generally ok since the TAP controller can be reset with five consecutive
+// TMS=1.  The loss of DINT is easily worked around since DINT is also
+// a scable control bit.
+// 
+// A side advantage to this is that the TPC signal is no longer multiplexed and
+// the skew between it and other TPC bits (if any) becomes zero.
+// 
+// This option should be turned on when there are multiple CPUs and/or when
+// a compatible probe is going to be connected.
+// 
+// NOTE: IF THIS OPTION IS TURNED ON AND A NON-EPI-MODIFIED PROBE IS USED,
+// THERE MAY BE CONFLICTING SIGNALS ON THE PROBE CONNECTOR (TPC and TRST).
+// 
+// Turn this off if a non-EPI probe or older EPI probe is being used.  Off is
+// the EJTAG "standard" selection.
+//
+// default: JTAG_TRST_IS_TPC = "NO";
+//
+//////////////////////////////////////////////////////////////////////
+
+JTAG_TRST_IS_TPC = "NO";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// PC_TRACE -- EJTAG PC trace pins
+//
+// configuration choices:  NO EXPORT BUFFER
+//
+//         "NO"  --  EJTAG PC trace pins not added to lx2
+//     "EXPORT"  --  EJTAG PC trace pins are added to lx2
+//     "BUFFER"  --  Internal PC trace buffer is added
+//
+// The following settings are required when PC_TRACE = EXPORT:
+//
+//              JTAG = EXPORT or EXPORT_EXTENDED
+//             EJTAG = YES
+//
+//
+// The following settings are required when PC_TRACE = BUFFER:
+//
+//              JTAG = EXPORT or EXPORT_EXTENDED
+//      EJTAG_DCLK_N = 1
+//             EJTAG = YES
+//
+//
+// This option provides EJTAG PC trace port on the lx2 module.
+//
+// default: PC_TRACE = "NO";
+//
+//////////////////////////////////////////////////////////////////////
+
+PC_TRACE = "NO";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// PCTB_SEQ_WIDTH -- Number of bits in an internal PC trace buffer entry allocated to the seqential instruction count
+//
+// configuration choices:  <integer>
+//
+//    <integer>  --  number of bits (2 to 8)
+//
+// Number of bits in an internal PC trace buffer entry allocated to the
+// sequential count field. This can range from 2 to 8 bits.
+//
+// default: PCTB_SEQ_WIDTH = 2;
+//
+//////////////////////////////////////////////////////////////////////
+
+PCTB_SEQ_WIDTH = 2;
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// PCTB_STL_MAN_WIDTH -- Number of bits in an internal PC trace buffer entry allocated to the mantissa field of the stall count
+//
+// configuration choices:  0 <integer>
+//
+//          "0"  --  
+//    <integer>  --  number of bits (0 to 4)
+//
+// The following settings are required when PCTB_STL_MAN_WIDTH = 0:
+//
+// PCTB_STL_EXP_WIDTH = 0
+//
+//
+// Number of bits in an internal PC trace buffer entry allocated to the
+// mantissa of the stall count field. This can range from 0 to 4 bits.
+// When 0 is chosen the exponent part of the stall count must also set to
+// 0 which results in the stall count field being removed from the PC
+// trace buffer.
+//
+// default: PCTB_STL_MAN_WIDTH = 0;
+//
+//////////////////////////////////////////////////////////////////////
+
+PCTB_STL_MAN_WIDTH = 0;
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// PCTB_STL_EXP_WIDTH -- Number of bits in an internal PC trace buffer entry allocated to the exponent field of the stall count
+//
+// configuration choices:  <integer>
+//
+//    <integer>  --  number of bits (0 to 4)
+//
+// Number of bits in an internal PC trace buffer entry allocated to the
+// exponent of the stall count field. This can range from 0 to 4 bits.
+// To remove the stall count field altogether, set both PCTB_STL_MAN_WIDTH and
+// PCTB_STL_EXP_WIDTH lconfig options to 0.
+//
+// default: PCTB_STL_EXP_WIDTH = 0;
+//
+//////////////////////////////////////////////////////////////////////
+
+PCTB_STL_EXP_WIDTH = 0;
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// PCTB_DEPTH -- Log base 2 of number of entries in internal PC trace buffer.
+//
+// configuration choices:  <integer>
+//
+//    <integer>  --  log base 2 number of buffer entries (2 or greater)
+//
+// Log base 2 the number of entries in internal PC trace buffer. 
+// Valid options are 4 (16 entries) or greater. This is only
+// instantiated if PC_TRACE="BUFFER".
+//
+// default: PCTB_DEPTH = 4;
+//
+//////////////////////////////////////////////////////////////////////
+
+PCTB_DEPTH = 4;
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// EJTAG_DCLK_N -- EJTAG PCTrace DCLK N parameter
+//
+// configuration choices:  1 2 3 4 EXPORT
+//
+//          "1"  --  1-1 DCLK:SysClk period ratio.
+//          "2"  --  2-1 DCLK:SysClk period ratio.
+//          "3"  --  3-1 DCLK:SysClk period ratio.
+//          "4"  --  4-1 DCLK:SysClk period ratio.
+//     "EXPORT"  --  CFG_EJTNMINUS1 input port on LX module
+//
+// This is the integral ratio between the DCLK period and the
+// processor core clock (SysClk) period.
+// 
+// If you choose EXPORT you must specify N-minus1 as a 2-bit value
+// connected to the CFG_EJTNMINUS1 port of the lx2 module.
+// 
+// If you choose EXPORT and you are simulating with the evaulation
+// board model (eb) supplied by Lexra (which would be the case if
+// you select TESTBED_ENV = "EVAL_BOARD" or "TEST_CHIP" with this form),
+// then you must provide a default setting for the jumper on the board.
+// This is done with the CFGEXP_EJTNMINUS1 Verilog `define symbol.  For
+// example, you can add any of the following statements to your lconfig
+// form input file, which will produce the required `defines in
+// lxr_symbols.vh:
+// 
+// 
+//    SYMBOL `define CFGEXP_EJTNMINUS1 2'b00
+// 
+//              or
+// 
+//    SYMBOL `define CFGEXP_EJTNMINUS1 2'b01
+// 
+//    etc.
+// 
+// The correspondence between these values and the actual
+// value of N is:
+// 
+//   CFGEXP_EJTNMINUS1   N
+//   ----------          --- 
+//    2'b00               1
+//    2'b01               2
+//    2'b10               3
+//    2'b11               4
+//
+// default: EJTAG_DCLK_N = "2";
+//
+//////////////////////////////////////////////////////////////////////
+
+EJTAG_DCLK_N = "2";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// EJTAG_TPC_M -- EJTAG PCTrace TPC M parameter
+//
+// configuration choices:  1 2 4 8 EXPORT
+//
+//          "1"  --  1 TPC bit  per DCLK.
+//          "2"  --  2 TPC bits per DCLK.
+//          "4"  --  4 TPC bits per DCLK.
+//          "8"  --  8 TPC bits per DCLK.
+//     "EXPORT"  --  CFG_EJTMLOG2 input port on LX module
+//
+// This is the number of valid TPC bits driven during PCTracing
+// at each DCLK.
+// 
+// If you choose EXPORT you must specify M-log2 as a 2-bit value
+// connected to the CFG_EJTMLOG2 port of the lx2 module.
+// 
+// If you choose EXPORT and you are simulating with the evaulation
+// board model (eb) supplied by Lexra (which would be the case if
+// you select TESTBED_ENV = "EVAL_BOARD" or "TEST_CHIP" with this form),
+// then you must provide a default setting for the jumper on the board.
+// This is done with the CFGEXP_EJTMLOG2 Verilog `define symbol.  For
+// example, you can add any of the following statements to your lconfig
+// form input file, which will produce the required `defines in
+// lxr_symbols.vh:
+// 
+//    SYMBOL `define CFGEXP_EJTMLOG2 2'b00
+// 
+//              or
+// 
+//    SYMBOL `define CFGEXP_EJTMLOG2 2'b01
+// 
+//    etc.
+// 
+// The correspondence between these values and the actual
+// value of M is:
+// 
+//   CFGEXP_EJTMLOG2   M
+//   --------          --- 
+//    2'b00            1
+//    2'b01            2
+//    2'b10            4
+//    2'b11            8
+//
+// default: EJTAG_TPC_M = "1";
+//
+//////////////////////////////////////////////////////////////////////
+
+EJTAG_TPC_M = "8";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// EJTAG_XV_BITS -- EJTAG PCTrace Number of Exception Vector bits
+//
+// configuration choices:  4 3 EXPORT
+//
+//          "4"  --  4-bit Exception Vector TPC output.
+//          "3"  --  3-bit Exception Vector TPC output.
+//     "EXPORT"  --  CFG_EJT3BITXVTPC input port on LX module
+//
+// This is the number of bits to be used for the EJTAG PCTrace
+// Exception Vector driven serially on the TPC line(s) when the
+// EXP code is output on the PCST lines.
+// 
+// If you use hardware low overhead vectored interrupts,
+// then a 4-bit code (with the most significant bit set to 1)
+// is used to indicate which one of the hardware interrupt vectors
+// (numbered 8 through 15) has been taken when the EXP code is output.
+// For other exceptions, the 4-bit code (with the most significant
+// bit set to 0) has the standard value on its 3 least significant
+// bits when the EXP code is output.
+// 
+// If your EJTAG probe vendor does not support this Lexra-specific
+// extension to 4-bits, or if you do not use hardware vectored interrupts,
+// you may use this parameter to disable the 4-bit code. In that case,
+// only the standard 3-bit code is used when the EXP code is output.
+// 
+// (If the 4-bit code is disabled and a hardware vectored interrupt
+// is taken, the NMI/Reset 3-bit code is used when the EXP code is output.)
+// 
+// If you choose EXPORT you must specify a 1-bit value
+// connected to the CFG_EJT3BITXVTPC port of the lx2 module.
+// 
+// If you choose EXPORT and you are simulating with the evaulation
+// board model (eb) supplied by Lexra (which would be the case if
+// you select TESTBED_ENV = "EVAL_BOARD" or "TEST_CHIP" with this form),
+// then you must provide a default setting for the jumper on the board.
+// This is done with the CFGEXP_EJT3BITXVTPC Verilog `define symbol.  For
+// example, you can add one of the following statements to your lconfig
+// form input file, which will produce the required `defines in
+// lxr_symbols.vh:
+// 
+//    SYMBOL `define CFGEXP_EJT3BITXVTPC 1'b0
+// 
+//              or
+// 
+//    SYMBOL `define CFGEXP_EJT3BITXVTPC 1'b1
+// 
+//    etc.
+// 
+// The correspondence between these values and the actual
+// width of the Exception Vector is:
+// 
+//   EJT3BITXVTPC  XV-width
+//   ------------  --------
+//    1'b0           4-bits
+//    1'b1           3-bits
+//
+// default: EJTAG_XV_BITS = "4";
+//
+//////////////////////////////////////////////////////////////////////
+
+EJTAG_XV_BITS = "4";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// EJTAG_PC_ISABIT -- EJTAG PCTrace Include ISA as PC Bit0
+//
+// configuration choices:  YES NO EXPORT
+//
+//        "YES"  --  32-bit PC for TPC output with ISA as Bit0.
+//         "NO"  --  31-bit PC for TPC output.
+//     "EXPORT"  --  CFG_EJTBIT0M16 input port on LX module
+//
+// This determines the number of bits to be used for the EJTAG PCTrace PC
+// that is driven serially on the TPC line(s) when the JMP code is output
+// on the PCST lines.
+// 
+// The EJTAG feature specifies that only a 31-bit PC (bits 31:1) should
+// be output on the TPC line(s) by systems that are capable of executing
+// code-compressed, 16-bit instructions (M16 ISA mode). (Systems that
+// are not capable of executing in M16 mode use a 30-bit PC (bits 31:2)).
+// 
+// Some debug software that uses PCTrace information from an EJTAG
+// probe can make good use of the ISA mode supplied as bit0 of the PC.
+// 
+// This parameter supports such debug software by enabling a 32-bit PC
+// for systems which are M16 capable. For these systems, if this
+// parameter is set to "YES", then bit0 is the first bit to be output on
+// the TPC line(s) and has the value "1" if the target of the JMP-type
+// instruction is in M16 ISA mode, and has the value "0" otherwise.
+// (This usage of bit0 is consistent with its use in the EPC register and
+// as the target of a JR instruction.)
+// 
+// Note: This parameter is ignored if the system is not capable of
+// executing M16 mode instructions. In that case, a 30-bit PC (bits 31:2)
+// is always used for output on the TPC line(s).
+// 
+// If you choose EXPORT you must specify a 1-bit value connected to the
+// CFG_EJTBIT0M16 port of the lx2 module.
+// 
+// If you choose EXPORT and you are simulating with the evaulation board
+// model (eb) supplied by Lexra (which would be the case if you select
+// TESTBED_ENV = "EVAL_BOARD" or "TEST_CHIP" with this form), then you
+// must provide a default setting for the jumper on the board.  This is
+// done with the CFGEXP_EJTBIT0M16 Verilog `define symbol.  For example,
+// you can add one of the following statements to your lconfig form input
+// file, which will produce the required `defines in lxr_symbols.vh:
+// 
+//    SYMBOL `define CFGEXP_EJTBIT0M16 1'b0
+// 
+//              or
+// 
+//    SYMBOL `define CFGEXP_EJTBIT0M16 1'b1
+// 
+//    etc.
+// 
+// The correspondence between these values and the actual
+// width of the output PC is:
+// 
+//   M16-capable?  PC-width (bits)  CFGEXP_EJTBIT0M16   
+//   ------------  --------	 ----------   
+//       no         30-bits (31:2)	 don't care   
+//      yes         31-bits (31:1)	   1'b0       
+//      yes         32-bits (31:0)	   1'b1       
+//
+// default: EJTAG_PC_ISABIT = "YES";
+//
+//////////////////////////////////////////////////////////////////////
+
+EJTAG_PC_ISABIT = "YES";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// SCAN_INSERT -- Controls scan insertion and synthesis
+//
+// configuration choices:  YES NO
+//
+//        "YES"  --  Insert scan in the Lexra core and optional modules
+//         "NO"  --  No Scan insertion will be performed
+//
+// The following settings are required when SCAN_INSERT = NO:
+//
+//          SCAN_SCL = NO
+//
+//
+// If you have selected SMOOTHCORE for the PRODUCT_TYPE configuration
+// option, internal scan will always be included in the core netlist you
+// receive from Lexra (at the lx0c level).
+//   * If you select NO as the SCAN_INSERT option, all scan signals will 
+//   be tied off in the top level netlists generated for you.
+//   * If you select YES as the SCAN_INSERT option, scan will also be
+//   inserted on the MAC and EJTAG options (if selected) and their scan
+//   enable and chains will be brought to lx2.
+//   In this case, there will be one scan chain for the mac, and one or 
+//   three scan chains for EJTAG, depending on the SCAN_MIX_CLOCKS option.
+// 
+// If you have selected RTL for the PRODUCT_TYPE configuration option,
+// and select YES as the SCAN_INSERT option, scan will be inserted in the
+// entire Lexra LX5280 up to the lx1 level, and the chains will be merged
+// according to the SCAN_NUM_CHAINS and SCAN_MIX_CLOCKS constraints.
+// 
+//
+// default: SCAN_INSERT = "NO";
+//
+//////////////////////////////////////////////////////////////////////
+
+SCAN_INSERT = "YES";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// SCAN_MIX_CLOCKS -- Scan Chains can cross clock boundaries with lock-up latches
+//
+// configuration choices:  YES NO
+//
+//        "YES"  --  Scan Chains may cross clock boundaries
+//         "NO"  --  Scan chains may not cross clock boundaries
+//
+// default: SCAN_MIX_CLOCKS = "YES";
+//
+//////////////////////////////////////////////////////////////////////
+
+SCAN_MIX_CLOCKS = "YES";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// SCAN_NUM_CHAINS -- Number of scan chains in LX5280 design
+//
+// configuration choices:  <integer> 0
+//
+//    <integer>  --  number of scan chainss (1 to 32768)
+//          "0"  --  No scan chain present in LX5280 design.
+//
+// The following settings are required when SCAN_NUM_CHAINS = 0:
+//
+//       SCAN_INSERT = NO
+//
+//
+//   Number of chains present in LX5280 design.
+//
+// default: SCAN_NUM_CHAINS = 4;
+//
+//////////////////////////////////////////////////////////////////////
+
+SCAN_NUM_CHAINS = 4;
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// SCAN_SCL -- A Scan collar will be inserted on RAM interfaces
+//
+// configuration choices:  NO YES
+//
+//         "NO"  --  Memory scan collar will not be inserted
+//        "YES"  --  Memory scan collar will be inserted
+//
+// default: SCAN_SCL = "NO";
+//
+//////////////////////////////////////////////////////////////////////
+
+SCAN_SCL = "NO";
+
+
+//////////////////////////////////////////////////////////////////////
+//
+// RAM_BIST_MUX -- include test RAM mux and ports on lx2 module
+//
+// configuration choices:  NO YES
+//
+//         "NO"  --  no RAM test mux ports on lx2
+//        "YES"  --  include RAM test mux ports on lx2 module
+//
+// default: RAM_BIST_MUX = "NO";
+//
+//////////////////////////////////////////////////////////////////////
+
+RAM_BIST_MUX = "NO";
+

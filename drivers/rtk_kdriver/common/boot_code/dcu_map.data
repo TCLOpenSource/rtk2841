@@ -1,0 +1,134 @@
+#ifdef  DC_MAP_NEW
+#define REMAP_BIT 0x200000
+#else
+#define REMAP_BIT 0x000000
+#endif
+
+dcu_param:
+.word MAP_START
+#ifdef DDR3  // DDR3
+#if EN_2DDR_SIZE_4G2G
+    .word (0x084B0041|REMAP_BIT)    	;;#// PARAM_DCSYS0::1800_8004 4K pg sz
+#elif EN_2DDR_SIZE_2G4G
+    .word (0x084B0041|REMAP_BIT)    	;;#// PARAM_DCSYS0::1800_8004 4K pg sz
+#elif SDRAM_2K_1DDR
+    #if X512
+    .word (0x04420000|REMAP_BIT)    	;;#// PARAM_DCSYS0::1800_8004 2K pg sz
+    #elif X2G
+    .word (0x02420000|REMAP_BIT)    	;;#// PARAM_DCSYS0::1800_8004 2K pg sz
+    #elif X4G
+    .word (0x08420000|REMAP_BIT)    	;;#// PARAM_DCSYS0::1800_8004 2K pg sz
+    #elif X8G
+    .word (0x10420000|REMAP_BIT)    	;;#// PARAM_DCSYS0::1800_8004 2K pg sz
+    #else        // X1G: default
+    .word (0x00420000|REMAP_BIT)    	;;#// PARAM_DCSYS0::1800_8004 2K pg sz
+    #endif
+#elif SDRAM_4K_2DDR
+    #if X512
+    .word (0x044B0000|REMAP_BIT)   	    ;;#// PARAM_DCSYS0::1800_8004 4K pg sz
+    #elif X2G
+    .word (0x024B0000|REMAP_BIT)    	;;#// PARAM_DCSYS0::1800_8004 4K pg sz
+    #elif X4G
+    .word (0x084B0000|REMAP_BIT)    	;;#// PARAM_DCSYS0::1800_8004 4K pg sz
+    #elif X8G
+    .word (0x104B0000|REMAP_BIT)    	;;#// PARAM_DCSYS0::1800_8004 4K pg sz
+    #else
+    .word (0x004B0000|REMAP_BIT)    	;;#// PARAM_DCSYS0::1800_8004 4K pg sz
+    #endif
+#else
+    .word (0x00420000|REMAP_BIT)    	;;#// PARAM_DCSYS0::1800_8004 2K pg sz
+#endif
+
+	// DDR3-1600
+//	.word 0x001CB816        // PARAM_DCPHY0::1800_8800, tmRAS=9'h1C, tmrcl=4'hB, tmcl=8'h8
+//	.word 0x05100D0D        // PARAM_DCPHY1::1800_8804, tmRRD=5'h5, tmRP=6'h10, tmRCD=6'hD, tmRC=8'hD
+//	.word 0x02040508        // PARAM_DCPHY2::1800_8808, tmCCD=5'h2, tRTP=7'h4, tmWTR=5'h5, tmWR=6'h8
+//	.word 0x2001707A        // PARAM_DCPHY3::1800_880C, tmtmFAW=8'h20, refcycle=10'h17, tmRFC=11'h07A
+//	.word 0x03030A02        // PARAM_DCPHY4::1800_8810, tAOND=6'h3, tAOFD=6'h3, tmmod=8'hA, tmmrd=5'h2
+//	.word 0x00200400        // PARAM_DCPHY5::1800_8814, tzqoper=12'h200, tzqinit=12'h400
+//	.word 0x00240080        // PARAM_DCPHY6::1800_8818, tdllk=12'h240, tzqcs=12'h80
+//	.word 0x00000D71        // PARAM_DCPHY7::1800_8844, CL=11, WR=12, DLL Reset
+
+	// DDR3-1866
+//	.word 0x001FC500        // PARAM_DCPHY0::1800_8800, tmRAS=9'h1F, tmrcl=4'hC, tmcl=8'h6
+	.word 0x001FC600        // PARAM_DCPHY0::1800_8800, tmRAS=9'h1F, tmrcl=4'hC, tmcl=8'h7
+	.word 0x05100D0D        // PARAM_DCPHY1::1800_8804, tmRRD=5'h5, tmRP=6'h10, tmRCD=6'hD, tmRC=8'hD
+	.word 0x02050B0E        // PARAM_DCPHY2::1800_8808, tmccd_r2r=4'h0, tmCCD=4'h2, tRTP=7'h5, tmWTR=5'hB, tmWR=6'hE
+	.word 0x1F0B807A        // PARAM_DCPHY3::1800_880C, tmtmFAW=8'h1F, refcycle=10'h0B8, tmRFC=11'h07A
+	.word 0x03030A02        // PARAM_DCPHY4::1800_8810, tAOND=6'h3, tAOFD=6'h3, tmmod=8'hA, tmmrd=5'h2
+	.word 0x00200400        // PARAM_DCPHY5::1800_8814, tzqoper=12'h200, tzqinit=12'h400
+	.word 0x00240080        // PARAM_DCPHY6::1800_8818, tdllk=12'h240, tzqcs=12'h80
+	.word 0x00000F05        // PARAM_DCPHY7::1800_8844, CL=12, WR=14, DLL Reset
+#endif  // end of DDR3
+//********************************************************************************************
+//******************************** below parameter for ddr2 //********************************
+//********************************************************************************************
+#ifdef DDR2   // ddr2
+	// DDR2-1066 (7-7-7), 187E, 4G, 4BANK
+    .word 0x00020000        // PARAM_DC0::1800_8004 2K  512Mb
+#if 0
+    .word 0x0018760f        // PARAM_DCPHY0::1800_8800, tmRAS=9'h18, tmrcl=4'h7, tmcl=4'h6, tmcl_rd=8'hf
+    .word 0x0607071f        // PARAM_DCPHY1::1800_8804, tmRRD=5'h6, tmRP=6'h7, tmRCD=6'h7, tmRC=8'h1f
+    .word 0x02040508        // PARAM_DCPHY2::1800_8808, tmCCD=5'h2, tRTP=7'h4, tmWTR=5'h5, tmWR=6'h8
+    .word 0x1802006A        // PARAM_DCPHY3::1800_880c, tmFAW=0x18, refcycle=0x20, tmrfc=0x6A
+    .word 0x03030a02        // PARAM_DCPHY4::1800_8810, tAOND=6'h3, tAOFD=6'h3, tmmod=8'hA, tmmrd=5'h2
+    .word 0x00200400        // PARAM_DCPHY5::1800_8814, tzqoper=12'h200, tzqinit=12'h400
+    .word 0x00240080        // PARAM_DCPHY6::1800_8818, tdllk=12'h240, tzqcs=12'h80
+    .word 0x00000F52        // PARAM_DCPHY7::1800_8844, CL=7, WR=8 DLL Reset
+#else
+    // Copy from RL6305 
+    .word 0x0016A60E        // PARAM_DCPHY0::1800_8800
+    .word 0x04050811        // PARAM_DCPHY1::1800_8804
+    .word 0x02040308        // PARAM_DCPHY2::1800_8808
+    .word 0x3f00504d        // PARAM_DCPHY3::1800_880c
+    .word 0x03030a02        // PARAM_DCPHY4::1800_8810, tAOND=6'h3, tAOFD=6'h3, tmmod=8'hA, tmmrd=5'h2
+    .word 0x00200400        // PARAM_DCPHY5::1800_8814, tzqoper=12'h200, tzqinit=12'h400
+    .word 0x00240080        // PARAM_DCPHY6::1800_8818, tdllk=12'h240, tzqcs=12'h80
+    .word 0x00000e72        // PARAM_DCPHY7::1800_8844
+#endif
+/*****************************************************************************************************
+    25E setting
+    .word 0x02022020        // PARAM_DC0::1800_8004 4K pg sz	# cltsai 082405
+    .word 0x00165409        // PARAM_DCPHY0::1800_8800, tmRAS=9'hF, tmrcl=4'h5, tmcl=4'h4, tmcl_rd=8'h9
+    .word 0x03050411        // PARAM_DCPHY1::1800_8804, tmRRD=5'h3, tmRP=6'h5, tmRCD=6'h4, tmRC=8'h11
+    .word 0x02040306        // PARAM_DCPHY2::1800_8808, tmCCD=5'h2, tRTP=7'h4, tmWTR=5'h5, tmWR=6'h6
+    .word 0x3F00504D        // PARAM_DCPHY3::1800_880c, tmFAW=0x3F, refcycle=0x50, tmrfc=0x4D
+    .word 0x03030A02        // PARAM_DCPHY4::1800_8810, tAOND=6'h3, tAOFD=6'h3, tmmod=8'hA, tmmrd=5'h2
+    .word 0x00200400        // PARAM_DCPHY5::1800_8814, tzqoper=12'h200, tzqinit=12'h400
+    .word 0x00240080        // PARAM_DCPHY6::1800_8818, tdllk=12'h240, tzqcs=12'h80
+    .word 0x00000A52        // PARAM_DCPHY7::1800_8844, CL=7, WR=7
+*****************************************************************************************************/
+#endif  // end of DDR2
+.word 0x7fcc3cf
+.word 0x3fcc3cf
+
+#ifdef DDR3  // DDR3
+.word 0x3
+#elif  DDR2
+.word 0x2
+#else
+.word 0x0
+#endif
+
+
+#if EN_2DDR_SIZE_4G2G
+.word 0x02000040  // @0x34 1800_8e00[25] mem_num_sel = 1;
+.word 0x00000000  // @0x38 1800_8ef8[1]  swap CS/CS1 = 0;
+.word 0x00000001  // @0x3c 1800_8954[0]  dq_sel      = 1;
+#elif EN_2DDR_SIZE_2G4G
+.word 0x02000040  // 1800_8e00[25] mem_num_sel = 1;
+.word 0x00000002  // 1800_8ef8[1]  swap CS/CS1 = 1;
+.word 0x00000000  // 1800_8954[0]  dq_sel      = 0;
+#elif SDRAM_2K_1DDR
+.word 0x00000040  // 1800_8e00[25] mem_num_sel = 0;
+.word 0x00000000  // 1800_8ef8[1]  swap CS/CS1 = 0;
+.word 0x00000001  // 1800_8954[0]  dq_sel      = 1;
+#elif SDRAM_4K_2DDR
+.word 0x00000040  // 1800_8e00[25] mem_num_sel = 0;
+.word 0x00000000  // 1800_8ef8[1]  swap CS/CS1 = 0;
+.word 0x00000001  // 1800_8954[0]  dq_sel      = 1;
+#else
+.word 0x00000040  // 1800_8e00[25] mem_num_sel = 0;
+.word 0x00000000  // 1800_8ef8[1]  swap CS/CS1 = 0;
+.word 0x00000001  // 1800_8954[0]  dq_sel      = 1;
+#endif

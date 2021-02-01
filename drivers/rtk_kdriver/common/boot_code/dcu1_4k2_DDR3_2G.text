@@ -1,0 +1,23 @@
+
+dcu1_4k2_DDR3_2G.o:     file format elf32-bigmips
+
+
+Disassembly of section .text:
+
+bfc01080 <dcu_param>:
+bfc01080:	bfc01080 	cache	0x0,4224(s8)
+bfc01084:	024b0000 	0x24b0000
+bfc01088:	001fc600 	sll	t8,ra,0x18
+bfc0108c:	05100d0d 	bltzal	t0,bfc044c4 <__bss_start+0x3404>
+bfc01090:	02050b0e 	0x2050b0e
+bfc01094:	1f0b807a 	0x1f0b807a
+bfc01098:	03030a02 	0x3030a02
+bfc0109c:	00200400 	0x200400
+bfc010a0:	00240080 	0x240080
+bfc010a4:	00000f05 	0xf05
+bfc010a8:	07fcc3cf 	0x7fcc3cf
+bfc010ac:	03fcc3cf 	0x3fcc3cf
+bfc010b0:	00000003 	sra	zero,zero,0x0
+bfc010b4:	00000040 	ssnop
+bfc010b8:	00000000 	nop
+bfc010bc:	00000001 	0x1

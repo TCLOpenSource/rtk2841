@@ -1,0 +1,2 @@
+# Makefile for the PQ ISR.
+obj-y := Dh_close.o FBlevelCtrl.o FilmDetcetCtrl.o FRC_decPhT_generate.o FRC_glb_Context.o FRC_LogoDetect.o FRC_phTable.o Mc_lbmcSwitch.o Patch_Manage.o PQL_context_ReadParam.o PQL_Glb_Param.o PQLAPI.o PQLContext.o PQLMessage.o Read_ComReg.o RimCtrl.o Write_ComReg.o

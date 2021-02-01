@@ -1,0 +1,11 @@
+#Copyright (C) 2007-2013 Realtek Semiconductor Corporation.
+# drivers/rtk_kdriver/switch/Kconfig
+
+config RTK_KDRV_SWITCH
+	bool "Switch Support"
+
+config RTK_KDRV_SWITCH_GPIO
+	bool "GPIO Switch  device interface"
+	depends on RTK_KDRV_SWITCH
+	help
+	  GPIO Switch Device Driver

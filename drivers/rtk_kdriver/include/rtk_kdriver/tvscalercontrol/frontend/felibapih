@@ -1,0 +1,743 @@
+/*=============================================================
+ * Copyright (c)      Realtek Semiconductor Corporation, 2005 *
+ * All rights reserved.                                       *
+ *============================================================*/
+
+/*======================= Description ========================*/
+/**
+ * @file
+ * This header file is for middleware to use frontend library
+ * @author Chuck Chen
+ * @date 2005/03/10
+ * @version $Id: felibAPI.h,v 1.10 2005/12/22 11:57:31 ycchen Exp $
+ * @ingroup dev_tuner
+ */
+
+#ifndef __FELIB_API_H__
+#define __FELIB_API_H__
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+//#include <sys/ioctl.h>
+//#include <rtd_types.h>
+//#include <kernel/frontendCtl/frontend.h>
+//#include <realtek/smart_antenna.h>
+
+
+//*************************************************************
+// ENUM
+//*************************************************************
+/**
+ *	define possible tuner types
+ */
+typedef enum _FE_TVSRC_TYPE {		// follow the fe_type_t in frontend.h
+	FE_TVSRC_DVB_SATELLITE = 0x0,
+	FE_TVSRC_DVB_CABLE,
+	FE_TVSRC_DVB_TERRESTRIAL,
+	FE_TVSRC_ATSC,
+	FE_TVSRC_ANALOG_AIR,			// split ANALOG to ANALOG_AIR and ANALOG_CABLE
+	FE_TVSRC_ANALOG_CABLE,
+	FE_TVSRC_OPCABLE,
+	FE_TVSRC_DMBTH,					// for DMB-TH
+	FE_TVSRC_ANTENNA,
+	FE_TVSRC_OPCABLE_OOB,
+	FE_TVSRC_MAX_TYPE
+} FE_TVSRC_TYPE;
+
+
+/**
+ *	define the signal status for upper layer
+ */
+typedef enum _FE_SIGNAL_STATUS {
+	FE_SIGNAL_NORMAL = 0x0,
+	FE_SIGNAL_WEAK,
+	FE_SIGNAL_NOT_FOUND,
+	FE_SIGNAL_NO_POWER,
+	FE_SIGNAL_WAIT_JUDGE,
+} FE_SIGNAL_STATUS;
+
+
+/**
+ *  define the spectral inversion frontend (referred to <kernel/frontendCtl/frontend.h>)
+ */
+typedef enum _FE_SPECTRAL_INVERSION {
+	FE_INVERSION_OFF,
+	FE_INVERSION_ON,
+	FE_INVERSION_AUTO,
+	FE_INVERSION_UNKOWN			// if upper layer don't have knowledge about inversion,
+								//use FE_INVERSION_UNKOWN to adopt driver's default value
+} FE_SPECTRAL_INVERSION;
+
+
+/**
+ *  define the code rate for DVB OFDM frontend (referred to <kernel/frontendCtl/frontend.h>)
+ */
+typedef enum _FE_CODE_RATE {
+	FE_FEC_NONE = 0,
+	FE_FEC_1_2,
+	FE_FEC_2_3,
+	FE_FEC_3_4,
+	FE_FEC_4_5,
+	FE_FEC_5_6,
+	FE_FEC_6_7,
+	FE_FEC_7_8,
+	FE_FEC_8_9,
+	FE_FEC_AUTO
+} FE_CODE_RATE;
+
+
+typedef enum _FE_ANALOG_DEMODMODE {
+	FE_ANALOG_DEMODMODE_SCAN,
+	FE_ANALOG_DEMODMODE_SET
+} FE_ANALOG_DEMODMODE;
+
+
+typedef enum _FE_VSB_DEMODMODE {
+	FE_VSB_DEMODMODE_SCAN,
+	FE_VSB_DEMODMODE_SET
+} FE_VSB_DEMODMODE;
+
+
+/**
+ *  define the modulation ways (referred to <kernel/frontendCtl/frontend.h>)
+ */
+typedef enum _FE_MODULATION {
+	FE_QPSK_AUTO,		//FE_QPSK is already used in linux/dvb/fronend.h
+	FE_QAM_16,
+	FE_QAM_32,
+	FE_QAM_64,
+	FE_QAM_128,
+	FE_QAM_256,
+	FE_QAM_AUTO,
+	FE_VSB_8,
+	FE_VSB_16
+} FE_MODULATION;
+
+
+//add by jr, refer to ifd.h
+typedef enum _FE_ANALOG_SIGMODE {
+	FE_ANALOG_SIG_MODE_AUTO = 0 ,
+	FE_ANALOG_SIG_MODE_PAL,
+	FE_ANALOG_SIG_MODE_NTSC,
+	FE_ANALOG_SIG_MODE_NTSC_443,
+	FE_ANALOG_SIG_MODE_SECAM,
+	FE_ANALOG_SIG_MODE_PAL_DK,
+	FE_ANALOG_SIG_MODE_PAL_I,
+	FE_ANALOG_SIG_MODE_PAL_BG,
+	FE_ANALOG_SIG_MODE_SECAM_DK,
+	FE_ANALOG_SIG_MODE_MAX
+} FE_ANALOG_SIGMODE;
+
+
+/**
+ *  define the transmit modes for DVB OFDM frontend (referred to <kernel/frontendCtl/frontend.h>)
+ */
+typedef enum _FE_TRANSMISSION_MODE {
+	FE_TRANSMISSION_MODE_2K,
+	FE_TRANSMISSION_MODE_8K,
+	FE_TRANSMISSION_MODE_AUTO
+} FE_TRANSMISSION_MODE;
+
+
+/**
+ *  define the frequency bandwidth for DVB OFDM frontend (referred to <kernel/frontendCtl/frontend.h>)
+ */
+typedef enum _FE_BANDWIDTH {
+	FE_BANDWIDTH_8_MHZ,
+	FE_BANDWIDTH_7_MHZ,
+	FE_BANDWIDTH_6_MHZ,
+	FE_BANDWIDTH_AUTO
+} FE_BANDWIDTH;
+
+
+/**
+ *  define the guard interval for DVB OFDM frontend (referred to <kernel/frontendCtl/frontend.h>)
+ */
+typedef enum _FE_GUARD_INTERVAL {
+	FE_GUARD_INTERVAL_1_32,
+	FE_GUARD_INTERVAL_1_16,
+	FE_GUARD_INTERVAL_1_9,     //for DMB-TH
+	FE_GUARD_INTERVAL_1_8,
+	FE_GUARD_INTERVAL_1_4,
+	FE_GUARD_INTERVAL_AUTO
+} FE_GUARD_INTERVAL;
+
+
+/**
+ *  define the hierarchy modes for DVB OFDM frontend (referred to <kernel/frontendCtl/frontend.h>)
+ */
+typedef enum _FE_HIERARCHY {
+	FE_HIERARCHY_NONE,
+	FE_HIERARCHY_1,
+	FE_HIERARCHY_2,
+	FE_HIERARCHY_4,
+	FE_HIERARCHY_AUTO
+} FE_HIERARCHY;
+
+
+/**
+ *  define the interleaver modes for DMB-TH
+ */
+typedef enum _FE_INTERLEAVER {
+	FE_INTERLEAVER_240,
+	FE_INTERLEAVER_720,
+	FE_INTERLEAVER_AUTO
+} FE_INTERLEAVER;
+
+
+typedef enum _FE_DMB_CODE_RATE {
+	FE_CODE_RATE_040,
+	FE_CODE_RATE_060,
+	FE_CODE_RATE_080,
+	FE_CODE_RATE_AUTO
+} FE_DMB_CODE_RATE;
+
+
+/**
+ *  define the qam alpha modes for DVB-C
+ */
+typedef enum _FE_QAM_ALPHA {
+	FE_ALPHA_0P12,			///<   Alpha = 0.12
+	FE_ALPHA_0P13,			///<   Alpha = 0.13
+	FE_ALPHA_0P15,			///<   Alpha = 0.15
+	FE_ALPHA_0P18,			///<   Alpha = 0.18
+	FE_ALPHA_0P20,			///<   Alpha = 0.20
+} FE_QAM_ALPHA;
+
+
+typedef enum _FE_FREQ_BAND {
+	FE_FREQ_BAND_LOW  = 0x01,	///<   low band
+	FE_FREQ_BAND_MID  = 0x02,	///<   middle band
+	FE_FREQ_BAND_HIGH = 0x04,	///<   high band
+} FE_FREQ_BAND;
+
+
+/*
+	DISEQC related definition
+*/
+typedef enum _DISEQC_DEVICE{
+	ANY_DEVICE						= 0x00,
+	ANY_LNBSWTICH					= 0x10, // Any LNB, Switcher or SMATV (Master to all...)
+	LNB								= 0x11, // LNB
+	LNB_LOOP_THROUGH				= 0x12, // LNB with Loop-through switching
+	SWITCHER						= 0x14, // Switcher (d.c. blocking)
+	SWITCHER_LOOP_THROUGH			= 0x15, // Switcher with d.c. Loop-through
+	SMATV							= 0x18, // SMATV
+	ANY_POLARISER					= 0x20, // Any Polariser (Master to all Polarisers)
+	LINEAR_POLARISER				= 0x21, // Linear Polarisation (Skew) Controller
+	ANY_POSITIONER					= 0x30, // Any Positioner (Master to all Positioners)
+	POLAR_AZIMUTH_POSITIONER		= 0x31, // Polar / Azimuth Positioner
+	ELEVATION_POSITIONER			= 0x32, // Elevation Positioner
+	ANY_INSTALLER_AID				= 0x40, // Any Installer Aid (Master to all Installer Aids)
+	SIGNAL_STRENGTH_ANALOGUE		= 0x41, // Signal-strength analogue value
+	INTELLIGENT_SLAVE_IF			= 0x70, // Any Intelligent Slave Interfaces (Master to all)
+	CONTROLLED_HEADENDS				= 0x71, //
+	DEFAULT_DEVICE					= 0xFF
+} DISEQC_DEVICE;
+
+typedef enum _DISEQC_COMMAND {
+	DISEQC1_RESET = 0x00,					// M*R/1.0 00 Reset Reset DiSEqCa microcontroller 3
+	DISEQC2_CLR_RESET_FLAG,					// R / 2.0 01 // Clr Reset Clear the ¡§Reset¡¨ flag 3
+	DISEQC1_STANDBY,						// R / 1.0 02 Standby Switch peripheral power supply off 3
+	DISEQC1_POWER_ON,						// R / 1.0 03 Power on Switch peripheral power supply on 3
+	DISEQC2_SET_CONTEND_FLAG,				// S / 2.0 04 Set Contend Set Contention flag 3
+	DISEQC2_CONTEND_RET_ADDR,				// S / 2.0 05 Contend Return address only if Contention flag is set 3 Address
+	DISEQC2_CLR_CONTEND_FLAG,				// R / 2.0 06 Clr Contend Clear Contention flag 3
+	DISEQC2_NOCONTEND_RET_ADDR,				// S / 2.0 07 Address Return address unless Contention flag is set 3 Address
+	DISEQC2_MOVE_C_CHANGE_ADDR,				// S / 2.0 08 Move C Change address only if Contention flag is set 4
+	DISEQC2_MOVE_NC_CHANGE_ADDR,			// R / 2.0 09 Move Change address unless Contention flag is set 4
+	DISEQC2_STATUS_READ,					// R / 2.0 10 Status Read Status register flags 3 Status
+	DISEQC2_CONFIG_READ,					// R / 2.0 11 Config Read Configuration flags (peripheral hardware) 3 Config.
+
+	DISEQC2_SW0_READ_STATE = 0x14,			// R / 2.0 14 Switch 0 Read Switching state flags (Committed port) 3 Switches
+	DISEQC2_SW1_READ_STATE,					// R / 2.0 15 Switch 1 Read Switching state flags (Uncommitted port) 3 Switches
+
+
+	DISEQC1_SET_LOW_LO = 0x20,				// R / 1.0 20 Set Lo Select the Low Local Oscillator frequency 3
+	DISEQC1_SET_VERTICAL,					// R / 1.0 21 Set VR Select Vertical Polarisation (or Right circular) 3
+	DISEQC1_SET_POS_A,						// R / 1.0 22 Set Pos A Select Satellite position A (or position C) 3
+	DISEQC1_SET_SWITCH_OPTION_A,			// R / 1.0 23 Set S0A Select Switch Option A (e.g. positions A/B) 3
+	DISEQC1_SET_HI_LO,						// R / 1.0 24 Set Hi Select the High Local Oscillator frequency 3
+	DISEQC1_SET_HORIZONTAL,					// R / 1.0 25 Set HL Select Horizontal Polarisation (or Left circular) 3
+	DISEQC1_SET_POS_B,						// R / 1.0 26 Set Pos B Select Satellite position B (or position D) 3
+	DISEQC1_SET_SWITCH_OPTION_B,			// R / 1.0 27 Set S0B Select Switch Option B (e.g. positions C/D) 3
+	DISEQC1_SET_SWITCH1A,					// R / 1.1 28 Set S1A Select switch S1 input A (deselect input B) 3
+	DISEQC1_SET_SWITCH2A,					// R / 1.1 29 Set S2A Select switch S2 input A (deselect input B) 3
+	DISEQC1_SET_SWITCH3A,					// R / 1.1 2A Set S3A Select switch S3 input A (deselect input B) 3
+	DISEQC1_SET_SWITCH4A,					// R / 1.1 2B Set S4A Select switch S4 input A (deselect input B) 3
+	DISEQC1_SET_SWITCH1B,					// R / 1.1 2C Set S1B Select switch S1 input B (deselect input A) 3
+	DISEQC1_SET_SWITCH2B,					// R / 1.1 2D Set S2B Select switch S2 input B (deselect input A) 3
+	DISEQC1_SET_SWITCH3B,					// R / 1.1 2E Set S3B Select switch S3 input B (deselect input A) 3
+	DISEQC1_SET_SWITCH4B,					// R / 1.1 2F Set S4B Select switch S4 input B (deselect input A) 3
+
+	DISEQC1_SLEEP,							// 30 Sleep Ignore all bus commands except ¡§Awake¡¨ 3
+	DISEQC1_AWAKE,							// 31 Awake Respond to future bus commands normally 3
+	DISEQC1_WRITEN0 = 0x38,					// M / 1.0 38 Write N0 Write to Port group 0 (Committed switches) 4
+	DISEQC1_WRITEN1,						// M / 1.1 39 Write N1 Write to Port group 1 (Uncommitted switches) 4
+	DISEQC1_WRITEN2,						// 3A Write N2 expansion option 4
+	DISEQC1_WRITEN3,						// 3B Write N3 expansion option 4
+	DISEQC2_READ_A0_ANALOGUE = 0x40,		// S / 2.0 40 Read A0 Read Analogue value A0 3 byte value
+	DISEQC2_READ_A1_ANALOGUE,				// S / 2.0 41 Read A1 Read Analogue value A1 3 byte value
+	DISEQC1_WRITE_A0_ANALOGUE = 0x48,		// R / 1.2 48 Write A0 Write Analogue value A0 (e.g. Skew) 4
+	DISEQC1_WRITE_A1_ANALOGUE,				// S / 1.2 49 Write A1 Write Analogue value A1 4
+	DISEQC2_READ_LO_FREQ,					// S / 2.0 50 LO string Read current frequency [Reply = BCD string] 3 BCD bytes
+	DISEQC2_READ_FREQ_ENTRY,				// R / 2.0 51 LO now Read current frequency table entry number 3 F number
+	DISEQC2_READ_LO_FREQ_TABLE_ENTRY,		// S / 2.0 52 LO Lo Read Lo frequency table entry number 3 F number
+	DISEQC2_READ_HI_FREQ_TABLE_ENTRY,		// S / 2.0 53 LO Hi Read Hi frequency table entry number 3 F number
+
+	DISEQC1_WRITE_LO_FREQ = 0x58,			// M / 1.1 58 Write Freq Write channel frequency (BCD string) 5 / 6
+	DISEQC1_WRITE_CHANNEL_NUMBER,			// 59 Ch. No. Write (receiver¡¦s) selected channel number 5
+	DISEQC1_HALT_POSITIONER,				// M / 1.2 60 Halt Stop Positioner movement 3
+
+	DISEQC1_DISABLE_LIMITS = 0x63,			// M / 1.2 63 Limits Off Disable Limits 3
+	DISEQC1_POSSTAT_READ = 0x64,			// R / 2.2 64 PosStat Read Positioner Status Register 3 Pos Status
+
+	DISEQC1_SET_EAST_LIMIT = 0x66,			// M / 1.2 66 Limit E Set East Limit (& Enable recommended) 3
+	DISEQC1_SET_WEST_LIMIT = 0x67,			// M / 1.2 67 Limit W Set West Limit (& Enable recommended) 3
+	DISEQC1_DRIVE_MOTOR_EAST = 0x68,		// M / 1.2 68 Drive East Drive Motor East (with optional timeout/steps) 4
+	DISEQC1_DRIVE_MOTOR_WEST = 0x69,		// M / 1.2 69 Drive West Drive Motor West (with optional timeout/steps) 4
+	DISEQC1_STORE_POS  = 0x6A,				// M / 1.2 6A Store nn Store Satellite Position & Enable Limits 4
+	DISEQC1_GOTO_STORE_POS = 0x6B,			// M / 1.2 6B Goto nn Drive Motor to Satellite Position nn 4
+	DISEQC1_SET_POSITION  = 0x6F			// R / 1.2 6F Set Posns. (Re-) Calculate Satellite Positions (4) / 6
+} DISEQC_COMMAND;
+
+
+//*************************************************************
+// STRUCT
+//*************************************************************
+/**
+ *  structure for the channel list
+ */
+typedef struct _FE_CHANNEL_NODE {
+	unsigned long				frequency;
+	struct _FE_CHANNEL_NODE*	next;
+} FE_CHANNEL_NODE;
+
+
+/**
+ *	structure for the auto channel scan request
+ */
+typedef struct _FE_CHANNEL_SCAN_RESULT {
+	unsigned long			start_freq;		///< start frequency of scanning
+	unsigned long			end_freq;		///< end frequency of scanning
+	int					count;			///< indicate the channel count
+	FE_TVSRC_TYPE			ttype;			///< indicate the tuner type
+	FE_CHANNEL_NODE			chlist;			///< the link list of channel frequency
+} FE_CHANNEL_SCAN_RESULT;
+
+
+/**
+ *  structure for parameters of DVB OFDM type frontend (referred to <kernel/frontendCtl/frontend.h>)
+ */
+typedef struct _FE_DVB_OFDM_PARAS {
+    FE_BANDWIDTH			bandwidth;
+    FE_CODE_RATE			code_rate_HP;	///< high priority stream code rate
+    FE_CODE_RATE			code_rate_LP;	///< low priority stream code rate
+    FE_MODULATION			constellation;	///< modulation type (see above)
+    FE_TRANSMISSION_MODE	transmission_mode;
+    FE_GUARD_INTERVAL		guard_interval;
+    FE_HIERARCHY			hierarchy_information;
+} FE_DVB_OFDM_PARAS;
+
+
+/**
+ *  structure for parameters of ATSC VSB8 type frontend (referred to <kernel/frontendCtl/frontend.h>)
+ */
+typedef struct _FE_ATSC_VSB_PARAMS {
+	FE_VSB_DEMODMODE		demodmode;		/* Scan or Set Channel*/
+	FE_MODULATION			modulation;		///< modulation type (see above)
+	unsigned long			uncorrected;
+} FE_ATSC_VSB_PARAMS;
+
+
+/**
+ *  structure for parameters of DMB-TH OFDM type frontend (referred to <kernel/frontendCtl/frontend.h>)
+ */
+typedef struct _FE_DMBTH_PARAMS {
+	FE_BANDWIDTH			bandwidth;
+	FE_DMB_CODE_RATE		code_rate;
+	FE_MODULATION			constellation;	/* modulation type (see above) */
+	FE_GUARD_INTERVAL		guard_interval;
+	FE_INTERLEAVER			interleaver_length;
+	unsigned long			others;			//for LGS8G42 series
+} FE_DMBTH_PARAMS;
+
+
+/**
+ *  structure for parameters of DVB-S QPSK type frontend (referred to <kernel/frontendCtl/frontend.h>)
+ */
+typedef struct _FE_DVBS_QPSK_PARAMS {
+	unsigned long			symbol_rate;	/* symbol rate in Symbols per second */
+	FE_CODE_RATE			fec_inner;			/* forward error correction (see above) */
+} FE_DVBS_QPSK_PARAMS;
+
+
+/**
+ *  structure for parameters of DVB-S QPSK type frontend (referred to <kernel/frontendCtl/frontend.h>)
+ */
+typedef struct _FE_ANALOG_VSB_PARAMS {
+	FE_ANALOG_DEMODMODE		demodmode;	/* Scan or Set Channel*/
+	FE_ANALOG_SIGMODE		sigmode;
+	FE_MODULATION			modulation;
+} FE_ANALOG_VSB_PARAMS;
+
+
+/**
+ *  structure for parameters of DVB-C QAM type frontend (referred to <kernel/frontendCtl/frontend.h>)
+ */
+typedef struct _FE_DVBC_QAM_PARAMS {
+	FE_MODULATION			modulation;
+	unsigned long			symbol_rate;
+	FE_CODE_RATE			code_rate;
+	FE_QAM_ALPHA			alpha_value;
+} FE_DVBC_QAM_PARAMS;
+
+/**
+ *	structure for channel detail information query
+ */
+typedef struct _FE_CHANNEL_INFO
+{
+	unsigned long				frequency;	///< (absolute) frequency in Hz for QAM/OFDM
+											///< intermediate frequency in kHz for QPSK
+	FE_SPECTRAL_INVERSION		inversion;	//used for OOB
+	FE_TVSRC_TYPE				ttype;		///< indicate the tuner type
+	int						strength;	///< indicate the signal strength
+	int						quality;	///< indicate the signal quality
+
+	union
+	{
+		FE_DVB_OFDM_PARAS		ofdm;
+		FE_ATSC_VSB_PARAMS		vsb;
+		FE_DVBC_QAM_PARAMS		qam;
+		FE_DMBTH_PARAMS			dmbofdm;	//for DMB-TH
+		FE_DVBS_QPSK_PARAMS		qpsk;		//for DVB-S
+		FE_ANALOG_VSB_PARAMS	analog;
+	} u;
+} FE_CHANNEL_INFO;
+
+
+/**
+ *  structure for smart antenna's properties
+ */
+ typedef struct _ANTENNA_PARAMS {
+	unsigned coarse_direction	:2;
+	unsigned fine_direction		:2;
+	unsigned polarization		:1;
+	unsigned preamp_gain		:2;
+	unsigned channel_no			:7;
+	unsigned antenna_mode		:2;
+} ANTENNA_PARAMS;
+
+
+/*
+	DISEQC related definition
+*/
+typedef struct _DISEQC_COMMAND_DATA {
+	int					out_param_len;
+	int					in_param_len;
+	DISEQC_COMMAND			cmd;
+} DISEQC_COMMAND_DATA;
+
+
+
+//*************************************************************
+// TYPEDEF
+//*************************************************************
+typedef dvb_diseqc_master_cmd		DISEQC_MASTER_CMD;
+typedef fe_sec_voltage_t			FE_SEC_VOLTAGE;
+typedef fe_sec_mini_cmd_t			FE_SEC_MINI_CMD;
+typedef fe_sec_tone_mode_t			FE_SEC_TONE_MODE;
+
+
+
+//*************************************************************
+// FELIB API
+//*************************************************************
+/**
+ * Init Frontend Library.
+ *
+ * @param type: void
+ * @return value: FALSE for error, TRUE for success
+ */
+unsigned char Fe_Init(void);
+
+/**
+ * Deinit Frontend Library.
+ *
+ * @param type: void
+ * @return value: FALSE for error, TRUE for success
+ */
+unsigned char Fe_DeInit(void);
+
+/**
+ * Create handler with the specified source input.
+ *
+ * @param type: the selected source input
+ * @return value: -1 for error, 0 for success
+ */
+int Fe_OpenDevHandler(FE_TVSRC_TYPE type);
+
+/**
+ * Close handler with specified source input.
+ *
+ * @param type: the selected source input
+ * @return value: -1 for error, 0 for success
+ */
+int Fe_CloseDevHandler(FE_TVSRC_TYPE type);
+
+/**
+ * auto scan available TV channel with specified frequency range.
+ *
+ * @param type: the selected source input
+ * @param result: point to structture FE_CHANNEL_SCAN_RESULT. (upper layer need to give frequency range)
+ *
+ * @return value: -1 for error, 0 for success
+ */
+int Fe_TVChannelAutoScan(FE_TVSRC_TYPE type, FE_CHANNEL_SCAN_RESULT *result);
+
+/**
+ * init demod
+ *
+ * @param type: the selected source input
+ * @param p: point to struct FE_CHANNEL_INFO.
+ *
+ * @return value: -1 for tuner no lock, 0 for success
+ */
+int Fe_DemodInit(FE_TVSRC_TYPE type, FE_CHANNEL_INFO *p);
+
+/**
+ * set tuner specific frequency
+ *
+ * @param type: the selected source input
+ * @param p: point to struct FE_CHANNEL_INFO.
+ *
+ * @return value: -1 for tuner no lock, 0 for success
+ */
+int Fe_SetTunerFreq(FE_TVSRC_TYPE type, FE_CHANNEL_INFO *p);
+
+/**
+ * set tuner specific frequency by frontend interface
+ *
+ * @param devType: the selected source input
+ * @param freq: frequency for setting tuner.
+ *
+ * @return value: 1 for write tuner error, 0 for success
+ */
+int Fe_WriteTuner(FE_TVSRC_TYPE devType, unsigned long freq);
+
+/**
+ * set TV channel with specified frequency.
+ *
+ * @param type: the selected source input
+ * @param p:  point to struct FE_CHANNEL_INFO. (upper layer need to specified frequency at least)
+ * @param fine_tune: enable/disable frequency fine tune.
+ * 					 If fine tune is enabled, the found frequency will overwrite p->frequency.
+ *
+ * @return value: 2 for no channel locked, -1 for error, 0 for success, 1 for tuner lock but no TP data
+				  3 for no need to scan QAM_64
+ */
+int Fe_SetTVChannel(FE_TVSRC_TYPE type, FE_CHANNEL_INFO *p, unsigned char fine_tune);
+
+/**
+ * get detailed channel information with the current frequency
+ *
+ * @param type: the selected source input
+ * @param p: point to struct FE_CHANNEL_INFO.
+ *
+ * @return value: -1 for tuner no lock, 0 for success
+ */
+int Fe_GetCurrChMoreInfo(FE_TVSRC_TYPE type, FE_CHANNEL_INFO *p);
+
+
+/**
+ * get current frequency tuner is set to.
+ *
+ * @param type: the selected source input
+ * @param p: point to struct FE_CHANNEL_INFO.
+ *
+ * @return value: 0 for no frequency.
+ */
+unsigned int Fe_GetCurFrequency();
+
+
+//Chuck add this for calue plug in/out issue on 20060829
+/**
+ * soft reset LG frontend (DT3303 demodulator)
+ *
+ * @param type: the selected source input
+ *
+ * @return value: -1 for ioctl failure, 0 for success
+ */
+int Fe_SwResetFrontend(FE_TVSRC_TYPE type);
+
+//Chuck add this to do HW reset on 20061113
+/**
+ * Frontend HW reset
+ *
+ * @param type: the selected source input
+ *
+ * @return value: -1 for ioctl failure, 0 for success
+ */
+int Fe_HwResetFrontend(FE_TVSRC_TYPE type);
+
+/**
+ * Frontend disable TS output
+ *
+ * @param type: the selected source input
+ *
+ * @return value: -1 for ioctl failure, 0 for success
+ */
+int Fe_DisableTSOut(FE_TVSRC_TYPE type);
+
+/**
+ * Frontend enable TS output
+ *
+ * @param type: the selected source input
+ *
+ * @return value: -1 for ioctl failure, 0 for success
+ */
+int Fe_EnableTSOut(FE_TVSRC_TYPE type);
+
+/**
+ * Frontend read Bit Error Rate
+ *
+ * @param type: the selected source input
+ * @param *pValue: specify the depth of measurement of BER, and the calculated value will be kept here also
+ * 			 the depth has three level (0: 1024 packets, 1: 4096 packets, 2: 16384 packets)
+ *
+ * @return value: -1 for ioctl failure, 0 for success
+ */
+int Fe_ReadBER(FE_TVSRC_TYPE type, unsigned int *pValue);
+
+/**
+ * Frontend read Bit Error Rate
+ *
+ * @param type: the selected source input
+ * @param *pValue: the calculated snr will be kept here
+ *
+ * @return value: -1 for ioctl failure, 0 for success
+ */
+int Fe_ReadSNRdb(FE_TVSRC_TYPE type, float *pValue);
+
+/**
+ * Frontend read uncorrected block error rate
+ *
+ * @param type: the selected source input
+ * @param *pValue: the calculated uncorrected block error rate will be kept here
+ *
+ * @return value: -1 for ioctl failure, 0 for success
+ */
+int Fe_ReadUcblockErr(FE_TVSRC_TYPE type, unsigned int *pValue);
+
+/**
+ * QAM used only, set QAM mode and Spectrum inverse
+ *
+ *  * @param *p: pass frontend info to set QAM and Spectrum mode
+ *
+ * @return value: -1 for ioctl failure, 0 for success
+ */
+int Fe_SetQamMode(FE_CHANNEL_INFO *p);
+
+/**
+ * Configure smart antenna's properties
+ *
+ * @param *params: point to struct ANTENNA_PARAMS.
+ *
+ * @return value: -1 for ioctl failure, 0 for success
+ */
+int Fe_SmartAntennaCtrl(ANTENNA_PARAMS *params);
+
+/**
+ * Smart antenna do the auto scan to find the best setting
+ *
+ * @return value: -1 for ioctl failure, 0 for not found, 1 for found
+ */
+int Fe_SmartAntennaAuto(void);
+
+/**
+ * Smart antenna do the auto scan to find the best setting (including direction, gain, polarity)
+ *
+ * @return value: -1 for ioctl failure, 0 for not found, 1 for found
+ */
+int Fe_SmartAntennaAutoFull(void);
+
+/**
+ * Get smart antenna's properties
+ *
+ * @param *params: point to struct ANTENNA_PARAMS.
+ *
+ * @return value: -1 for ioctl failure, 0 for success
+ */
+int Fe_SmartAntennaInfo(ANTENNA_PARAMS *params);
+
+/**
+ * Check if smart antenna is connected.
+ *
+ * @param:
+ *
+ * @return value: -1 for ioctl failure, 0 for success
+ */
+int Fe_SmartAntennaIsConnected(void);
+
+/**
+ * Read fe lock status
+ *
+ * @param : void.
+ *
+ * @return value: -1 for ioctl failure, else for fe status.
+ */
+int Fe_ReadFeStatus(FE_TVSRC_TYPE type);
+
+/**
+ *  Function: Send DiSEqC Raw Command
+ *
+ * @param *params: Data output, repeat count
+ *
+ * @return value: -1 for ioctl failure, 0 for success
+ */
+int Fe_SendDiSEqCRaw(DISEQC_MASTER_CMD *cmd, int count);
+
+
+/**
+ *  Function: Send DiSEqC Command
+ *
+ * @param: cmd --> Diseqc Command (refer to DISEQC_COMMAND_T)
+ 		   device --> target device such as LNB, switcher, or motor (refer to DISEQC_DEVICE_T)
+ 		   param  --> paramter for Diseqc Command
+ *
+ * @return value: -1 for ioctl failure, 0 for success
+ */
+int Fe_SendDiSEqC(DISEQC_COMMAND cmd, DISEQC_DEVICE device, unsigned char *param, unsigned char *reply);
+
+/*
+
+	int Fe_SendToneBusrt(FE_SEC_VOLTAGE Voltage, FE_SEC_MINI_CMD SelectAB, FE_SEC_TONE_MODE ToneOffOn);
+
+	Function: Used for adjust voltage and send tone burst
+
+	Input: Voltage (13V, 18V, OnOff) ,
+		   A, B LNB Selection,
+		   ToneOffOn == TRUE --> Don't send Tone Burst just adjust Voltage
+	return: Fail < 0
+*/
+int Fe_SendToneBusrt(FE_SEC_VOLTAGE Voltage, FE_SEC_MINI_CMD SelectAB, FE_SEC_TONE_MODE ToneOffOn);
+
+/*
+	Function: int Fe_DiseqcSet22K(int OnOff)
+	Input: OnOff --> 1: "On" indicate Tone Burst will Continuous Run
+					 0: "Off" indicate Tone Burst will Stop
+	return: Fail < 0
+*/
+int Fe_DiseqcSet22K(int OnOff);
+
+unsigned char Fe_ReadRegister_DVBS(unsigned char byRegisterAddress);
+unsigned char Fe_WriteRegister_DVBS(unsigned char byRegisterAddress, unsigned char byRegisterData);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif // __FELIB_API_H__
+

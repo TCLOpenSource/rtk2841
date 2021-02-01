@@ -1,0 +1,3 @@
+# UAPI Header export list
+header-y += n/binder.h
+header-y += o/binder.h

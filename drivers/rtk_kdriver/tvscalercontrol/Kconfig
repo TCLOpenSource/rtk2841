@@ -1,0 +1,73 @@
+config SUPPORT_SCALER
+	bool "Scaler Driver"
+	default n
+	help
+		SUPPORT Scaler Driver
+
+if SUPPORT_SCALER
+config ENABLE_3D_SETTING
+	bool "Enable VDC 3D YC Separation"
+	default y
+	help
+		3D YC Separation
+
+config DYNAMIC_ALLOCATION_SCALER_MEMORY
+	bool "Enable dynamic memory allocation"
+	default y
+	help
+		SUPPORT memory dynamic allocation
+
+config DUAL_CHANNEL
+	bool "Enable dual channel"
+	default y
+	help
+		dual chanel open for pip
+
+
+config ENABLE_VD_27MHZ_MODE
+	bool "Enable VD 27MHz mode"
+	default y
+	help
+		enable VD 27MHz mode
+
+config FIX_CKILL_MODE
+	bool "Fix ckill mode"
+	default y
+	help
+		Fix ckill mode
+
+config ENABLE_DOLBY_VISION_HDMI_AUTO_DETECT
+	bool "Enable Dolby Vision HDMI Auto Detect"
+	default n
+	help
+		Enable Dolby Vision HDMI Auto Detect
+
+config ENABLE_HDR10_HDMI_AUTO_DETECT
+	bool "Enable HDR10 HDMI Auto Detect"
+	default n
+	help
+		Enable HDR10 HDMI Auto Detect
+
+
+config HDMI_DRV_CONTROL_AVMUTE
+	bool "Enable HDMI CONTROL AVMUTE"
+	default n
+	help
+		Enable HDMI CONTROL AVMUTE
+endif
+
+config MEMC
+    bool "Enable MEMC"
+    default n
+    help
+        Provide realtek MEMC.
+
+config SCALER_MDOMAIN
+    bool "Enable SCALER_MDOMAIN"
+    default n
+    help
+        Provide realtek SCALER_MDOMAIN.
+
+
+
+

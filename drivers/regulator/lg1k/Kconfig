@@ -1,0 +1,6 @@
+config REGULATOR_LG1K
+	tristate "Regulator-wrapper for LG1K PMS"
+	select LG1K_PMS
+	help
+	  This driver provides regulator-wrapper for the LG1K Power Management
+	  System.

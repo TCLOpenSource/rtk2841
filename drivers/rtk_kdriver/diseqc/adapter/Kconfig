@@ -1,0 +1,15 @@
+#Copyright (C) 2007-2013 Realtek Semiconductor Corporation.
+# drivers/Kconfig
+
+#menu "DISEQC Adapters"
+#	depends on RTK_KDRV_DISEQC
+
+config RTK_KDRV_DISEQC_ADAPTERS
+	tristate "diseqc adpater Controller"
+	depends on RTK_KDRV_DISEQC
+	default n
+	help
+	  Say Y, if you want to enable diseqc feature on Realtek platform.
+
+
+#endmenu

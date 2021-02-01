@@ -1,0 +1,5 @@
+config RTK_KDRV_CRM
+	tristate "Driver for Codec Resource Manager"
+	depends on RTK_KDRV_RPC
+	help
+	  Driver for Codec Resource Manager

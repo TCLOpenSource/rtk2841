@@ -1,0 +1,25 @@
+#Copyright (C) 2007-2013 Realtek Semiconductor Corporation.
+# drivers/diseqc/core/Kconfig
+
+config RTK_KDRV_DISEQC
+	bool "Diseqc Driver Support"
+
+config RTK_KDRV_DISEQC_CHARDEV
+	bool "diseqc device interface"
+	depends on RTK_KDRV_DISEQC
+	help
+	  Say Y here to use diseqc-* device files, usually found in the /dev/diseqc/
+	  directory on your system.  They make it possible to have user-space
+	  programs use the diseqc bus.
+
+	  This support is also available as a module.  If so, the module
+	  will be called diseqc-dev.
+
+
+config RTK_KDRV_DISEQC_DEBUG
+	bool "diseqc Debug Mode"
+	depends on RTK_KDRV_DISEQC
+	default n
+	help
+	  If you want to enable diseqc debug message, say Y.
+

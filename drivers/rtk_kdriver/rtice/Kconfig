@@ -1,0 +1,68 @@
+menu "Realtek RTICE stub" 
+
+config RTK_KDRV_RTICE
+	bool "Use Realtek RTICE stub driver"
+	depends on RTK_KDRIVER_SUPPORT	
+	default n
+	help
+		RTICE stub driver
+		
+#=================================================================
+		
+config RTK_KDRV_RTICE_SYSTEM_TOOL
+        bool "RTICE System Utilities"
+        depends on RTK_KDRV_RTICE
+        default y
+        help
+          RTICE System utility allows user to access system infomation
+ 
+config RTK_KDRV_RTICE_IOMEM_TOOL
+        bool "RTICE IO/MEM Utilities"
+        depends on RTK_KDRV_RTICE
+        default y
+        help
+          RTICE IO/MEM utility allows user to access io/mem 
+          
+config RTK_KDRV_RTICE_I2C_TOOL
+        bool "RTICE I2C Tool driver"
+        depends on RTK_KDRV_RTICE && I2C
+        default y
+        help
+          RTICE I2C Tool allows user to access i2c via RTICE
+          
+config RTK_KDRV_RTICE_ICM_TOOL
+        bool "RTICE ICM (Independent Clock Management) Tool"
+        depends on RTK_KDRV_RTICE && MACH_RTK_294x
+        default n
+        help
+          RTICE ICM Tool driver
+
+config RTK_KDRV_RTICE_AP_TOOL
+        bool "RTICE AP DEBUG Tool driver"
+        depends on RTK_KDRV_RTICE
+        default y
+        help
+          RTICE AP DEBUG Tool allows user to access ap ID value
+	  
+config RTK_KDRV_RTICE_BW_CHECK
+        bool "RTICE BW Check Tool driver"
+        depends on RTK_KDRV_RTICE
+        default y
+        help
+          RTICE BW Check Tool allows user to start bw checking flow and query bw value of checked ip. 		
+
+config RTK_KDRV_RTICE_DMA_STATUS
+        tristate "RTICE2 DMA Status Tool driver"
+        depends on RTK_KDRV_RTICE
+        default y
+        help
+          RTICE DMA Status Tool allows user to query info about DMA of checked ip.
+ 
+config RTK_KDRV_RTICE_MC_MEASURE
+        tristate "RTICE MC Measure Tool driver"
+        depends on RTK_KDRV_RTICE
+        default y
+        help
+          RTICE MC Measure Tool allows user to query info about MC read or write count.
+          
+endmenu

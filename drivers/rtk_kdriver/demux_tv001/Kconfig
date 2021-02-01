@@ -1,0 +1,5 @@
+config RTK_KDRV_DEMUX
+	bool "Driver for Demux HAL Manager"
+	default n
+	help
+	  Driver for Demux HAL Manager

@@ -1,0 +1,5 @@
+config LG1K_PMS
+	tristate "Generic interface driver for LG1K Power Management System"
+	help
+	  This option enables LG1K SoCs to register and to use possible
+	  PMS(Power Management System) operations.

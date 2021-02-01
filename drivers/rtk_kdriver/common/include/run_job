@@ -1,0 +1,6 @@
+#!/bin/csh -f
+source ~/.cshrc
+setenv PROJECT_HOME /rsc/R3555/work/mac3
+source /rsc/R3555/work/mac3/verification/scripts/cshrc.realtek
+cd /project/RL6363/Digital/R3555/mac3/verification/common/include
+meld /project/RL6330/Digital/R3555/sirius/verification/common/include/saturn.h saturn.h

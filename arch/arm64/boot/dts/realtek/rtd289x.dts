@@ -1,0 +1,353 @@
+/*
+ * rtd289x device tree source
+ */
+
+/dts-v1/;
+
+/include/ "skeleton.dtsi"
+
+/ {
+	model = "rtd289x64";
+	compatible = "rtk,rtd289x";
+	interrupt-parent = <&gic>;
+
+	#address-cells = <2>;
+	#size-cells = <1>;
+
+	cpus {
+
+        	#address-cells = <2>;
+        	#size-cells = <0>;
+
+		cpu-map {
+			cluster0: cluster0 {
+				#cooling-cells = <2>; /* min followed by max */
+
+				core0 {
+					cpu = <&A53_0>;
+				};
+				core1 {
+					cpu = <&A53_1>;
+				};
+				core2 {
+					cpu = <&A53_2>;
+				};
+				core3 {
+					cpu = <&A53_3>;
+				};
+			};
+		};
+
+		idle-states {
+			entry-method = "arm,psci";
+
+			CPU_SLEEP_0: cpu-sleep-0 {
+				compatible = "arm,idle-state";
+				entry-method-param = <0x0010000>;
+				entry-latency-us = <40>;
+				exit-latency-us = <100>;
+				min-residency-us = <150>;
+			};
+
+			CLUSTER_SLEEP_0: cluster-sleep-0 {
+				compatible = "arm,idle-state";
+				entry-method-param = <0x1010000>;
+				entry-latency-us = <500>;
+				exit-latency-us = <1000>;
+				min-residency-us = <2500>;
+			};
+		};
+
+		A53_0: cpu@0 {
+			compatible = "arm,cortex-a53","arm,armv8";
+			reg = <0x0 0x0>;
+			device_type = "cpu";
+			enable-method = "spin-table";
+			cpu-idle-states = <&CPU_SLEEP_0 &CLUSTER_SLEEP_0>;
+                        clocks = <&rtk_dvfs 0>;
+			clock-names = "vlittle";
+                        next-level-cache = <&A53_L2>;
+			cpu-release-addr = <0x0 0x500>;
+		};
+
+		A53_1: cpu@1 {
+			compatible = "arm,cortex-a53","arm,armv8";
+			reg = <0x0 0x1>;
+			device_type = "cpu";
+			enable-method = "spin-table";
+			cpu-idle-states = <&CPU_SLEEP_0 &CLUSTER_SLEEP_0>;
+			clock-names = "vlittle";
+                        next-level-cache = <&A53_L2>;
+                        clocks = <&rtk_dvfs 0>;
+			cpu-release-addr = <0x0 0x508>;
+		};
+
+		A53_2: cpu@2 {
+			compatible = "arm,cortex-a53","arm,armv8";
+			reg = <0x0 0x2>;
+			device_type = "cpu";
+			enable-method = "spin-table";
+			cpu-idle-states = <&CPU_SLEEP_0 &CLUSTER_SLEEP_0>;
+                        next-level-cache = <&A53_L2>;
+			clock-names = "vlittle";
+                        clocks = <&rtk_dvfs 1>;
+			cpu-release-addr = <0x0 0x510>;
+		};
+
+		A53_3: cpu@3 {
+			compatible = "arm,cortex-a53","arm,armv8";
+			reg = <0x0 0x3>;
+			device_type = "cpu";
+			enable-method = "spin-table";
+			cpu-idle-states = <&CPU_SLEEP_0 &CLUSTER_SLEEP_0>;
+                        next-level-cache = <&A53_L2>;
+			clock-names = "vlittle";
+                        clocks = <&rtk_dvfs 1>;
+			cpu-release-addr = <0x0 0x518>;
+		};
+
+		A53_L2: l2-cache0 {
+                        compatible = "cache";
+                };
+
+	};
+
+	/*  memory will be updated by atags from bootcode */
+	memory {
+		device_type = "memory";
+		reg = <0x00000000 0x00000000 0x40000000
+		       0x00000000 0x40000000 0x20000000>;
+	};
+
+	reserved-memory {
+		#address-cells = <2>;
+		#size-cells = <1>;
+		ranges;
+
+		boot@00000000 {
+			reg = <0x0 0x00000000 0x00100000>;
+		};
+
+		demod@02000000 {
+			reg = <0x0 0x02000000 0x00800000>;
+			cma-ban;
+			ban-not-used;
+		};
+
+		dmem@10000000 {
+			reg = <0x0 0x10000000 0x00100000>;
+			cma-ban;
+			ban-normal;
+		};
+
+        /* for secure os */
+        kcpu@16000000 {
+            reg = <0x0 0x16000000 0x2000000>;
+        };
+
+		rbus@18000000 {
+			reg = <0x0 0x18000000 0x02200000>;
+			no-map;
+		};
+
+		avcpu@1a200000 {
+			reg = <0x0 0x1a300000 0x00d00000>;
+			no-map;
+		};
+
+		rtkrpc@1b100000 {
+			reg = <0x0 0x1b100000 0x00100000>;
+			no-map;
+		};
+
+		vdec_ringbuffer@1b200000 {
+			reg = <0x0 0x1b200000 0x01000000>;
+			no-map;
+		};
+
+		logbuf@1ca00000 {
+			reg = <0x0 0x1ca00000 0x00600000>;
+			no-map;
+		};
+
+		rom@1fc00000 {
+			reg = <0x0 0x1fc00000 0x00008000>;
+		};
+
+		vbm@20000000 {
+			reg = <0x0 0x20000000 0x0e000000>;
+			cma-ban;
+			ban-not-used;
+		};
+
+		scaler@2e000000 {
+			reg = <0x0 0x2e000000 0x0b000000>;
+			cma-ban;
+			ban-not-used;
+
+			memc@2e000000 {
+				reg = <0x0 0x2e000000 0x04e00000>;
+				is-sub-region;
+			};
+
+			mdomain@32e00000 {
+				reg = <0x0 0x32e00000 0x05200000>;
+				is-sub-region;
+			};
+
+			od@38000000 {
+				reg = <0x0 0x38000000 0x01000000>;
+				is-sub-region;
+			};
+		};
+	};
+
+
+	chosen {
+		/*  bootargs will be updated by atags from bootcode */
+		bootargs ="androidboot.console=ttyS0 console=ttyS0,115200 envp=74100 flashtype=emmc mmcparts=rtkemmc:3436544k,655360k(/system),4096k(/usr/local/etc) root=/dev/mmcblk0p1 rootfstype=ext4 ro rootwait reclaim=72M@32M last_image=8M@160M earlyprintk=uart8250-32bit,0x18062300 ac_on";
+	};
+
+
+	gic:interrupt-controller@0x18081000 {
+		compatible = "arm,cortex-a9-gic";
+		#interrupt-cells = <3>;
+		interrupt-controller;
+		reg = <0x0 0x18081000  0x1000>,    /* gic dist base */
+			<0x0 0x18082000  0x1000>;  /* gic cpu base  */
+	};
+
+        timer {
+                compatible = "arm,armv8-timer";
+                interrupts = <1 13 0xf08>,
+                             <1 14 0xf08>,
+                             <1 11 0xf08>,
+                             <1 10 0xf08>;
+        };
+
+       timer1: timer@1801B600 {
+               compatible = "rtk-timer";
+               /* PPI secure/nonsecure IRQ, active low level-sensitive ,following not used now*/
+               clock-frequency = <27000000>;
+       };
+
+
+	uart0:serial@18062300 {
+		compatible = "realtek,rtd29xx-uart";
+		reg = <0x0 0x18062300 0x1000>;
+		interrupts = <0 25 8>;
+	};
+
+	pcmcia0:pcmcia@1801b700 {
+		compatible = "realtek,rtk_pcmcia";
+		reg = <0x0 0x1801b700 0x1000>;
+		interrupts = <0 19 8>;
+	};
+
+	eth0:eth0@18016000 {
+		compatible = "realtek,rtk_8168";
+		reg = <0x0 0x18016000 0x1000>;
+		interrupts = <0 20 8>;
+	};
+
+	md0:md@1800b000 {
+                compatible = "realtek,rtk-md";
+                reg = <0x0 0x1800b000 0x230>;
+                interrupts = <0 13 8>;
+	};
+
+        mcp0:MCP@18015100 {
+                compatible = "realtek,rtk-mcp";
+                reg = <0x0 0x18015100 0x1000>;
+                interrupts = <0 12 8>;
+        };
+
+	rtkrpc@1b100000 {
+		compatible = "realtek,venus-rpc";
+		reg = <0x0 0x1b100000 0x00100000>;
+		interrupts = <0 3 4>;
+	};
+
+	dcmt@18007200 {
+		compatible = "realtek,dcmt";
+		interrupts = <0 4 8>;
+	};
+
+        emmc@18010800 {
+                compatible = "realtek,rtk-emmc";
+                reg = <0x0 0x18010800 0x400>;
+                interrupts = <0 18 4>;
+        };
+
+	sdio@0x18010c00 {
+		compatible = "realtek,rtk-sdio";
+		reg = <0x0 0x18010c00 0x400>;
+		interrupts = <0 18 4>;
+		bus-width = <4>;
+		max-frequency = <50000000>;
+		cap-sd-highspeed;
+		cap-mmc-hw-reset;
+		broken-cd;
+	};
+	gdma@1802f200 {
+                compatible = "rtk,gdma";
+                reg = <0x0 0x1802f200 0xd00>;
+                interrupts = <0 7 4>;
+	};
+
+	gpu@0x18100000 {
+		compatible = "img,img-ge7800";
+		reg = <0x0 0x18100000 0xF000>;
+		interrupts = <0 14 4>;
+	};
+/*
+	gpu@0x18040000 {
+		compatible = "arm,malit6xx", "arm,mali-midgard";
+		reg = <0x18040000 0x4000>;
+		interrupts = <0 26>, <0 27>, <0 14>;
+		interrupt-names = "JOB", "MMU", "GPU";
+
+		//clocks = <&pclk_mali>;
+		clock-names = "clk_mali";
+	};
+
+
+	thermal@0xb8000000 {
+        	compatible = "rtk_rtk299s-tmu";
+        	reg = <0xb8000000 0x200
+        	       0xb8000200 0x200>;
+        	status = "okay";
+        };
+
+*/
+       clocks {
+               compatible = "arm,rtk-clks";
+
+                rtk_dvfs: rtk_clocks@0 {
+                        compatible = "arm,rtk-clk-indexed";
+                        #clock-cells = <1>;
+                        clock-indices = <0>, <1>;
+                        clock-output-names = "vbig", "vlittle";
+                };
+
+/*                rtk_clk: rtk_clocks@2 {
+                        compatible = "arm,rtk-clk-range";
+                        #clock-cells = <1>;
+                        clock-indices = <2>, <3>;
+                        frequency-range = <23750000 165000000>;
+                        clock-output-names = "pxlclk0", "pxlclk1";
+                };*/
+       };
+
+        cpufreq {
+                compatible = "arm,rtk-cpufreq";
+        };
+	usb@0x18050000 {
+		compatible = "realtek,xhci-hcd";
+		reg = <0x0 0x18050000 0x9000>;
+		interrupts = <0 21 0x1>;
+	};
+
+
+};
+

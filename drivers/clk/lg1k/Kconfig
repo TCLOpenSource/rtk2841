@@ -1,0 +1,5 @@
+config COMMON_CLK_LG1K
+	tristate "Clock driver for LG1K SoCs"
+	select LG1K_PMS
+	---help---
+	  This driver supports clocking subsystem on LG Electronics LG1k SoCs.

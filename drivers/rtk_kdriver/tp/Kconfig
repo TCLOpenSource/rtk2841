@@ -1,0 +1,13 @@
+
+config RTK_KDRV_TP
+	bool "TP Driver (MPEG2-Transport)"
+	select RTK_KDRV_CW
+	depends on RTK_KDRIVER_SUPPORT
+	default n		  
+
+config RTK_KDRV_MULTI_TP_CLOCK
+	bool "Enable multiple tp clock"
+	depends on RTK_KDRV_TP
+	default y if RTK_KDRV_TP
+	help
+		Enable multiple tp clock.

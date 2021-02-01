@@ -1,0 +1,13 @@
+config RTK_KDRV_VDEC
+	bool "Driver for VDEC HAL Manager"
+	depends on RTK_KDRV_RPC
+	default n
+	help
+	  Driver for VDEC HAL Manager
+
+config RTK_VIDEO_LOSSY_COMP_50P
+        bool "Video using 50% lossy compression"
+        depends on RTK_KDRV_VDEC
+        default n
+        help
+          Select video 50% lossy compression for less VBM usage 

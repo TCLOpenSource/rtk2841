@@ -1,0 +1,30 @@
+#ifndef _ADEMOD_CMD_H_
+#define _ADEMOD_CMD_H_
+
+#include <linux/init.h>
+#include <linux/module.h>
+#include <linux/version.h>
+#include <linux/slab.h>
+#include <linux/pci.h>
+#include <linux/input.h>
+
+// IO control define
+#define RTK_ADEMOD_CTL_CODE(code)        code
+#define IOCTL_RTK_ADEMOD_CONSTRUCTORS        RTK_ADEMOD_CTL_CODE(0x100)
+#define IOCTL_RTK_ADEMOD_INIT                RTK_ADEMOD_CTL_CODE(0x101)
+#define IOCTL_RTK_ADEMOD_SETIF               RTK_ADEMOD_CTL_CODE(0x102)
+#define IOCTL_RTK_ADEMOD_SETTVMODE           RTK_ADEMOD_CTL_CODE(0x103)
+#define IOCTL_RTK_ADEMOD_SETTVSYSEX          RTK_ADEMOD_CTL_CODE(0x104)
+#define IOCTL_RTK_ADEMOD_ACQUIRESIGNAL       RTK_ADEMOD_CTL_CODE(0x105)
+#define IOCTL_RTK_ADEMOD_UNINIT              RTK_ADEMOD_CTL_CODE(0x106)
+#define IOCTL_RTK_ADEMOD_DESTRUCTORS         RTK_ADEMOD_CTL_CODE(0x107)
+#define IOCTL_RTK_ADEMOD_SETTSMODE           RTK_ADEMOD_CTL_CODE(0x108)
+#define IOCTL_RTK_ADEMOD_GETLOCK             RTK_ADEMOD_CTL_CODE(0x109)
+#define IOCTL_RTK_ADEMOD_AUTO_TUNE           RTK_ADEMOD_CTL_CODE(0x10a)
+#define IOCTL_RTK_ADEMOD_SETMODE             RTK_ADEMOD_CTL_CODE(0x10b)
+#define IOCTL_RTK_ADEMOD_SETTVPARA           RTK_ADEMOD_CTL_CODE(0x10c)
+#define IOCTL_RTK_ADEMOD_GETQUALITY          RTK_ADEMOD_CTL_CODE(0x10d)
+#define IOCTL_RTK_ADEMOD_GETCARRIEROFFSET    RTK_ADEMOD_CTL_CODE(0x10e)
+ 
+#endif
+

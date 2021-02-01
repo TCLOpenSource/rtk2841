@@ -1,0 +1,6 @@
+config RTK_KDRV_AUDIO
+	bool "Driver for Audio HAL Manager"
+	depends on RTK_KDRV_RPC
+	default n
+	help
+	  Driver for Audio HAL Manager

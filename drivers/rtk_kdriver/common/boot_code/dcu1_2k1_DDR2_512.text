@@ -1,0 +1,23 @@
+
+dcu1_2k1_DDR2_512.o:     file format elf32-bigmips
+
+
+Disassembly of section .text:
+
+bfc01080 <dcu_param>:
+bfc01080:	bfc01080 	cache	0x0,4224(s8)
+bfc01084:	00020000 	sll	zero,v0,0x0
+bfc01088:	0016a60e 	0x16a60e
+bfc0108c:	04050811 	0x4050811
+bfc01090:	02040308 	0x2040308
+bfc01094:	3f00504d 	0x3f00504d
+bfc01098:	03030a02 	0x3030a02
+bfc0109c:	00200400 	0x200400
+bfc010a0:	00240080 	0x240080
+bfc010a4:	00000e72 	0xe72
+bfc010a8:	07fcc3cf 	0x7fcc3cf
+bfc010ac:	03fcc3cf 	0x3fcc3cf
+bfc010b0:	00000002 	srl	zero,zero,0x0
+bfc010b4:	00000040 	ssnop
+bfc010b8:	00000000 	nop
+bfc010bc:	00000001 	0x1

@@ -1,0 +1,5 @@
+config RTK_KDRV_AUDIO_HW
+	bool "Driver for Audio HW Control"
+	default n
+	help
+	  Driver for Audio HW Control

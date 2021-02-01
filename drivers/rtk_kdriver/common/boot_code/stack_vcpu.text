@@ -1,0 +1,29 @@
+
+stack_vcpu.o:     file format elf32-bigmips
+
+
+Disassembly of section .text:
+
+80103000 <_test_pass>:
+80103000:	1000ffff 	b	80103000 <_test_pass>
+80103004:	00000000 	nop
+80103008:	beefbeef 	cache	0xf,-16657(s7)
+8010300c:	beefbeef 	cache	0xf,-16657(s7)
+80103010:	beefbeef 	cache	0xf,-16657(s7)
+80103014:	beefbeef 	cache	0xf,-16657(s7)
+80103018:	beefbeef 	cache	0xf,-16657(s7)
+8010301c:	beefbeef 	cache	0xf,-16657(s7)
+
+80103020 <_test_fail>:
+80103020:	1000ffff 	b	80103020 <_test_fail>
+80103024:	00000000 	nop
+80103028:	deaddead 	0xdeaddead
+8010302c:	deaddead 	0xdeaddead
+80103030:	deaddead 	0xdeaddead
+80103034:	deaddead 	0xdeaddead
+80103038:	deaddead 	0xdeaddead
+8010303c:	deaddead 	0xdeaddead
+	...
+
+80103ffc <_stack>:
+80103ffc:	cafecafe                                ....

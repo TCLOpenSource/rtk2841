@@ -1,0 +1,33 @@
+#
+# Arasan device configuration
+#
+
+config NET_VENDOR_ARASAN
+	bool "Arasan devices"
+	default y
+	---help---
+	  If you have a network (Ethernet) card belonging to this class, say Y.
+	  Make sure you know the name of your card. Read the Ethernet-HOWTO,
+	  available from <http://www.tldp.org/docs.html#howto>.
+
+	  If unsure, say Y.
+
+	  Note that the answer to this question doesn't directly affect the
+	  kernel: saying N will just cause the configurator to skip all
+	  the remaining Atmel network card questions. If you say Y, you will be
+	  asked for your specific card in the following questions.
+
+if NET_VENDOR_ARASAN
+
+config EMAC
+	tristate "Arasan Fast Ethernet MAC support"
+	select CRC32
+	select PHYLIB
+	---help---
+	  Say Y here to support the Arasan Fast Ethernet MAC usually
+	  found in LGE DTV SoCs.
+
+	  To compile this driver as a module, choose M here: the module
+	  will be called emac.
+
+endif # NET_VENDOR_ARASAN

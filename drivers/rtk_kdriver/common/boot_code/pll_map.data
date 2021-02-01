@@ -1,0 +1,66 @@
+#define BOOT_PLL_BUS1_n(data)        (0x06000000&((data)<<25))
+#define BOOT_PLL_BUS1_m(data)        (0x01FC0000&((data)<<18))
+#define BOOT_PLL_BUS2_n(data)        (0x06000000&((data)<<25))
+#define BOOT_PLL_BUS2_m(data)        (0x01FC0000&((data)<<18))
+#define BOOT_PLL_SCPU1_fcode(data)   (0x07FF0000&((data)<<16))
+#define BOOT_PLL_SCPU1_ncode(data)   (0x0000FF00&((data)<<8))
+#define BOOT_PLL_ACPU1_n(data)       (0x00300000&((data)<<20))
+#define BOOT_PLL_ACPU1_m(data)       (0x0007F000&((data)<<12))
+#define BOOT_PLL_ACPU1_o(data)       (0x00000180&((data)<<7))
+#define BOOT_PLL_VCPU1_n(data)       (0x00300000&((data)<<20))
+#define BOOT_PLL_VCPU1_m(data)       (0x0007F000&((data)<<12))
+#define BOOT_PLL_VCPU1_o(data)       (0x00000180&((data)<<7))
+#define BOOT_PLL_DDR_n(data)         (0x0FF00000&((data)<<20))
+#define BOOT_PLL_DDR_f(data)         (0x0001FFF0&((data)<<4))
+#define BOOT_PLL_BUSH_n(data)        (0x06000000&((data)<<25))
+#define BOOT_PLL_BUSH_m(data)        (0x01FC0000&((data)<<18))
+#define BOOT_PLL_GPU0_fcode(data)    (0x07FF0000&((data)<<16))
+#define BOOT_PLL_GPU0_ncode(data)    (0x0000FF00&((data)<<8))
+#define BOOT_PLL_GPU1_n(data)       (0x00300000&((data)<<20))
+#define BOOT_PLL_GPU1_m(data)       (0x0007F000&((data)<<12))
+#define BOOT_PLL_GPU1_o(data)       (0x00000180&((data)<<7))
+
+
+#define BOOT_PLL_DISP1_m(data)       (0x0FF00000&((data)<<20))
+#define BOOT_PLL_DISP1_n(data)       (0x00007000&((data)<<12))
+
+#define BOOT_PLL_DIF_n(data)         (0x30000000&((data)<<28))
+#define BOOT_PLL_DIF_m(data)         (0x07F00000&((data)<<20))
+
+
+#define PARAM_PLL_04 (0x11b52 | BOOT_PLL_BUS1_n(0) | BOOT_PLL_BUS1_m(13)) // 27*15/1,405M
+#define PARAM_PLL_08 0
+#define PARAM_PLL_0C (0x4   | BOOT_PLL_SCPU1_ncode(33) | BOOT_PLL_SCPU1_fcode(682) ) // 27*(33 + 682/2048),900M
+//#define PARAM_PLL_0C (0x4   | BOOT_PLL_SCPU1_ncode(33) | BOOT_PLL_SCPU1_fcode(0) ) // 27*(22 + 0/2048),891M
+#define PARAM_PLL_10 (0x613 | BOOT_PLL_ACPU1_n(1) | BOOT_PLL_ACPU1_m(35) | BOOT_PLL_ACPU1_o(0)) // 27*37/2/1,499.5M
+#define PARAM_PLL_14 (0x613 | BOOT_PLL_VCPU1_n(2) | BOOT_PLL_VCPU1_m(98) | BOOT_PLL_VCPU1_o(2)) // 27*98/3/3,300M
+
+#ifdef DDR3
+#define PARAM_PLL_18 (0x4 | BOOT_PLL_DDR_n(57) ) // 27*(59/2)/1,796.5M
+//#define PARAM_PLL_18 (0x4 | BOOT_PLL_DDR_n(67) | BOOT_PLL_DDR_f(910) ) // 27/2*(69 + 820/8192)/933
+#else
+#define PARAM_PLL_18 (0x4 | BOOT_PLL_DDR_n(37) | BOOT_PLL_DDR_f(0xf5d) )  // 27*(39 + 0xf5d/8192)/2 = 532.98M
+#endif
+#define PARAM_PLL_1C (0x11b52 | BOOT_PLL_BUSH_n(3) | BOOT_PLL_BUSH_m(47))   // 27*49/4, 330.75M
+
+#define PARAM_PLL_20 (0x42A   | BOOT_PLL_DISP1_n(7) | BOOT_PLL_DISP1_m(108)) // 27*110/9,330M
+#define PARAM_PLL_24 (0x5c000 | BOOT_PLL_DIF_n(0) | BOOT_PLL_DIF_m(6))     // 27*8/1,216M
+#define PARAM_PLL_28 0
+#define PARAM_PLL_2C (0x4 | BOOT_PLL_GPU0_ncode(22) | BOOT_PLL_GPU0_fcode(455) ) // 27*(22 + 455/2048)/2, 300M
+//#define PARAM_PLL_2C (0x4 | BOOT_PLL_GPU0_ncode(23) | BOOT_PLL_GPU0_fcode(0) ) // 27*(23 + 0/2048)/2, 310M
+#define PARAM_PLL_30 (0x000613 | BOOT_PLL_GPU1_m(98) | BOOT_PLL_GPU1_n(2) | BOOT_PLL_GPU1_o(2)) // 27*74/3/3, 222M
+
+pll_param:
+.word MAP_START
+.word PARAM_PLL_04   //BUS1     @1800_0420
+.word PARAM_PLL_08   //N/A
+.word PARAM_PLL_0C   //SCPU     @1800_0404
+.word PARAM_PLL_10   //ACPU     @1800_0408
+.word PARAM_PLL_14   //VCPU     @1800_0410
+.word PARAM_PLL_18   //DDR_DCU1 @1800_0514
+.word PARAM_PLL_1C   //BUSH     @1800_0430
+.word PARAM_PLL_20   //DISPD    @1800_0490
+.word PARAM_PLL_24   //DIF      @1800_04C0
+.word PARAM_PLL_28   //N/A      
+.word PARAM_PLL_2C   //GPU      @1800_0454
+.word PARAM_PLL_30   //GPU1     @1800_0458

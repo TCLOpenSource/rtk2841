@@ -1,0 +1,14 @@
+#
+# Synopsys DWC OTG Controller Drivers
+#
+
+comment "DWC OTG Controller Drivers"
+   
+config USB_DWC_OTG
+    tristate "DWC OTG support"
+    depends on USB_OTG
+    default n
+    help
+	  USB OTG Controller driver. 
+	  Synopsys DeshignWare Hi-Speed USB On-The-Go (OTG) Core.
+

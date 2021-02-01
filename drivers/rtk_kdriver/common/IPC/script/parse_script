@@ -1,0 +1,86 @@
+#!/usr/bin/perl
+
+use Getopt::Long;
+
+$result = GetOptions(  "f=s"  => \$InputFile,
+                       "r=s"  => \$RPCGen, 
+                       "Ss=s" => \$Ss_file,
+                       "h"    => \$Help
+		    );
+
+if( $Help )
+{
+  printf("Usage: parse_script [-f <input_file>] [-p ROS or Linux] [-Ss <output_file>] [-h]\n");
+  printf("       -f:     Input script file\n");
+  printf("       -r:     RPC gen file\n");
+  printf("       -Ss:    Specify -Ss for rpcgen\n");
+  printf("       -h:     Help screen\n");
+  exit();
+}
+
+system("mv $InputFile $InputFile~");
+
+print "File backed up!\n";
+
+open( INPUTFILE, "<$InputFile~") or die "Couldn't open for read '$InputFile~': $!\n";
+open( OUTPUTFILE, ">$InputFile") or die "Couldn't open for write '$InputFile': $!\n";
+
+$macro_number=0;
+
+while( defined($line=<INPUTFILE>) )
+{
+  chomp($line);
+
+  if( $line =~ /^#define/ )
+  {
+    print OUTPUTFILE "$line\n";
+    @define_line = split /\s+/, $line;
+    if( $#define_line == 2 )
+    {
+      $macro_name[$macro_index]=$define_line[1];
+      $macro_var[$macro_index]=$define_line[2];
+      $macro_index=$macro_index+1;       
+    }  
+  }
+  else 
+  {
+    if( $line =~ /(\w*) \+ (\w*|\d*)/ )
+    {
+      for( $i = 0; $i <= $macro_index; $i ++)
+      {
+        if( "$1" eq "$macro_name[$i]" )
+        {
+          $FUNC_VAR = $2 + $macro_var[$i];
+          print OUTPUTFILE "$` $FUNC_VAR $'\n";
+          last;
+        }
+      }
+    }
+    else
+    {
+      print OUTPUTFILE "$line\n";
+    }
+  }
+}
+
+close INPUTFILE;
+close OUTPUTFILE;
+
+if( $Ss_file )
+{
+  system("$RPCGen -Ss $InputFile > $Ss_file");
+}
+else
+{
+  system("$RPCGen $InputFile");
+}
+
+
+system("mv $InputFile~ $InputFile");
+
+
+
+
+
+
+

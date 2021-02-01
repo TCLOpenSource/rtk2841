@@ -1,0 +1,100 @@
+include ../rtkhal/MakeConfig
+
+
+##############################################
+# Targets
+##############################################
+MYLIB    := $(RTK_HAL_OUTPUT_PATH)/librtk_common.a
+SUBDIRS  := 
+
+SRC := IPC/src/RPCstruct.c \
+    IPC/src/SVCFunc.c \
+    IPC/src/ClientStub.c
+
+ifneq ($(ENABLE_SECURE_CPU), YES)
+SRC += \
+	IPC/src/rpcapi.c \
+	IPC/src/RPCProxy.c \
+	IPC/src/rpcstubapi.c
+else
+SRC += \
+	IPC/src/rpcapi_secure.c \
+	IPC/src/RPCProxy_secure.c \
+	IPC/src/rpcstubapi_secure.c
+endif
+
+SRC += \
+    IPC/src/xdr/xdr.c \
+    IPC/src/xdr/xdr_mem.c \
+    IPC/src/xdr/xdr_array.c \
+    IPC/src/xdr/xdr_float.c \
+    IPC/src/xdr/xdr_process.c \
+    IPC/src/xdr/xdr_ref.c \
+    IPC/src/xdr/xdr_sizeof.c
+
+SRC += \
+    IPC/generate/src/system/AudioRPC_Agent_svc.c \
+    IPC/generate/src/system/AudioRPC_System_clnt.c \
+    IPC/generate/src/system/AudioRPCBaseDS_xdr.c \
+    IPC/generate/src/system/AudioRPC_Agent_xdr.c \
+    IPC/generate/src/system/AudioRPC_System_xdr.c \
+    IPC/generate/src/system/RPCBaseDS_xdr.c
+
+ifeq ($(ENABLE_KCPU_COMMON), YES)
+#for Secure CPU
+SRC += \
+	IPC/generate/src/system/SecureRPC_Agent_svc.c \
+	IPC/generate/src/system/SecureRPC_System_clnt.c \
+	IPC/generate/src/system/SecureRPCBaseDS_xdr.c \
+	IPC/generate/src/system/SecureRPC_Agent_xdr.c \
+	IPC/generate/src/system/SecureRPC_System_xdr.c
+endif
+
+SRC += \
+    IPC/generate/src/system/VideoRPC_Agent_svc.c \
+    IPC/generate/src/system/VideoRPC_System_clnt.c \
+    IPC/generate/src/system/VideoRPC_Agent_xdr.c \
+    IPC/generate/src/system/VideoRPC_System_xdr.c \
+    IPC/generate/src/system/VideoRPCBaseDS_xdr.c
+        
+        
+OBJ     = $(SRC:.c=.o)
+INC     = $(SRC:.cpp=.h)
+SUBDIRS =
+
+INC_DEF  = -I . 
+INC_DEF += -I $(RTK_HAL_INCLUDE)
+INC_DEF += -I $(RTK_HAL_SRC_INCLUDE)
+INC_DEF += -I $(RTK_HAL_LIBKADAPTER_INCLUDE)
+
+# the following includes should be removed. please fix it
+INC_DEF += -I $(RTK_EXT_LIBS_INCLUDE)
+INC_DEF += -I $(RTK_EXT_UTILS_INCLUDE)
+
+#for RTK COMMON
+INC_DEF += -I $(RTK_EXT_COMMON_INCLUDE)
+INC_DEF += -I $(RTK_EXT_COMMON_IPC_INCLUDE)
+INC_DEF += -I $(RTK_EXT_COMMON_IPC_XDR_INCLUDE)
+INC_DEF += -I $(RTK_EXT_COMMON_IPC_SYSTEM_INCLUDE)
+
+# for PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP
+CPPFLAGS += -D_GNU_SOURCE
+
+##############################################
+# Make
+##############################################
+
+.PHONY: all clean $(SUBDIRS)
+	
+all : $(OBJ)
+	@set -e; for i in $(OBJ); do $(AR) rcv $(MYLIB) $$i; done;
+
+.c.o:
+	$(MYCC) $(INC_DEF) $(CPPFLAGS) $(DEBUGFLAG) -c $< -o $@	
+
+.cpp.o:
+	$(MYCXX) $(INC_DEF) $(CPPFLAGS) $(DEBUGFLAG) -c $< -o $@	
+
+clean: 
+	@set -e; for i in $(SUBDIRS); do $(MAKE) clean -C $$i; done;	
+	@rm -f $(MYLIB) $(OBJ)

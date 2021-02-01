@@ -1,0 +1,13 @@
+# drivers/Kconfig
+
+comment"Smart Card Interface"
+	depends on RTK_KDRV_SMARTCARD
+
+config RTK_KDRV_SMARTCARD_IFD
+	tristate "Realtek  Smart Card Interface"
+	depends on RTK_KDRV_SMARTCARD 
+	select RTK_KDRV_GPIO
+	default n
+	help
+	  If you want to use smart card on board, say Y.
+

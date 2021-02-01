@@ -1,0 +1,30 @@
+config RTK_KDRV_GPIO
+	bool "GPIO Driver"
+	depends on RTK_KDRIVER_SUPPORT
+	select RTK_KDRIVER
+	default n
+	help
+	  GPIO Device Driver
+
+config RTK_KDRV_GPIO_GPIOLIB_SUPPORT
+	bool "Allow to access GPIO by Linux GPIO library"
+	depends on RTK_KDRV_GPIO
+	select ARCH_REQUIRE_GPIOLIB
+	select GPIO_SYSFS
+	select GPIOLIB
+	default y
+
+config RTK_KDRV_GPIO_BUILT_IN_TEST
+	bool "Enable GPIO Driver Built in test"
+	depends on RTK_KDRV_GPIO
+	default n
+
+config RTK_KDRV_GPIO_WITH_SYSFS_DEBUG
+	bool "Enable Debug Interface via SYSFS device Attribute"
+	depends on RTK_KDRV_GPIO && GPIOLIB
+	default y
+
+config RTK_KDRV_GPIO_IGNORE_ADMIN_CHECK
+	bool "Ignore GPIO IOCTL ADMIN Check"
+	depends on RTK_KDRV_GPIO
+	default n

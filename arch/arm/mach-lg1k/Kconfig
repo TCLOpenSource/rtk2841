@@ -1,0 +1,67 @@
+menu "LG1xxx options"
+	depends on ARCH_LG1K
+
+comment "LG1xxx system type"
+
+config ARCH_LG1K_CA9MPCORE
+	bool "LG1xxx based on Cortex-A9 MPcore"
+	select HAVE_ARM_SCU if SMP
+	select HAVE_ARM_TWD if SMP
+	select MIGHT_HAVE_CACHE_L2X0
+	select USB_ARCH_HAS_EHCI
+	select USB_ARCH_HAS_OHCI
+	select USB_ARCH_HAS_XHCI
+	select USB_XHCI_PLATFORM
+	select COMMON_CLK_LG1K
+	select LG1K_PMS
+
+config ARCH_LG1K_CA15MPCORE
+	bool "LG1xxx based on Cortex-A15 MPcore"
+	select ARM_ARCH_TIMER if SMP
+	select USB_ARCH_HAS_XHCI
+	select USB_XHCI_PLATFORM
+	select COMMON_CLK_LG1K
+	select REGULATOR_LG1K
+	select LG1K_PMS
+
+comment "Clocks and timers"
+
+config AMBA_CLOCK_MHZ
+	int "AMBA bus clock frequency (MHz)"
+	default 198
+
+comment "Level-2 cache controller options"
+
+if MIGHT_HAVE_CACHE_L2X0
+
+config L2CC_PREFETCH_DATA
+	bool "Enable data-prefetch"
+	default n
+	depends on CACHE_L2X0
+
+config L2CC_PREFETCH_INST
+	bool "Enable instruction-prefetch"
+	default n
+	depends on CACHE_L2X0
+
+config L2CC_PREFETCH_OFFSET
+	int "Prefetch-offset (0-7, 15, 23, 31)"
+	default 0
+	depends on CACHE_PL310 && (L2CC_PREFETCH_DATA || L2CC_PREFETCH_INST)
+	help
+	  In some systems, it might be better to prefetch more in advance
+	  to achieve better performance. The prefetch offset enables this
+	  by setting the address of the prefetched cache line to
+	  Cache Line + 1 + Offset. The optimal value of the prefetch offset
+	  depends on the L3 read latency and on the L1 read issuing capability.
+	  It is recommended to perform system experiments by varying
+	  the prefetch offset, to find the optimal value.
+
+endif	# MIGHT_HAVE_CACHE_L2X0
+
+comment "Miscellaneous options"
+
+config ARCH_HIBERNATION_POSSIBLE
+	def_bool y
+
+endmenu

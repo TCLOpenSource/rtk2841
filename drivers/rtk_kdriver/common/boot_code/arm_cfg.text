@@ -1,0 +1,11 @@
+
+arm_cfg.o:     file format elf32-bigmips
+
+
+Disassembly of section .text:
+
+bfc010c0 <arm_cfg>:
+bfc010c0:	bfc010c0 	cache	0x0,4288(s8)
+bfc010c4:	00000000 	nop
+bfc010c8:	000000cb 	0xcb
+bfc010cc:	00000000 	nop

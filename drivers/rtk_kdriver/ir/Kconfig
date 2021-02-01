@@ -1,0 +1,195 @@
+menu "IR Receiver Driver"
+config RTK_KDRV_IR
+	tristate "IR Receiver Driver"
+	default y
+	help
+		IR Receiver Character Device Driver
+
+config RTK_KDRV_IR_MOD_KEY_TOOL
+	tristate "IR Key Gen Tool"
+	default n
+	help
+		Use to generate any irda signals by GPIO.
+
+if RTK_KDRV_IR
+
+config RTK_KDRV_RECORD_KEY
+        bool "IR key recorder toool"
+        depends on RTK_KDRV_IR && RTK_KDRV_RAW_MODE
+        default n
+        help
+                Use for record key
+
+config IRDA_POWER_SAVING_MODE
+        bool "irda power saving function"
+        depends on RTK_KDRV_IR
+        default n
+        help
+                Used for Irda power saving
+
+config RTK_KDRV_DYNAMIC_INPUT_DEV_NAME
+        bool "support irda input dev dynamic name configure"
+        depends on RTK_KDRV_IR
+        default n
+        help
+                Used for irda input dev dynamic name configure
+
+config DELAY_FIRST_REPEAT
+	bool "IR support first repeat delay"
+	depends on RTK_KDRV_IR
+	default n if ANDROID
+	default y if !ANDROID
+	help
+		IR support first repeat dealy
+
+config RTK_KDRV_INPUT_DEVICE
+	bool "Support IR Input Device"
+	depends on RTK_KDRV_IR
+	default y
+	help
+		IR Input Device Support
+
+config RTK_KDRV_IR_SUPPORT_ANDROID_O
+	bool "IR Support Android O"
+	depends on RTK_KDRV_IR && ANDROID && RTK_KDRV_INPUT_DEVICE
+	default n
+	help
+		IR Support Android O
+
+config RTK_KDRV_SUPPORT_ALC_COMMAND
+        bool "alc module enable"
+        depends on RTK_KDRV_INPUT_DEVICE && RTK_KDRV_IR && ANDROID
+        default n
+        help
+                Used for alc module function
+
+config RTK_KDRV_INPUT_DEVICE_MOUSE
+	bool "Support IR Input Device Mouse"
+	depends on RTK_KDRV_IR && RTK_KDRV_INPUT_DEVICE
+	default n 
+	help
+		IR Input Device as Mouse Support
+
+config RTK_KDRV_RAW_MODE
+	bool "Use Raw Mode decode"
+	depends on RTK_KDRV_IR
+	help
+		Use Raw Mode decode
+
+config RTK_KDRV_HAIER_IR
+    bool "Support HAIER TV Remote Controller"
+    depends on RTK_KDRV_IR
+    help
+       HAIER TV Remote Controller
+ 
+config RTK_KDRV_YK_54LU
+    bool "Support Skyworth TV Remote Controller"
+    depends on RTK_KDRV_IR
+    help
+      Skyworth TV Remote Controller
+
+if RTK_KDRV_YK_54LU
+config RTK_KDRV_YK_54LU_SHUTTLE
+	bool "Support Skyworth shuttle device"
+	depends on RTK_KDRV_YK_54LU && RTK_KDRV_RAW_MODE
+	help
+		Skyworth shuttle Device
+endif
+
+config RTK_KDRV_MK5_2
+    bool "Support Realtek DTV Controller"
+    depends on RTK_KDRV_IR
+    help
+      Realtek DTV Remote Controller
+
+config RTK_KDRV_TV001_IR
+    bool "Support Realtek Keycode Mapping"
+    depends on RTK_KDRV_IR && RTK_KDRV_INPUT_DEVICE
+    default y if RTK_KDRV_MK5_2
+    help
+      Realtek DTV Keycode Mapping
+
+config RTK_KDRV_TV002_IR_RAW_MODE
+	bool "Support SONY Remote Controller Raw Mode Decode"
+	depends on RTK_KDRV_RAW_MODE
+	help
+		SONY Remote Controller
+
+config RTK_KDRV_TV002_IR
+    bool "Support Sony Keycode Mapping"
+    depends on RTK_KDRV_IR && RTK_KDRV_INPUT_DEVICE
+    default y if RTK_KDRV_TV002_IR_RAW_MODE
+    help
+      Realtek Sony Keycode Mapping
+
+config RTK_KDRV_ANDROID_OTT
+    bool "Support Realtek android stb OTT Controller"
+    depends on RTK_KDRV_IR
+    help
+      Realtek OTT Remote Controller
+
+config RTK_KDRV_TV015_IR
+    bool "Support TPV DTV Controller"
+    depends on RTK_KDRV_IR
+    help
+      TPV DTV Remote Controller
+
+config RTK_KDRV_TV030_IR
+    bool "Support TCL DTV Controller"
+    depends on RTK_KDRV_IR && RTK_KDRV_RAW_MODE
+    help
+      TCL DTV Remote Controller
+
+if RTK_KDRV_TV030_IR
+config RTK_KDRV_TV030_MOUSE
+	bool "Support TCL mouse device"
+	depends on RTK_KDRV_TV030_IR && RTK_KDRV_RAW_MODE && RTK_KDRV_INPUT_DEVICE
+	help
+		TCL Mouse Device
+endif
+
+config RTK_KDRV_TV035_IR
+    bool "Support KONKA TV Remote Controller"
+    depends on RTK_KDRV_IR && RTK_KDRV_RAW_MODE
+    help
+      KONKA TV Remote Controller
+
+if TV035_IR
+config RTK_KDRV_TV035_IR_RAW_MODE
+    bool "Support KONKA TV Remote Controller Raw Mode Decode"
+    depends on RTK_KDRV_TV035_IR && RTK_KDRV_RAW_MODE
+    help
+      KONKA TV Remote Controller Raw Mode Decode
+endif
+
+config RTK_KDRV_TV036_10D_IR
+    bool "Support HIKEEN 10D TV Remote Controller"
+    depends on RTK_KDRV_IR
+    help
+      HIKEEN 10D TV Remote Controller
+
+config RTK_KDRV_TV036_KTSG45_IR
+    bool "Support HIKEEN KTSG45 TV Remote Controller"
+    depends on RTK_KDRV_IR && RTK_KDRV_RAW_MODE
+    help
+      HIKEEN KTSG45 TV Remote Controller
+
+config RTK_KDRV_TV005_IR
+	bool "Support Toshiba Android DTV Controller"
+	depends on RTK_KDRV_IR
+	help
+      		Toshiba Android DTV Remote Controller
+
+if RTK_KDRV_TV005_IR
+config RTK_KDRV_TV005_MOUSE
+	bool "Support Toshiba mouse pointing device"
+	depends on RTK_KDRV_TV005_IR && RTK_KDRV_RAW_MODE && RTK_KDRV_INPUT_DEVICE_MOUSE
+	help
+		Toshiba Mouse Pointing Device
+endif
+
+endif
+
+endmenu # endof RTK_KDRV_IR
+
+

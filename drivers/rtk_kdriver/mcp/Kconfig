@@ -1,0 +1,44 @@
+menu "MCP HW Crypto Engine Support"
+
+# CP
+config RTK_KDRV_MCP
+        bool "MCP Driver."
+        depends on RTK_KDRIVER_SUPPORT
+        select RTK_KDRIVER
+        default n
+
+config RTK_KDRV_RCP_TEST
+        bool "Support CP Register Mode Cryption Self Test"
+        depends on RTK_KDRV_MCP
+        default n
+        help
+          CP Register mode Driver Self Test 
+
+config RTK_KDRV_MCP_NAPI
+        bool "MCP New API"
+        depends on RTK_KDRV_MCP
+        default n
+        help
+          MCP New API Driver
+
+config RTK_KDRV_MCP_SHA256
+        bool "Support MCP SHA256"
+        depends on RTK_KDRV_MCP
+        default n
+        help
+          MCP SHA256 Driver
+
+config RTK_KDRV_MCP_RSA
+	bool "Support MCP RSA"
+	select MPILIB
+	default n
+	help
+          MCP RSA Driver
+
+config RTK_KDRV_MCP_CAMELLIA
+        bool "Support MCP Camellia Algorithm"
+        depends on RTK_KDRV_MCP
+        default n
+        help
+          MCP CAMELLIA Driver
+endmenu

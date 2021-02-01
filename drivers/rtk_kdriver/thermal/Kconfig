@@ -1,0 +1,41 @@
+menu "Realtek Thermal Support"
+
+if THERMAL
+config RTK_KDRV_THERMAL
+    depends on RTK_KDRIVER_SUPPORT
+    select RTK_KDRIVER
+    tristate "Realtek thermal management"
+	    help
+		      Enable this option if you want to have support for thermal management
+			        controller present in Realtek SoC.
+			          	
+config RTK_KDRV_THERMAL_GOV_RTK_THERMAL_THROTTLE
+       depends on RTK_KDRV_THERMAL
+       bool "Realtek thermal governor"
+       help
+	Enable this to manage platform thermals using fair-share governor.	
+endif
+
+config RTK_KDRV_THERMAL_DEFAULT_GOV_RTK_THERMAL
+			 depends on RTK_KDRV_THERMAL_GOV_RTK_THERMAL_THROTTLE 
+       bool "Realtek default thermal governor"
+       help
+         Use the rtk_thermal governor as default. This throttles the
+         devices depends on temperature 
+
+#Thermal Sensor
+config RTK_KDRV_THERMAL_SENSOR
+	bool "Thermal Sensor Driver."
+	depends on RTK_KDRIVER_SUPPORT
+	select RTK_KDRIVER
+	default n
+	help
+	  Thermal Sensor
+
+config RTK_KDRV_ENABLE_THERMAL_CALLBACK
+    depends on RTK_KDRV_THERMAL
+    default n
+    bool "Realtek Thermal callback mesachism"
+	    help
+		      Enable the callback mesachism of thermal.
+endmenu

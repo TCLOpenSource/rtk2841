@@ -1,0 +1,352 @@
+#
+# LG kernel expand  configuration
+# CONFIG_LG_KERNEL_EXPAND
+#
+menu "LG kernel expand"
+
+config LG_CHANGE
+	tristate "LG Change"
+    default y
+	help
+	  lg change
+
+config LG_KERNEL_EXPAND
+	tristate "LG Kernel Expand support"
+    default y
+	help
+	  lg kernel expand support the function of the LG
+
+	  If unsure, say Y.
+
+config LG_XIP
+	bool "LG Xip support"
+	depends on LG_KERNEL_EXPAND
+	depends on CRAMFS_LINEAR_XIP
+    default y
+	help
+	  lg xip support xip operaition with gnu xip.
+	  If unsure, say N.
+
+config LG_MEM_DEVICE
+	bool "LG MEM DEVICE support"
+	depends on LG_KERNEL_EXPAND
+	default y
+	help
+	it support the debug info to LG's debug framework
+	If unsure, say N.
+
+config LG_DRIVER
+	bool "LG Driver support"
+	depends on LG_KERNEL_EXPAND
+    default y
+	help
+	  lg dirver support the debug info to LG's osadap.
+	  If unsure, say N.
+
+config LG_THREADED_DEVICE_PROBE
+	bool "LG Threaded Device Probe support"
+	depends on LG_KERNEL_EXPAND
+    default y
+	help
+	  lg threaded device probe support.
+	  If unsure, say Y.
+
+config THREADED_DEVICE_PROBE_NET
+	bool "LG Threaded NET Device Probe support"
+	depends on LG_KERNEL_EXPAND && LG_THREADED_DEVICE_PROBE
+    default y
+	help
+	  lg threaded NET device probe support.
+
+config LG_USER_INITCALL
+	bool "LG User Initcall support"
+	depends on LG_KERNEL_EXPAND
+    default y
+	help
+	  lg user initcall support delayed initialization for fast boot.
+	  If unsure, say N.
+
+config USER_INITCALL_USB
+	bool "LG User Initcall usb support"
+	depends on LG_KERNEL_EXPAND && LG_USER_INITCALL
+    default y
+	help
+	  lg user initcall usb support delayed initialization for fast boot.
+	  If unsure, say N.
+
+config USER_INITCALL_NET
+	bool "LG User Initcall net support"
+	depends on LG_KERNEL_EXPAND && LG_USER_INITCALL && !THREADED_DEVICE_PROBE_NET
+    default n
+	help
+	  lg user initcall net support delayed initialization for fast boot.
+	  If unsure, say N.
+
+config USERINITCALL_KTHREAD
+	bool "LG User Initcall kernel thread support"
+	depends on LG_KERNEL_EXPAND && LG_USER_INITCALL
+    default y
+	help
+	  support lg user initcall kernel thread for removing video flikering when bootup
+	  If unsure, say N.
+
+config OOM_KILL_TASK
+	bool "In case of out-of-memory, kill specific task support"
+	depends on LG_KERNEL_EXPAND
+	default y
+	help
+	  If unsure, say N.
+config OOM_KILL_TASKNAME
+	string "Kill task Name"
+	depends on LG_KERNEL_EXPAND
+	depends on OOM_KILL_TASK
+	default "lb5wk"
+	help
+		In case of out of memory, kill specific task immediately
+
+config MTD_MTDINFO
+	bool "LG MTDINFO partition"
+	depends on LG_KERNEL_EXPAND
+	depends on MTD_PARTITIONS
+    default y
+	help
+	  lg user initcall support LG's mtdinfo function.
+	  If unsure, say N.
+
+config MTD_NAND_BBM
+    bool "Nand Bad Block Management by junorion"
+	depends on LG_KERNEL_EXPAND
+    default y
+	help
+	  Support Nand Bad Block Management
+
+config LG_USB_PATCH
+    bool "LG USB Patch support"
+	depends on LG_KERNEL_EXPAND
+    default y
+	help
+	  Support LG's USB Patch
+
+config DEBUG_THREAD_SPSTART
+    bool "Enable thread stack start address"
+	depends on LG_KERNEL_EXPAND
+    default y
+    help
+      for debug thread stack in linux thread env by junorion
+
+config LOCKUP_DETECT
+    bool "Lock Up Detect support"
+	depends on LG_KERNEL_EXPAND && PROFILING
+    default y
+    help
+      Selecting this option causes the process in case of lock up
+      to be detected
+
+config GNU_PATCH_FROM_LG
+    bool "Additional GNU Patch support"
+	depends on LG_KERNEL_EXPAND
+    default y
+    help
+	 to support additional gnu patch
+
+#	GNU Patch List
+#		- CRAMFS_LINEAR
+#		- CRAMFS_LINEAR_XIP
+
+config LG_MISC
+	bool "LG Misc support"
+	depends on LG_KERNEL_EXPAND
+    default y
+	help
+	  lg misc support the misc function of the LG.
+	  If unsure, say N.
+
+config ALIGN_ENTRYPOINT
+	bool "kernel_entry is aligned at start address"
+	depends on LG_KERNEL_EXPAND
+    default y
+	help
+	  kernel_entry is aligned at start address.
+	  If unsure, say N.
+
+config PRINT_COLOR_SUPPORT
+	bool "Kernel printk color display support"
+	depends on LG_KERNEL_EXPAND
+	default y
+	help
+	  Kernel printk color display support
+	  If unsure, say Y.
+
+config LG_INIT
+	bool "LG init support"
+	depends on LG_KERNEL_EXPAND
+	default y
+	help
+	  LG custom init program support
+	  If unsure, say Y.
+
+config LG_YAFFS2_CPU_YIELD
+	bool "Yaffs2 cpu yield support"
+	depends on LG_KERNEL_EXPAND
+	default y
+	help
+	  Let yaffs2 yield cpu on mount to reduce event latency.
+	  This can be enabled with cpu-yield option.
+	  If unsure, say Y.
+
+config LG_TIME_COMPENSATION
+	int "LG's system time compensation value (in seconds)"
+	depends on LG_KERNEL_EXPAND
+	default "0"
+	help
+	  Usually MIPS kernel has time drift. You can compensate the system
+	  time drift by this value.
+
+config LG_JFS_USB_PULLOUT
+	bool "JFS : USB media sudden disconnection support"
+	depends on LG_KERNEL_EXPAND && JFS_FS
+	default y
+	help
+	  In case of DVR Ready, somebody can pull out USB HDD during writing operation.
+	  At that time, kernel panic occurred rarely at jfsCommit thread.
+	  This patch make jfsCommit thread more rigid when USB disconnected suddenly.
+	  If unsure, say Y.
+
+config KO_LAZY_LOAD
+	bool "driver module(ko) lazy load support"
+	depends on LG_KERNEL_EXPAND
+	default y
+	help
+	  ko module lazy load support for removing video flickering when bootup
+	  If unsure, say Y.
+
+config ELF_LAZY_LOAD
+	bool "elf lazy load support"
+	depends on LG_KERNEL_EXPAND
+	default y
+	help
+	  elf lazy load support for removing video flickering when bootup
+	  If unsure, say Y.
+
+config LG_PRINT_CTRL
+	bool "print on/off flag support"
+	depends on LG_KERNEL_EXPAND
+	default y
+	help
+	  support print on/off flag for controling printk on application(RELEASE)
+	  If unsure, say Y.
+
+config LG_CMD_DEBUG
+	bool "cmd line debug support"
+	depends on LG_KERNEL_EXPAND
+	default y
+	help
+	  support commnad line debugging when you meet kernel panic
+	  If unsure, say Y.
+
+config LG_BUILTIN_KDRIVER
+	bool "kernel builtin SOC kernel driver"
+	default y
+	help
+	  this feature make SOC kernel driver to be linked into kernel not kernel module
+	  kernel with SOC kernel driver will speed up the booting time
+
+config LG_IOCTL_COMPATIBILITY
+        bool "ioctl compatibility"
+        default n
+        help
+          this feature make use ioctl with unlocked_ioctl.
+          but,ioctl is not protected by BKL same as unlocked_ioctl
+
+config LG_BCM_WIFI_SUPPORT
+        bool "BCM wifi support"
+        default y
+	select WIRELESS_EXT
+	select WEXT_PRIV
+        help
+          select wifi extention config for BCM wifi. 
+
+config MODULE_IGNORE_SUBVER
+        bool "Ignore check for the subversion."
+        default y
+        help
+          Ignore check for the sunversion when kernel module is loaded.
+
+choice
+	prompt "UVC driver selection"
+	default QUANTA_UVC
+	help
+	  Select UVC driver you want to use.
+	  You should select USB_VIDEO_CLASS to enable UVC driver independent on this selection.
+	  In other words, this selection doesn't make UVC driver enabled.
+
+config QUANTA_UVC
+	bool "Quanta UVC driver"
+	
+config ORGINAL_UVC
+	bool "Original Linux UVC driver"
+
+endchoice
+
+menu "LG UVC patch for Quanta Camera"
+	depends on QUANTA_UVC
+
+config UVC_LG_QUANTA_LARGE_TS_BUFFER
+	bool "Use large URB buffers"
+	default y
+	depends on QUANTA_UVC
+	---help---
+	  This option increases maximum packet number per URB.
+
+	  If you are in doubt, say N.
+
+config UVC_LG_QUANTA_USE_STREAMING_DMA_FOR_URB
+	bool "Use Streaming DMA mapping for URB"
+	default y
+	depends on QUANTA_UVC
+	---help---
+	  This option makes UVC driver use streaming DMA mapping instead of usb_buffer_alloc
+	  to allocate URB buffer.
+
+config UVC_LG_QUANTA_USE_KMALLOC_FOR_VIDEO_FRAME
+	bool "Use kmalloc to allocate video frame buffer"
+	default y
+	depends on QUANTA_UVC
+	---help---
+	  This option makes UVC driver use kmalloc instead of vmalloc
+	  to allocate video frame buffer.
+
+
+config UVC_LG_QUANTA_SKIP_EVEN_YUYV_FRAME
+	bool "Skip even YUYV frame"
+	default y
+	depends on QUANTA_UVC
+	---help---
+	  This option makes UVC driver not use even YUYV frame.
+
+config UVC_LG_QUANTA_USE_DMA
+	bool "Use DMA to copy video data from URB buffer to video frame buffer(Unstable)"
+	default n
+	depends on QUANTA_UVC
+	---help---
+	  This option makes UVC driver use DMA function when coping video data
+	  from URB buffer to video frame buffer
+
+	  This option is Unstable
+	  Don't select this if you have don't know what this does.
+
+endmenu
+
+menu "LG Sysrq expand"
+
+config LG_KLOG_PRINT
+	bool "Print kernel log when sysrq(.)"
+	default n
+
+config LG_DISABLE_SYSRQ_EXCEPT_UNMOUNT
+	bool "Disable sysrq for preventing security threats except unmount(u) feature"
+	default n
+
+endmenu
+
+endmenu

@@ -1,0 +1,23 @@
+
+fake_acpu_pass.o:     file format elf32-bigmips
+
+
+Disassembly of section .text:
+
+80204000 <dummy_acpu_loop>:
+80204000:	10000003 	b	80204010 <DIAG_PASS>
+80204004:	00000000 	nop
+80204008:	1000ffff 	b	80204008 <dummy_acpu_loop+0x8>
+8020400c:	00000000 	nop
+
+80204010 <DIAG_PASS>:
+80204010:	3c088020 	lui	t0,0x8020
+80204014:	35083000 	ori	t0,t0,0x3000
+80204018:	01000008 	jr	t0
+8020401c:	00000000 	nop
+
+80204020 <DIAG_FAIL>:
+80204020:	3c088020 	lui	t0,0x8020
+80204024:	35083020 	ori	t0,t0,0x3020
+80204028:	01000008 	jr	t0
+8020402c:	00000000 	nop

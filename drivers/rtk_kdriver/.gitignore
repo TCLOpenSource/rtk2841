@@ -1,0 +1,6 @@
+.gitignorei
+*.cmd
+*.o
+*.builtin
+*.order
+

@@ -1,0 +1,14 @@
+#Note: disable it since the following config is already defined in mach-rtd284x/Kconfig
+
+#config REALTEK_PCBMGR
+#	bool "Use Realtek PCB Manager sysfs"
+#	default n
+#	help
+#		pcb manager enable, pcb manager will export the pcb info at /sys/realtek_boards/pcb_enum
+#
+config REALTEK_PCBMGR_WITH_IO_API
+	bool 
+	depends on REALTEK_PCBMGR
+	select RTK_KDRV_GPIO
+	default y
+

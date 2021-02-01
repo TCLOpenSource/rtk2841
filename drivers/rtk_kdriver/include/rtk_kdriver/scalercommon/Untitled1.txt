@@ -1,0 +1,136 @@
+{
+	UINT32 temp_reg_HistCnt[COLOR_HISTOGRAM_LEVEL];
+	UINT32 i = 0, sram_block_cnt = 0;
+	UINT32 baseAddress = 0;
+	UINT8 sram_block_cnt_th = 0;
+	UINT8 sram_bin_base = 0;
+	UINT8 Hist_Total_Bin = 0;
+
+	const UINT8 timeout = 255;
+	static UINT8 read_timer = timeout;
+
+	if(channel>SLR_SUB_DISPLAY || channel<SLR_MAIN_DISPLAY){ //prevent the channel selection error!
+
+		channel = SLR_MAIN_DISPLAY;
+	}
+
+	if(channel == SLR_MAIN_DISPLAY){
+
+		histogram_ich1_hist_read_ctr_RBUS ich1_hist_read_ctr_Reg;
+		histogram_ich1_hist_in_cselect_RBUS ich1_hist_in_cselect_Reg;
+		ich1_hist_read_ctr_Reg.regValue = rtd_inl(HISTOGRAM_ICH1_HIST_READ_CTR_VADDR);
+		ich1_hist_in_cselect_Reg.regValue = rtd_inl(HISTOGRAM_ICH1_HIST_IN_CSELECT_VADDR);
+
+		if(ich1_hist_in_cselect_Reg.bin_mode == 0){
+			sram_block_cnt_th = 1;
+			Hist_Total_Bin = 32;
+		} else {
+			sram_block_cnt_th = 4;
+			Hist_Total_Bin = 128;
+
+			if( ich1_hist_read_ctr_Reg.ch1_sram_read_consistent_flag == 1 ){
+				ich1_hist_read_ctr_Reg.ch1_sram_read_consistent_flag = 1;
+				rtd_outl(HISTOGRAM_ICH1_HIST_READ_CTR_VADDR,ich1_hist_read_ctr_Reg.regValue);
+			}
+
+		}
+
+		// Read ich1_hist_in_data_01_00_reg once a time can speed up by caching mechanism.
+		// And because the structure of ich1_hist_in_data_01_00_reg ~ ich1_hist_in_data_31_30_reg are all the same,
+		// we can declare ich1_hist_in_data_01_00_reg only for reduce the number of variable.
+		histogram_ich1_c0_hist_in_data_01_00_RBUS	ich1_hist_in_data_reg;
+
+		if( C_Channel_select == 0){
+			baseAddress = HISTOGRAM_ICH1_C0_HIST_IN_DATA_01_00_VADDR;
+		} else if ( C_Channel_select == 1 )  {
+			baseAddress = HISTOGRAM_ICH1_C1_HIST_IN_DATA_01_00_VADDR;
+		}
+#if 0
+		if(MA_print_count%300==0) {
+			ich1_hist_read_ctr_Reg.regValue = rtd_inl(HISTOGRAM_ICH1_HIST_READ_CTR_VADDR);
+			ROSPrintfInternal("1.drvif_color_Get_Idomain_Y_histogram(%d,%d)\n",read_timer,ich1_hist_read_ctr_Reg.ch1_sram_read_consistent_flag);
+		}
+#endif
+
+		for(sram_block_cnt=0; sram_block_cnt<sram_block_cnt_th; sram_block_cnt++){
+
+			/*o----init the read setting for hist sram---o*/
+			ich1_hist_read_ctr_Reg.ch1_sram_block = sram_block_cnt;
+			rtd_outl(HISTOGRAM_ICH1_HIST_READ_CTR_VADDR,ich1_hist_read_ctr_Reg.regValue);
+			ich1_hist_read_ctr_Reg.ch1_sram_read = 1;
+			rtd_outl(HISTOGRAM_ICH1_HIST_READ_CTR_VADDR,ich1_hist_read_ctr_Reg.regValue);
+
+			/*o----check sram read status and avoide the infinite loop !!----o*/
+			do{
+				ich1_hist_read_ctr_Reg.regValue = rtd_inl(HISTOGRAM_ICH1_HIST_READ_CTR_VADDR);
+				read_timer--;
+
+				if( read_timer == 0 ){
+					read_timer = timeout;
+					if(MA_print_count%300==0) {
+						ROSPrintf("2.Warring!!! histogram Reading timeout, sram_read !=0 !! \n");
+					}
+					return; // wait until next ISR
+				}
+			}while(ich1_hist_read_ctr_Reg.ch1_sram_read == 1);
+
+			/*o----Read histogram ----o*/
+			for(i=0; i<COLOR_HISTOGRAM_DATA_BIN_NUM; i++){
+				ich1_hist_in_data_reg.regValue = scaler_rtd_inl(baseAddress + i*4);
+				sram_bin_base = (i<<1) + (sram_block_cnt<<5);
+				temp_reg_HistCnt[sram_bin_base] = ich1_hist_in_data_reg.ch1_c0_hist00;
+				temp_reg_HistCnt[sram_bin_base+1] = ich1_hist_in_data_reg.ch1_c0_hist01;
+#if 0
+				if(MA_print_count%300==0) {
+					ROSPrintfInternal("(%d, %d), sram_bin_base=%d \n",i,sram_block_cnt, sram_bin_base);
+					ROSPrintfInternal("[%d]=%d, [%d]=%d \n",sram_bin_base,temp_reg_HistCnt[sram_bin_base],(sram_bin_base+1),temp_reg_HistCnt[sram_bin_base+1]);
+				}
+#endif
+			}
+		}
+
+		/*o----avoide to read wrong Histogram !!----o*/
+		if( sram_block_cnt_th == 4 ){
+			ich1_hist_read_ctr_Reg.regValue = rtd_inl(HISTOGRAM_ICH1_HIST_READ_CTR_VADDR);
+			if(ich1_hist_read_ctr_Reg.ch1_sram_read_consistent_flag == 1){
+				if(MA_print_count%300==0) {
+					  ROSPrintf("Get_Idomain_Y_histogram !! \n");
+					  ROSPrintf("Warring!!! inconsistent frame for histogram Reading !! \n");
+				}
+				return; // wait until next ISR
+			}
+
+		}
+
+		if( Hist_Total_Bin != COLOR_HISTOGRAM_LEVEL ){
+			if(MA_print_count%100==0) {
+				ROSPrintf("Warring!!! Bin_Mode setting not match with HISTOGRAM_LEVEL !! \n");
+			}
+		}
+
+		/*o----Read finish and move to SmartPic_clue----o*/
+		for(i=0; i<Hist_Total_Bin; i++){
+			reg_HistCnt[i] = temp_reg_HistCnt[i];
+#if 0
+			if(MA_print_count%300==0) {
+				ROSPrintfInternal("temp_reg_HistCnt[%d]=%d \n",i,temp_reg_HistCnt[i]);
+			}
+#endif
+		}
+#if 0
+		if(MA_print_count%300==0) {
+			ROSPrintfInternal("read_timer=%d (cnt=%d)\n",read_timer, MA_print_count);
+		}
+#endif
+		read_timer = timeout;
+	} else if(channel == SLR_SUB_DISPLAY){
+		//need to fix sub channel
+	} else { // check the channel selection
+		if(MA_print_count%100==0) {
+			ROSPrintf("Get_Idomain_Y_histogram !! \n");
+			ROSPrintf("Warring!!! Please check the histogram channel number\n");
+			ROSPrintf("channel=%d\n",channel);
+		}
+	}
+
+}

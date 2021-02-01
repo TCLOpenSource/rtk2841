@@ -1,0 +1,22 @@
+# drivers/smartcard/core/Kconfig
+
+config RTK_KDRV_SMARTCARD_CHARDEV
+	bool "Smart Card Device Interface"
+	depends on RTK_KDRV_SMARTCARD
+	select RTK_KDRV_SMARTCARD_DEV_FILE
+	help
+	  Say Y here to use smart card device files, usually found in the /dev/smartcard/
+	  directory on your system.  They make it possible to have user-space
+	  programs use the smart card reader.
+
+config RTK_KDRV_SMARTCARD_DEV_FILE
+	bool 
+	depends on RTK_KDRV_SMARTCARD
+	default n
+
+config RTK_KDRV_SMARTCARD_DEBUG
+	bool "Smart Card Debug Mode"
+	depends on RTK_KDRV_SMARTCARD
+	default n
+	help
+	  If you want to enable smart card debug message, say Y.

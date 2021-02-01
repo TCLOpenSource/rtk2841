@@ -1,0 +1,32 @@
+DIR = .
+TOOLCHAIN_PATH = $(DIR)/toolchain
+TOOLCHAIN = asdk-5.4.1-a53-EL-4.4-g2.23-a32nt-161027
+
+#CC = ./$(TOOLCHAIN)/bin/arm-linux-gcc
+CC = gcc
+
+OBJS += $(DIR)/rtk_gen_vpqtable.o
+OBJS += $(DIR)/tvscalercontrol/vip/pq_misc_table.o
+OBJS += $(DIR)/tvscalercontrol/vip/vip_panel_default.o
+#OBJS += $(DIR)/tt.o
+
+INCLUDES += -I$(DIR)/include/rtk_kdriver/
+INCLUDES += -I$(DIR)/include/
+INCLUDES += -I$(DIR)
+
+CFLAGS += $(INCLUDES) 
+CFLAGS += -DCONFIG_FIRMWARE_IN_KERNEL
+CFLAGS += -DCONFIG_VPQ_TABLE_GENERATE
+
+all : $(OBJS)
+	$(CC) $(CFLAGS) -o vpqtable.o $(OBJS)
+
+.PHONY : clean install_toolchain
+clean :
+	rm -rf vpqtable.o $(OBJS)
+
+install_toolchain:
+	if [ ! -d $(TOOLCHAIN) ] ; then \
+		git clone ssh://code.realtek.com.tw:20001/Sina/system/toolchain ; \
+		tar -xvf $(TOOLCHAIN_PATH)/gcc5/asdk-5.4.1-a53-EL-4.4-g2.23-a32nt-161027.tar.bz2 ; \
+	fi

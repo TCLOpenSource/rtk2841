@@ -1,0 +1,15 @@
+# drivers/cec/Kconfig
+
+menu "Smart Card Interface Support"
+
+config RTK_KDRV_SMARTCARD
+	tristate "Smart Card Interface Support"
+	default n
+	help
+	  Say Y here if you want to support smart card on your platform
+
+source drivers/rtk_kdriver/smartcard/core/Kconfig
+source drivers/rtk_kdriver/smartcard/adapter/Kconfig
+
+endmenu
+

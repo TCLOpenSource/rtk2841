@@ -1,0 +1,6 @@
+config RTK_KDRV_OMX
+	tristate "Driver for OpenMAX Integration Layer"
+	default n
+	depends on RTK_KDRV_RPC
+	help
+	  Driver for OpenMAX Integration Layer

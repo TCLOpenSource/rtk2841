@@ -1,0 +1,238 @@
+/dts-v1/;
+
+/ {
+	#address-cells = <2>;
+	#size-cells = <1>;
+
+	model = "LG Electronics, DTV SoC LG1210 (FPGA)";
+	compatible = "lge,lg1210";
+
+	aliases {
+
+	};
+
+	chosen {
+		bootargs = "";
+	};
+
+	memory@00000000 {
+		device_type = "memory";
+		reg = <0x0 0x00000000 0x10000000>;
+	};
+
+	cpus {
+		#address-cells = <2>;
+		#size-cells = <0>;
+
+		cpu@0 {
+			device_type = "cpu";
+			compatible = "arm,armv8";
+			reg = <0x0 0x0>;
+			enable-method = "spin-table";
+		};
+		cpu@1 {
+			device_type = "cpu";
+			compatible = "arm,armv8";
+			reg = <0x0 0x1>;
+			enable-method = "spin-table";
+			//cpu-release-addr = <0x0 0xfd3002e0>;
+			cpu-release-addr = <0x0 0xfff8>;
+		};
+		cpu@2 {
+			device_type = "cpu";
+			compatible = "arm,armv8";
+			reg = <0x0 0x2>;
+			enable-method = "spin-table";
+			//cpu-release-addr = <0x0 0xfd3002e0>;
+			cpu-release-addr = <0x0 0xfff8>;
+		};
+		cpu@3 {
+			device_type = "cpu";
+			compatible = "arm,armv8";
+			reg = <0x0 0x3>;
+			enable-method = "spin-table";
+			//cpu-release-addr = <0x0 0xfd3002e0>;
+			cpu-release-addr = <0x0 0xfff8>;
+		};
+	};
+
+	gic: interrupt-controller@c2001000 {
+		#interrupt-cells = <3>;
+
+		compatible = "arm,cortex-a15-gic";
+		interrupt-controller;
+		reg = <0x0 0xc2001000 0x1000>,
+		      <0x0 0xc2002000 0x1000>;
+	};
+
+	/* system clock is not ready -- can't use this */
+	timer {
+		compatible = "arm,armv8-timer";
+		interrupt-parent = <&gic>;
+		interrupts = <1 13 0xff01>,
+		             <1 14 0xff01>;
+		clock-frequency = <5000000>;
+	};
+	pmu {
+		compatible = "arm,armv8-pmuv3";
+		interrupt-parent = <&gic>;
+		interrupts = <0 149 0x0004>,
+		             <0 150 0x0004>,
+		             <0 151 0x0004>,
+		             <0 152 0x0004>;
+	};
+
+	clocks {
+		clk_xtal: clk_xtal {
+			#clock-cells = <0>;
+
+			compatible = "fixed-clock";
+			clock-frequency = <5000000>;
+			clk-output-names = "clk-xtal";
+		};
+		clk_cpu: clk_cpu {
+			#clock-cells = <0>;
+
+			compatible = "fixed-clock";
+			clock-frequency = <5000000>;
+			clk-output-names = "clk-cpu";
+		};
+		clk_bus: clk_bus {
+			#clock-cells = <0>;
+
+			compatible = "fixed-clock";
+			clock-frequency = <5000000>;
+			clk-output-names = "clk-bus";
+		};
+	};
+
+	platform {
+		#address-cells = <2>;
+		#size-cells = <1>;
+
+		compatible = "simple-bus";
+		interrupt-parent = <&gic>;
+		ranges;
+
+		eth0: ethernet@c0b00000 {
+			compatible = "lge,lg115x-macb", "cdns,gem";
+			reg = <0x0 0xc0b00000 0x1000>;
+			interrupts = <0 31 0>;
+			clocks = <&clk_bus>, <&clk_bus>;
+			clock-names = "hclk", "pclk";
+			phy-mode = "rgmii";
+			mac-address = [ 00 00 00 00 00 00 ];
+		};
+/*		xhci0: usb@ {
+			compatible = "lge,lg115x-xhci", "xhci-platform";
+			interrupts = <0 72 0>;
+			status = "skip";
+		};
+		xhci1: usb@ {
+			compatible = "lge,lg115x-xhci", "xhci-platform";
+			interrupts = <0 73 0>;
+			status = "skip";
+		};
+		ehci0: usb@ {
+			compatible = "lge,lg115x-ehci", "ehci-platform";
+			interrupts = <0 75 0>;
+			status = "skip";
+		};
+		ehci1: usb@ {
+			compatible = "lge,lg115x-ehci", "ehci-platform";
+			interrupts = <0 77 0>;
+			status = "skip";
+		};
+		ehci2: usb@ {
+			compatible = "lge,lg115x-ehci", "ehci-platform";
+			interrupts = <0 79 0>;
+			status = "skip";
+		};
+		ohci0: usb@ {
+			compatible = "lge,lg115x-ohci", "ohci-platform";
+			interrupts = <0 74 0>;
+			status = "skip";
+		};
+		ohci1: usb@ {
+			compatible = "lge,lg115x-ohci", "ohci-platform";
+			interrupts = <0 76 0>;
+			status = "skip";
+		};
+		ohci2: usb@ {
+			compatible = "lge,lg115x-ohci", "ohci-platform";
+			interrupts = <0 78 0>;
+			status = "skip";
+		};
+*/		sdhci: mmc@c0c00000 {
+			compatible = "lge,lg1k-sdhci-5.0";
+			reg = <0x0 0xc0c00000 0x1000>;
+			interrupts = <0 87 0>;
+		};
+	};
+
+	amba {
+		#address-cells = <2>;
+		#size-cells = <1>;
+
+		compatible = "arm,amba-bus";
+		interrupt-parent = <&gic>;
+		ranges;
+
+		timers: timer@fd100000 {
+			compatible = "arm,sp804", "arm,primecell";
+			reg = <0x0 0xfd100000 0x1000>;
+			interrupts = <0 6 0>;
+			clocks = <&clk_bus>;
+			clock-names = "apb_pclk";
+		};
+		wdog: watchdog@fd200000 {
+			compatible = "arm,sp805", "arm,primecell";
+			reg = <0x0 0xfd200000 0x1000>;
+			interrupts = <0 7 0>;
+			clocks = <&clk_bus>;
+			clock-names = "apb_pclk";
+		};
+		uart0: serial@fe000000 {
+			compatible = "arm,pl011", "arm,primecell";
+			reg = <0x0 0xfe000000 0x1000>;
+			interrupts = <0 0 0>;
+			clocks = <&clk_bus>;
+			clock-names = "apb_pclk";
+		};
+		uart1: serial@fe100000 {
+			compatible = "arm,pl011", "arm,primecell";
+			reg = <0x0 0xfe100000 0x1000>;
+			interrupts = <0 1 0>;
+			clocks = <&clk_bus>;
+			clock-names = "apb_pclk";
+		};
+		uart2: serial@fe200000 {
+			compatible = "arm,pl011", "arm,primecell";
+			reg = <0x0 0xfe200000 0x1000>;
+			interrupts = <0 2 0>;
+			clocks = <&clk_bus>;
+			clock-names = "apb_pclk";
+		};
+		spi0: ssp@fe800000 {
+			compatible = "arm,pl022", "arm,primecell";
+			reg = <0x0 0xfe800000 0x1000>;
+			interrupts = <0 3 0>;
+			clocks = <&clk_bus>;
+			clock-names = "apb_pclk";
+		};
+		spi1: ssp@fe900000 {
+			compatible = "arm,pl022", "arm,primecell";
+			reg = <0x0 0xfe900000 0x1000>;
+			interrupts = <0 4 0>;
+			clocks = <&clk_bus>;
+			clock-names = "apb_pclk";
+		};
+		dmac: dma@ff200000 {
+			compatible = "arm,pl080", "arm,primecell";
+			reg = <0x0 0xff200000 0x1000>;
+			interrupts = <0 24 0>;
+			clocks = <&clk_bus>;
+			clock-names = "apb_pclk";
+		};
+	};
+};

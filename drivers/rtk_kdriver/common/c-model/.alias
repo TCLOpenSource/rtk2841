@@ -1,0 +1,79 @@
+alias al "source ~/.alias;source ~/.cshrc.my"
+alias ll "ls -al;pwd"
+alias c "cd .."
+alias e "exit"
+alias cd 'cd \!*;set prompt="`hostname`:`pwd`>";ll'
+alias au 'auto_hload 4'
+alias au2 'auto_hload 2'
+alias mk 'make clean;qqrsh make -j 10'
+alias ru 'qqrsh64 run_reg *.reg'
+alias run_dump 'qqrsh64 run_rtl -dump ve'
+alias cl 'rm -rf *_rnd* INCA_libs tmp* iter_seed'
+alias genwrappervcpu  '~/tmp/GenVEWrapper.pl module_VE1_reg_map.h'
+alias genwrappervcpu2 '~/tmp/GenVEWrapper.pl module_VE1_reg_map.h module_VE2_reg_map.h'
+alias gencppvcpu  '~/tmp/UpdateRegMap.cs module_VE1_reg_map.h'
+alias gencppvcpu2 '~/tmp/UpdateRegMap.cs module_VE2_reg_map.h'
+
+alias mer  "echo http://cadinfo/svn/MM/RL6221/trunk/mercury"
+alias merc "echo http://cadinfo/svn/MM/RL6221/trunk/mercury/c_model/VE3"
+alias merd "echo http://cadinfo/svn/MM/RL6221/trunk/mercury/dv_tests"
+alias merh "echo http://cadinfo/svn/MM/RL6221/trunk/mercury/hardware/rtl/VE"
+alias merv "echo http://cadinfo/svn/MM/RL6221/trunk/mercury/verification"
+
+alias nike  "echo http://cadinfo/svn/MM/RL6259/trunk/nike"
+alias nikec "echo http://cadinfo/svn/MM/RL6259/trunk/nike/c_model/VE3"
+alias niked "echo http://cadinfo/svn/MM/RL6259/trunk/nike/dv_tests"
+alias nikeh "echo http://cadinfo/svn/MM/RL6259/trunk/nike/hardware/rtl/VE"
+alias nikev "echo http://cadinfo/svn/MM/RL6259/trunk/nike/verification"
+
+#alias mac2  "echo http://cadinfo/svn/MM/RL6283/trunk/mac2"
+#alias mac2c "echo http://cadinfo/svn/MM/RL6283/trunk/mac2/c_model/VE3"
+#alias mac2d "echo http://cadinfo/svn/MM/RL6283/trunk/mac2/dv_tests"
+#alias mac2h "echo http://cadinfo/svn/MM/RL6283/trunk/mac2/hardware/rtl/VE"
+#alias mac2v "echo http://cadinfo/svn/MM/RL6283/trunk/mac2/verification"
+
+alias mac2  "echo http://cadinfo/svn/MM/RL6319/trunk"
+alias mac2c "echo http://cadinfo/svn/MM/RL6319/trunk/c_model/VE3"
+alias mac2d "echo http://cadinfo/svn/MM/RL6319/trunk/dv_tests"
+alias mac2h "echo http://cadinfo/svn/MM/RL6319/trunk/hardware/rtl/VE"
+alias mac2v "echo http://cadinfo/svn/MM/RL6319/trunk/verification"
+
+alias mag  "echo http://cadinfo/svn/MM/RL6227/trunk"
+alias magc "echo http://cadinfo/svn/MM/RL6227/trunk/c_model/VE3"
+alias magd "echo http://cadinfo/svn/MM/RL6227/trunk/dv_tests"
+alias magh "echo http://cadinfo/svn/MM/RL6227/trunk/hardware/rtl/VE"
+alias magv "echo http://cadinfo/svn/MM/RL6227/trunk/verification"
+
+alias sirius  "echo http://dtdinfo.realtek.com.tw/svn/MM/RL6330/trunk/sirius"
+alias mag2    "echo http://dtdinfo.realtek.com.tw/svn/MM/RL6331/trunk"
+
+
+alias ml4  "echo http://dtdinfo.realtek.com.tw/svn/MM/RL6328/trunk"
+alias ml4c "echo http://dtdinfo.realtek.com.tw/svn/MM/RL6328/trunk/c_model"
+alias ml4d "echo http://dtdinfo.realtek.com.tw/svn/MM/RL6328/trunk/tests"
+
+alias picasso  "echo http://cadinfo/svn/MM/RL6211/trunk"
+
+
+alias vip "echo http://cadinfo.realtek.com.tw/svn/MM/video_processor/trunk/Code/C/dali_2"
+
+alias gdb2 "gdb -args tb_dvr -m VCPU -dbus_no_ovhd_timing -rbus_no_ovhd_timing  -ve3_dump 1128 -dc_map 1 -iss_t cpu.trace -ps2k -ddr3  -s ddd.scr"
+alias gdb3 "gdb -args tb_dvr -ve3_dump 1128 -m VCPU  -cpu_init 2 -dbus_no_ovhd_timing -rbus_no_ovhd_timing -ddr_init_value 42405 -ps2k  -ddr3 -iss_t cpu.trace  -s run.scr.cmodel"
+alias gdb4 "gdb -args random_test_gen -r seed 100"
+alias make2 "qrsh -q rh532q -cwd -verbose make"
+alias make3 "qqrsh_c make"
+alias drop " > /dev/null"
+alias runfw0 "make START_FRAME_NUM=0 TOTAL_RUN_FRAMES=1"
+alias runfw1 "make START_FRAME_NUM=1 TOTAL_RUN_FRAMES=2"
+alias runfw2 "make START_FRAME_NUM=2 TOTAL_RUN_FRAMES=3"
+alias runfw3 "make START_FRAME_NUM=3 TOTAL_RUN_FRAMES=4"
+alias runfw4 "make START_FRAME_NUM=4 TOTAL_RUN_FRAMES=5"
+alias runfw5 "make START_FRAME_NUM=5 TOTAL_RUN_FRAMES=6"
+alias rmlog "rm -rf */*.log */*.dump */*.text"
+alias rnd1  "iterate_random -n 1 -i 1 random_test -nosvn"
+alias rnd10  "iterate_random -n 10 -i 1 random_test -nosvn"
+alias rnd100  "iterate_random -n 20 -i 5 random_test -nosvn"
+alias rnd300  "iterate_random -n 20 -i 15 random_test -nosvn"
+alias rnd1000  "iterate_random -n 20 -i 50 random_test -nosvn"
+alias rnd20 "iterate_random -n 20 -i 1 random_test -nosvn"
+alias rnd200 "spawn_random -n 200 random_test"

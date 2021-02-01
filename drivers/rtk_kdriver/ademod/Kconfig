@@ -1,0 +1,12 @@
+config RTK_KDRV_ADEMOD
+	bool "ATV Demod Driver"
+	depends on RTK_KDRIVER_SUPPORT	
+	default n
+	help	
+	
+config RTK_KDRV_ADEMOD_TEST
+	bool "ADemod Test"
+	depends on RTK_KDRV_ADEMOD
+	default n
+	help
+	  Dummy flag

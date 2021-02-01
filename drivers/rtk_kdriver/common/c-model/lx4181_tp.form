@@ -1,0 +1,1910 @@
+//+FHDR-------------------------------------------------------------------------
+// Copyright (c) 2006, Realtek Semiconductor Corporation
+// Realtek's Proprietary/Confidential
+//
+// All rights reserved. No part of this design may be reproduced or stored
+// in a retrieval system, or transmitted, in any form or by any means,
+// electronic, mechanical, photocopying, recording, or otherwise,
+// without prior written permission of the Realtek Semiconductor Corporation.
+// Unauthorized reproduction, duplication, use, or disclosure of this
+// design will be deemed as infringement.
+//------------------------------------------------------------------------------
+// Description: 
+//     Project RLX4181. This file is modified from Lexra LX4380 database.
+//-FHDR-------------------------------------------------------------------------
+// lconfig configuration form for RLX4181
+// 
+// Copyright 1997-2002, Lexra Inc.
+// ALL RIGHTS RESERVED
+// 
+// 
+// This form is processed by the lconfig tool to configure the
+// RLX4181 RTL source code for user specific options.  To
+// configure the RTL source code, edit this form to indicate the
+// desired options, and from the include directory execute the
+// ../bin/lconfig utility.
+// 
+// A starting form with properly configured default values can be
+// obtained with the command
+// 
+//   "lconfig -blank_form <output_filename>"
+// 
+// To configure the RTL, review each of the sections in the new form
+// and fill in the desired values based on your application
+// requirements.  Then process the form with the lconfig tool.
+// The tool will produce the symbol file (lxr_symbols.vh) that is
+// used for RTL simulation and also by the synthesis process.
+// lconfig also produces various other configuration specific
+// files for simulation and synthesis.
+// 
+// DO NOT EDIT THE RESULTING LXR_SYMBOLS.VH FILE BY HAND.
+// 
+// A summary of the configurable elements appears below.  Following
+// this summary are the detailed sections for each configurable
+// element.
+//
+//            PRODUCT -- Lexra Processor
+//           SIM_TECH -- control use of technology specific files in simulation
+//       SIM_RAM_TECH -- simulate with technology specific ram wrappers
+//         SYNTH_TECH -- control the use of technology specific libraries in synthesis
+//         TECHNOLOGY -- identifies target technology
+//      LOC_PROTO_LX2 -- the location(s) of Lexra core(s)
+//      LOC_PROTO_PLD -- which Development Board sockets are populated
+//         RESET_MODE -- flip-flop reset method
+//           SEN_DIST -- Scan Enable Distribution Method
+//        SEN_BUFFERS -- Scan Enable Buffering at lx2
+//      RESET_BUFFERS -- Reset buffers at the lx2 module level
+//      CLOCK_BUFFERS -- clock buffers at lx2 module level
+//                MMU -- Memory Management Unit Implementation
+//        TLB_ENTRIES -- Number of entries in the TLB
+//               COP1 -- coprocessor interface 1
+//               COP2 -- coprocessor interface 2
+//               COP3 -- coprocessor interface 3
+//                CE0 -- custom engine 0
+//                CE1 -- custom engine 1
+//        M16_SUPPORT -- 16-bit opcode support
+//     MEM_LINE_ORDER -- cache line fill beat ordering
+//     MEM_FIRST_WORD -- cache line fill first word
+//   SYSTEM_INTERFACE -- system bus interface type
+//           CBI_WBUF -- CBUS interface write buffer depth
+//           LBC_RBUF -- Lexra Bus Controller read buffer depth
+//       LBC_RDBYPASS -- Lexra Bus Controller read bypass enable
+//      LBC_SYNC_MODE -- LBC synchronous/asynchronous selection
+//          LINE_SIZE -- cache line size, in words
+//             ICACHE -- instruction cache size
+//             DCACHE -- data cache size
+//      DCACHE_POLICY -- Dcache WriteBack/WriteThrough Policy selection
+// WRITETHROUGH_RANGE -- WriteThrough Range for WriteBack Dcache
+//               IMEM -- local instruction RAM
+//               DMEM -- local scratch pad data RAM
+//   LMI_RANGE_SOURCE -- source of LMI address ranges
+//           IMEM_ARB -- allow external agents to arbitrate for IMEM
+//           DMEM_ARB -- allow external agents to arbitrate for DMEM
+//               JTAG -- Internal JTAG Tap controller with EJTAG support
+//              EJTAG -- EJTAG Debug Support
+//   EJTAG_INST_BREAK -- Number of instruction breaks to be compiled
+//   EJTAG_DATA_BREAK -- Number of data breaks to be compiled
+//   JTAG_TRST_IS_TPC -- TRST pin is used as TPC out to eliminate TDO/TPC mux
+//           PC_TRACE -- EJTAG PC trace pins
+//       EJTAG_DCLK_N -- EJTAG PCTrace DCLK N parameter
+//        EJTAG_TPC_M -- EJTAG PCTrace TPC M parameter
+//      EJTAG_XV_BITS -- EJTAG PCTrace Number of Exception Vector bits
+//     LOW_POWER_CORE -- Lower power enhancement in cpu core
+//        SCAN_INSERT -- Controls scan insertion and synthesis
+//    SCAN_MIX_CLOCKS -- Scan Chains can cross clock boundaries with lock-up latches
+//    SCAN_NUM_CHAINS -- Number of scan chains in LX1
+//           SCAN_SCL -- A Scan collar will be inserted in lx1
+//        UNIQUE_NAME -- Apply a unique name to the RTL
+//              SLEEP -- include clock SLEEP support   
+//       SYSTEM_WIDTH -- Use native LEXRA 64 bits bus or add a 32 bits bridge
+
+
+
+///////////////////////////////////////////////////////
+//
+// PRODUCT -- Lexra Processor
+//
+// configuration choices:  RLX4181
+//
+//    "RLX4181"  --  High performance RISC core
+//
+// The following settings are required when PRODUCT = RLX4181:
+//
+//               CE0 = CE_MAC, CE_HL or NONE
+//
+//
+// default: PRODUCT = "RLX4181";
+//
+///////////////////////////////////////////////////////
+
+PRODUCT = RLX4181;
+//PRODUCT = RLX5181;
+//PRODUCT = LX5280;
+
+
+///////////////////////////////////////////////////////
+//
+// SIM_TECH -- control use of technology specific files in simulation
+//
+// configuration choices:  YES NO
+//
+//        "YES"  --  use technology specific files in simulation
+//         "NO"  --  use only generic RTL for simulation
+//
+// The following settings are required when SIM_TECH = NO:
+//
+//      SIM_RAM_TECH = NO
+//
+//
+// This option will enable/disable the use of technology specific files
+// during simulation.  Setting it to NO will improve simulation performance,
+// but will not utilize files that may be used for synthesis.  Setting it
+// to YES will use technology specific files for simulation at the expense
+// of simulation performance.
+// 
+// This option does not control the technology specific RAM wrappers.  See
+// the SIM_RAM_TECH option.  Also, required technology specific files will 
+// always be used for simulation regardless of the setting of this option.
+//
+// default: SIM_TECH = "YES";
+//
+///////////////////////////////////////////////////////
+
+SIM_TECH = NO;
+
+
+///////////////////////////////////////////////////////
+//
+// SIM_RAM_TECH -- simulate with technology specific ram wrappers
+//
+// configuration choices:  YES NO
+//
+//        "YES"  --  use technology specific ram wrappers in simulation
+//         "NO"  --  use only generic behavioral ram models in simulation
+//
+// Until appropriately sized RAM models and wrappers have been created
+// SIM_RAM_TECH should be NO.  This will cause RTL simulation with the
+// Lexra testbed to use generic behavioral RAM models generated by
+// lconfig.
+// 
+// Once an ASIC RAM technology library has been chosen and RAM models have
+// been generated for the desired RLX4181 core configuration, SIM_RAM_TECH
+// should be YES.  This will cause RTL simulation with the Lexra testbed
+// to use the customer created RAM wrappers in the chip/<technology>/
+// directory.  The library generated Verilog RAM models should be listed
+// in the user/<technology>/gate.f file for inclusion in simulation.
+//
+// default: SIM_RAM_TECH = "NO";
+//
+///////////////////////////////////////////////////////
+
+SIM_RAM_TECH = NO;
+
+
+///////////////////////////////////////////////////////
+//
+// SYNTH_TECH -- control the use of technology specific libraries in synthesis
+//
+// configuration choices:  YES NO
+//
+//        "YES"  --  Use technology specific libraries for synthesis if they exist
+//         "NO"  --  Use generic libraries for synthesis
+//
+// The setting of this option controls the use of technology specific 
+// files in synthesis.  This option does not control the use of required
+// technology specific files like RAMs and clock buffers.
+//
+// default: SYNTH_TECH = "YES";
+//
+///////////////////////////////////////////////////////
+
+SYNTH_TECH = YES;
+
+
+///////////////////////////////////////////////////////
+//
+// TECHNOLOGY -- identifies target technology
+//
+// configuration choices:  CUSTOM
+//
+//     "CUSTOM"  --  customer defined technology (any name beginning with CUSTOM)
+//
+// You may define custom technologies by choosing a technology name that
+// begins with the string "CUSTOM" and consists of all uppercase characters
+// numbers and an underscore (e.g., CUSTOM_FOO18).  Within the RLX4181 
+// project directory, sub-directories with this same name may then
+// contain technology-customized implementations of RTL files.  Note 
+// that the subdirectory names will be in lowercase (e.g., custom_foo). 
+// When lconfig is run, it will use the customized version in place of 
+// the standard model of the same name for both simulation and
+// synthesis purposes.
+//
+// default: TECHNOLOGY = "CUSTOM";
+//
+///////////////////////////////////////////////////////
+
+TECHNOLOGY = CUSTOM;
+
+
+///////////////////////////////////////////////////////
+//
+// LOC_PROTO_LX2 -- the location(s) of Lexra core(s)
+//
+// configuration choices:  TC PLD_L PLD_P MULT NONE
+//
+//         "TC"  --  lx2 is in the testchip
+//      "PLD_L"  --  lx2 is in PLD_L
+//      "PLD_P"  --  lx2 is in PLD_P
+//       "MULT"  --  lx2s are in PLD_P and PLD_L
+//       "NONE"  --  not a Development Board configuration
+//
+// The following settings are required when LOC_PROTO_LX2 = TC:
+//
+//           PRODUCT = LX4189, LX4280, LX5180 or LX5280
+//     LOC_PROTO_PLD = TC or MULT
+//
+//
+// The following settings are required when LOC_PROTO_LX2 = PLD_L:
+//
+//     LOC_PROTO_PLD = PLD_L
+//
+//
+// The following settings are required when LOC_PROTO_LX2 = PLD_P:
+//
+//     LOC_PROTO_PLD = PLD_P or PLD_L
+//
+//
+// The following settings are required when LOC_PROTO_LX2 = MULT:
+//
+//     LOC_PROTO_PLD = PLD_L or MULT
+//
+//
+// This option only applies to Lexra Hardware/Software Development Board
+// configurations.  For all other configurations NONE should be selected.
+// 
+// When compiling logic for the PLDs on the Lexra Hardware/Software
+// Development Board this option is used to indicate which chips contain
+// Lexra cores.  lx2 is the top-level module of a single Lexra core.  A
+// Lexra core may exist on the board either in an ASIC test chip, PLD-P,
+// or PLD-L.
+//
+// default: LOC_PROTO_LX2 = "NONE";
+//
+///////////////////////////////////////////////////////
+
+LOC_PROTO_LX2 = NONE;
+
+
+///////////////////////////////////////////////////////
+//
+// LOC_PROTO_PLD -- which Development Board sockets are populated
+//
+// configuration choices:  TC PLD_L PLD_P MULT NONE
+//
+//         "TC"  --  PLD_P and test chip
+//      "PLD_L"  --  PLD_P and PLD_L
+//      "PLD_P"  --  PLD_P only
+//       "MULT"  --  PLD_P, PLD_L, and test chip
+//       "NONE"  --  not a Development Board configuration
+//
+// The following settings are required when LOC_PROTO_PLD = TC:
+//
+//           PRODUCT = LX4189, LX4280, LX5180 or LX5280
+//
+//
+// The following settings are required when LOC_PROTO_PLD = MULT:
+//
+//           PRODUCT = LX4189, LX4280, LX5180 or LX5280
+//
+//
+// This option only applies to Lexra Hardware/Software Development Board
+// configurations.  For all other configurations NONE should be selected.
+// 
+// When compiling logic for the PLDs on the Lexra Hardware/Software
+// Development Board this option is used to indicate which sockets on the
+// board is/are populated with chips.  The board has sockets for an ASIC
+// test chip (TC) and up to two PLDs (PLD-P and PLD-L).
+//
+// default: LOC_PROTO_PLD = "NONE";
+//
+///////////////////////////////////////////////////////
+
+LOC_PROTO_PLD = NONE;
+
+
+///////////////////////////////////////////////////////
+//
+// RESET_MODE -- flip-flop reset method
+//
+// configuration choices:  GLOBAL_ASYNC GLOBAL_SYNC SAMPLED_SYNC BUFFERED_ASYNC
+//
+// "GLOBAL_ASYNC"  --  globally distributed reset to asynchronously resettable flip-flops
+// "GLOBAL_SYNC"  --  globally distributed reset to synchronously resettable flip-flops
+// "SAMPLED_SYNC"  --  locally distributed reset to synchronously resettable flip-flops
+// "BUFFERED_ASYNC"  --  locally distributed reset with local buffers to asynchronously resettable flip-flops
+//
+// Choose GLOBAL_ASYNC or GLOBAL_SYNC if your ASIC design flow will
+// completely handle buffering and fanout of reset signals.  This
+// setting results in pure wires and port connections being used
+// throughout the RLX4181 hierarchy.  GLOBAL_ASYNC requires
+// asynchronously resettable flip-flops while GLOBAL_SYNC requires
+// synchronously resettable flip-flops.
+// 
+// Choose SAMPLED_SYNC to insert a flip-flop that samples reset
+// coming into each major RLX4181 module.  The reset is then distributed
+// within the module.  This provides purely local timing requirements
+// for reset within each module.  SAMPLED_SYNC requires synchronously
+// resettable flip-flops.
+// 
+// Choose BUFFERED_ASYNC to synchronize reset signal inside RLX4181 and
+// insert buffers in each major RLX4181 module. This provides buffering
+// throughout the hierarchy, and may be practical for most applications.
+// BUFFERED_ASYNC requires asynchronously resettable flip-flops.     
+//
+// default: RESET_MODE = "SAMPLED_SYNC";
+//
+///////////////////////////////////////////////////////
+
+RESET_MODE = GLOBAL_ASYNC;
+
+
+///////////////////////////////////////////////////////
+//
+// SEN_DIST -- Scan Enable Distribution Method
+//
+// configuration choices:  GLOBAL LOCAL_BUFFERED NONE
+//
+//     "GLOBAL"  --  Global Scan Enable Distribution
+// "LOCAL_BUFFERED"  --  Locally Buffered Scan Enable Distribution
+//       "NONE"  --  Do Not Distribute Scan Enable
+//
+// The following settings are required when SEN_DIST = GLOBAL:
+//
+//       SCAN_INSERT = YES
+//
+//
+// The following settings are required when SEN_DIST = LOCAL_BUFFERED:
+//
+//       SCAN_INSERT = YES
+//
+//
+// The following settings are required when SEN_DIST = NONE:
+//
+//       SCAN_INSERT = NO
+//
+//
+// default: SEN_DIST = "NONE";
+//
+///////////////////////////////////////////////////////
+
+SEN_DIST = GLOBAL;
+
+
+///////////////////////////////////////////////////////
+//
+// SEN_BUFFERS -- Scan Enable Buffering at lx2
+//
+// configuration choices:  LX2 EXTERNAL NONE
+//
+//        "LX2"  --  Buffer Scan Enable at lx2
+//   "EXTERNAL"  --  Buffer Scan Enable outside of lx2
+//       "NONE"  --  Do Not Buffer Scan Enable
+//
+// The following settings are required when SEN_BUFFERS = LX2:
+//
+//       SCAN_INSERT = YES
+//
+//
+// The following settings are required when SEN_BUFFERS = EXTERNAL:
+//
+//       SCAN_INSERT = YES
+//
+//
+// default: SEN_BUFFERS = "NONE";
+//
+///////////////////////////////////////////////////////
+
+SEN_BUFFERS = NONE;
+
+
+///////////////////////////////////////////////////////
+//
+// RESET_BUFFERS -- Reset buffers at the lx2 module level
+//
+// configuration choices:  EXTERNAL LX2
+//
+//   "EXTERNAL"  --  user supplies external reset buffers
+//        "LX2"  --  include reset buffers in the lx2 module
+//
+// This setting controls the method used to buffer resets used in the RLX4181
+// hierarchy.
+// 
+// Choosing LX2 will cause buffers to be instanced in the lx2 module.
+// Each reset brought into the lx2 module will be passed through an
+// lx2 buffer, and the buffered copy is passed down throughout the
+// hierarchy.
+// 
+// Choosing EXTERNAL will export each reset brought into the lx2 module.
+// You may then connect your own buffers to these outputs.
+//
+// default: RESET_BUFFERS = "EXTERNAL";
+//
+///////////////////////////////////////////////////////
+
+RESET_BUFFERS = LX2;
+
+
+///////////////////////////////////////////////////////
+//
+// CLOCK_BUFFERS -- clock buffers at lx2 module level
+//
+// configuration choices:  EXTERNAL LX2
+//
+//   "EXTERNAL"  --  user supplies external clock buffers
+//        "LX2"  --  include clock buffers in lx2 module
+//
+// This setting controls the method used to buffer clocks used in the RLX4181
+// hierarchy.
+// 
+// Choosing LX2 will cause buffers to be instanced in the lx2.
+// Each clock brought into the lx2 module will be passed through an lx2
+// buffer, and the buffered copy is passed as pure wire throughout the
+// hierarchy.  This option should be used for physical design flows that
+// can turn the input buffer and clock wires into a balanced clock tree
+// distributed throughout the lx2/lx1/lx0 module hierarchy.  If LX2
+// is chosen for this option, lconfig will select generic buffer
+// modules for RTL simulation, and identify them to allow users to
+// define technology specific versions.
+// 
+// Choosing EXTERNAL will cause pure wires to be used for clock connections
+// throughout the lx2/lx1/lx0 hierarchy.  This option should be chosen
+// if the user's ASIC flow cannot properly interpret the clock buffers
+// on the lx2 inputs, or if the user desires to handle tree synthesis
+// and layout at higher level than lx2.
+// 
+// Note that for Lexra products that support sleep, if sleep mode is enabled
+// (SLEEP="YES"), then the clock buffers for SYSCLK (and optionally BUSCLK)
+// will include clock sleep terms sourced by the sleep logic.
+// 
+// For RAM clock tuning, the user can also use RAM clock buffers instanced
+// within each LMI that controls RAMs.  See RAM_CLOCK_BUFFERS below.
+//
+// default: CLOCK_BUFFERS = "EXTERNAL";
+//
+///////////////////////////////////////////////////////
+
+CLOCK_BUFFERS = EXTERNAL;
+
+
+///////////////////////////////////////////////////////
+//
+// MMU -- Memory Management Unit Implementation
+//
+// configuration choices:  SMMU TLB EXPORT
+//
+//       "SMMU"  --  Use SMMU
+//        "TLB"  --  Use Lexra TLB
+//     "EXPORT"  --  Export CFGEXP_TLB_DISABLE from lx2
+//
+// The following settings are required when MMU = SMMU:
+//
+//       TLB_ENTRIES = 0
+//
+//
+// The following settings are required when MMU = TLB:
+//
+//       TLB_ENTRIES = 16, 32 or 64
+//
+//
+// The following settings are required when MMU = EXPORT:
+//
+//       TLB_ENTRIES = 16, 32 or 64
+//
+//
+// This parameter controls the inclusion of the Lexra supplied MMU/TLB.
+// If SMMU is chosen, the default virtual-to-physical memory mapping is
+// used.  The Lexra TLB is not included.  If TLB is chosen, the Lexra TLB
+// is instanced in the design.  This option can also be set to EXPORT.
+// If you choose EXPORT, then you must also provide a default simulation
+// setting for the resulting configuration pin.  This is done with the
+// CFGEXP_TLB_DISABLE Verilog `define symbol.  For example, you can add
+// any of the following statements to your lconfig form input file, which
+// will produce the required `defines in lxr_symbols.vh:
+// 
+//    SYMBOL `define CFGEXP_TLB_DISABLE 1'b0 // TLB ENABLED
+// 
+//              or
+// 
+//    SYMBOL `define CFGEXP_TLB_DISABLE 1'b1 // TLB DISABLED
+// 
+// See your field representative for further information.
+//
+// default: MMU = "SMMU";
+//
+///////////////////////////////////////////////////////
+
+MMU = SMMU;
+//MMU = TLB;
+
+
+///////////////////////////////////////////////////////
+//
+// TLB_ENTRIES -- Number of entries in the TLB
+//
+// configuration choices:  0 64 32 16
+//
+//          "0"  --  TLB is not configured
+//         "64"  --  TLB has 64 entries
+//         "32"  --  TLB has 32 entries
+//         "16"  --  TLB has 16 entries
+//
+// The following settings are required when TLB_ENTRIES = 0:
+//
+//               MMU = SMMU
+//
+//
+// The following settings are required when TLB_ENTRIES = 64:
+//
+//               MMU = TLB or EXPORT
+//
+//
+// The following settings are required when TLB_ENTRIES = 32:
+//
+//               MMU = TLB or EXPORT
+//
+//
+// The following settings are required when TLB_ENTRIES = 16:
+//
+//               MMU = TLB or EXPORT
+//
+//
+// default: TLB_ENTRIES = "0";
+//
+///////////////////////////////////////////////////////
+
+TLB_ENTRIES = 0;
+//TLB_ENTRIES = 16;
+
+
+///////////////////////////////////////////////////////
+//
+// COP1 -- coprocessor interface 1
+//
+// configuration choices:  NONE EXPORT
+//
+//       "NONE"  --  coprocessor 1 not exported from the core
+//     "EXPORT"  --  coprocessor 1 interface connected to customer logic but not simulated in the Lexra testbed
+//
+// This option determines whether the coprocessor 1 interface is
+// exported and how it is treated by the Lexra testbed.
+// 
+// NONE, the coprocessor interface will not be exported from the
+// core.
+// 
+// COPSTUB, the coprocessor interface will be exported from the
+// core and connected to a coprocessor model in the Lexra testbed
+// for regression testing.  This option may be used for initial
+// verification of the core, but should not be used for the
+// customer's final design.
+// 
+// CUSTOM, the coprocessor interface will be exported from the core
+// and the customer will connect their coprocessor model to the
+// core and run simulations with the Lexra testbed.
+// 
+// EXPORT, the coprocessor interface will be exported from the core
+// but no coprocessor simulation model will be used in Lexra's
+// testbed.
+//
+// default: COP1 = "NONE";
+//
+///////////////////////////////////////////////////////
+
+COP1 = NONE;
+
+
+///////////////////////////////////////////////////////
+//
+// COP2 -- coprocessor interface 2
+//
+// configuration choices:  NONE EXPORT
+//
+//       "NONE"  --  coprocessor 2 not exported from the core
+//     "EXPORT"  --  coprocessor 2 interface connected to customer logic but not simulated in the Lexra testbed
+//
+// This option determines whether the coprocessor 2 interface is
+// exported and how it is treated by the Lexra testbed.
+// 
+// NONE, the coprocessor interface will not be exported from the
+// core.
+// 
+// COPSTUB, the coprocessor interface will be exported from the
+// core and connected to a coprocessor model in the Lexra testbed
+// for regression testing.  This option may be used for initial
+// verification of the core, but should not be used for the
+// customer's final design.
+// 
+// CUSTOM, the coprocessor interface will be exported from the core
+// and the customer will connect their coprocessor model to the
+// core and run simulations with the Lexra testbed.
+// 
+// EXPORT, the coprocessor interface will be exported from the core
+// but no coprocessor simulation model will be used in Lexra's
+// testbed.
+//
+// default: COP2 = "NONE";
+//
+///////////////////////////////////////////////////////
+
+COP2 = NONE;
+
+
+///////////////////////////////////////////////////////
+//
+// COP3 -- coprocessor interface 3
+//
+// configuration choices:  NONE COPTC3
+//
+//       "NONE"  --  coprocessor 3 not populated
+//     "COPTC3"  --  coprocessor 3 present, Lexra tc_cop
+//
+// This option determines whether the coprocessor 3 interface is
+// connected and how it is treated by the Lexra testbed.
+//
+// default: COP3 = "NONE";
+//
+///////////////////////////////////////////////////////
+
+COP3 = COPTC3;
+
+
+///////////////////////////////////////////////////////
+//
+// CE0 -- custom engine 0
+//
+// configuration choices:  NONE CE_MAC CE_HL
+//
+//       "NONE"  --  custom engine 0 not present
+//     "CE_MAC"  --  Lexra mul/div/MAC module
+//      "CE_HL"  --  Lexra MFHI/MFLO/MTHI/MTLO module
+//
+// Custom engine zero (CE0) is used to implement to the optional Lexra
+// multiply-accumulate (MAC) engine.  This implements the MULT and DIV
+// instructions that are defined by the MIPS-I instruction set as well
+// as Lexra extended multiply-accumulate instructions.
+// 
+// If a MAC is not present, for architectural consistency, the HI and
+// LOW registers must be implemented.  If they are not implemented by a
+// licensee defined custom engine attached to CE1 then the Lexra CE_HL
+// must be selected.
+// 
+// If no MAC is present, a RI exception will be taken for MULT and DIV
+// instructions.  The multiplication/division operation may be emulated
+// by the exception handler and the result may be stored in the HI/LO
+// registers for full MIPS-I software compatibility.
+//
+// default: CE0 = "CE_HL";
+//
+///////////////////////////////////////////////////////
+
+CE0 = CE_MAC;
+
+
+///////////////////////////////////////////////////////
+//
+// CE1 -- custom engine 1
+//
+// configuration choices:  NONE EXPORT
+//
+//       "NONE"  --  custom engine 1 interface not present
+//     "EXPORT"  --  export CE1 interface from LX module
+//
+// The following settings are required when CE1 = NONE:
+//
+//               CE0 = CE_MAC, CE_MACD or CE_HL
+//
+//
+// Custom engine one (CE1) may be used by licensees to implement custom
+// instruction extensions to the core instruction set.
+//
+// default: CE1 = "NONE";
+//
+///////////////////////////////////////////////////////
+
+CE1 = NONE;
+
+
+///////////////////////////////////////////////////////
+//
+// M16_SUPPORT -- 16-bit opcode support
+//
+// configuration choices:  YES NO
+//
+//        "YES"  --  enable decode and execution of 16-bit opcodes
+//         "NO"  --  disable decode and execution of 16-bit opcodes
+//
+// M16 code compression can be used to improve code density for systems in
+// which on-chip instruction storage is a premium.  In some configurations and
+// technologies M16 support may have a negative effect on the system clock rate.
+// A small amount of die area is consumed by M16 so for applications that have
+// no need for code compression it is best to disable M16 support.
+//
+// default: M16_SUPPORT = "NO";
+//
+///////////////////////////////////////////////////////
+
+M16_SUPPORT = NO;
+
+
+///////////////////////////////////////////////////////
+//
+// MEM_LINE_ORDER -- cache line fill beat ordering
+//
+// configuration choices:  INTERLEAVE SEQUENTIAL EXPORT
+//
+// "INTERLEAVE"  --  interleave ordering, low bit toggles
+// "SEQUENTIAL"  --  increment ordering, wrap to zero
+//     "EXPORT"  --  external logic drives CFG_MEMSEQUENTIAL port of LX module
+//
+// This setting declares the line read word ordering policy of the
+// user's main memory implementation, and configures the RLX4181
+// to correctly work with that policy.
+// 
+// You must configure the RLX4181 to match the line order policy of your
+// main memory controller.  This ensures that the RLX4181 performs a line
+// read from memory that the words will be stored in the correct offsets
+// within the cache line.
+// 
+// The first two choices result in hardwired setting of this attribute.
+// The third choice allows application specific logic to drive a
+// configuration value onto the CFG_MEMSEQUENTIAL port of lx2.v to specify
+// the attribute setting.  Sourcing a logic one on the wire results
+// in the SEQUENTIAL mode of operation, and sourcing a logic zero on the
+// wire results in the INTERLEAVE mode of operation.
+// 
+// If you choose EXPORT, then you must also provide a default simulation
+// setting for the resulting configuration pin.  This is done with the
+// CFGEXP_MEMSEQUENTIAL Verilog `define symbol.  For example, you can add any of the
+// following statements to your lconfig form input file, which will
+// produce the required `define in lxr_symbols.vh:
+// 
+//    SYMBOL `define CFGEXP_MEMSEQUENTIAL 1'b0  // INTERLEAVE
+// 
+//              or
+// 
+//    SYMBOL `define CFGEXP_MEMSEQUENTIAL 1'b1  // SEQUENTIAL
+// 
+// You must configure the RLX4181 to match the line order policy of your
+// main memory controller.  This ensures that the RLX4181 performs a line
+// read from memory that the words will be stored in the correct offsets
+// within the cache line.
+// 
+//
+// default: MEM_LINE_ORDER = "SEQUENTIAL";
+//
+///////////////////////////////////////////////////////
+
+MEM_LINE_ORDER = SEQUENTIAL;
+
+
+///////////////////////////////////////////////////////
+//
+// MEM_FIRST_WORD -- cache line fill first word
+//
+// configuration choices:  DESIRED ZERO EXPORT
+//
+//    "DESIRED"  --  desired word first
+//       "ZERO"  --  word 0 first
+//     "EXPORT"  --  external logic drives CFG_MEMZEROFIRST port of LX module
+//
+// This setting declares the line read first word policy of the
+// user's main memory implementation, and configures the RLX4181
+// to correctly work with that policy.
+// 
+// You must configure the RLX4181 to match the first word policy of your
+// main memory controller.  This ensures that the RLX4181 performs a line
+// read from memory that the words will be stored in the correct offsets
+// within the cache line.
+// 
+// The first two choices result in hardwired setting of this attribute.
+// The third choice allows application specific logic to drive a
+// configuration value onto the CFG_MEMZEROFIRST port of lx2.v to specify
+// the attribute setting.  Sourcing a logic one on the wire results
+// in the ZERO mode of operation, and sourcing a logic zero on the
+// wire results in the DESIRED mode of operation.
+// 
+// If you choose EXPORT, then you must also provide a default simulation
+// setting for the resulting configuration pin.  This is done with the
+// CFGEXP_MEMZEROFIRST Verilog `define symbol.  For example, you can add any of the
+// following statements to your lconfig form input file, which will
+// produce the required `define in lxr_symbols.vh:
+// 
+//    SYMBOL `define CFGEXP_MEMZEROFIRST 1'b0  // DESIRED
+// 
+//              or
+// 
+//    SYMBOL `define CFGEXP_MEMZEROFIRST 1'b1  // ZERO
+// 
+// You must configure the RLX4181 to match the first word policy of your
+// main memory controller.  This ensures that the RLX4181 performs a line
+// read from memory that the words will be stored in the correct offsets
+// within the cache line.
+// 
+//
+// default: MEM_FIRST_WORD = "DESIRED";
+//
+///////////////////////////////////////////////////////
+
+MEM_FIRST_WORD = DESIRED;
+
+
+///////////////////////////////////////////////////////
+//
+// SYSTEM_INTERFACE -- system bus interface type
+//
+// configuration choices:  LBUS CBUS
+//
+//       "LBUS"  --  Lexra system bus with Lexra bus controller
+//       "CBUS"  --  Lexra cache bus with processor bus interface
+//
+// The following settings are required when SYSTEM_INTERFACE = CBUS:
+//
+//     LBC_SYNC_MODE = SYNCHRONOUS
+//
+//
+// The Lexra processor can either connect to the system through the
+// standard Lexra bus or through a customer defined bus interface.
+// If the Lexra bus is selected then the Lexra bus master controller
+// (LBC) will be instantiated.  If the cache bus is selected then
+// an external interface must be designed to connect to the Lexra
+// cache bus.
+//
+// default: SYSTEM_INTERFACE = "LBUS";
+//
+///////////////////////////////////////////////////////
+
+SYSTEM_INTERFACE = LBUS;
+
+
+///////////////////////////////////////////////////////
+//
+// CBI_WBUF -- CBUS interface write buffer depth
+//
+// configuration choices:  <integer>
+//
+//    <integer>  --  number of write buffer entries (2 to 16)
+//
+// 
+// Adding more write buffers could improve system performance at a cost
+// of additional real estate.  16 write buffers may improve performance
+// by as much as 5 percent over 4 buffers.  The minimum setting is 2.
+// Each write buffer entry adds about 113 flip flops and compare logic
+// for 33 bits. An entry contains up to one bus width of data.
+// 
+// If a writeback D-cache is chosen the write buffer should contain
+// at least enough entries to accommodate a full line of write data.
+//
+// default: CBI_WBUF = 4;
+//
+///////////////////////////////////////////////////////
+
+CBI_WBUF = 4;
+
+
+///////////////////////////////////////////////////////
+//
+// LBC_RBUF -- Lexra Bus Controller read buffer depth
+//
+// configuration choices:  <integer>
+//
+//    <integer>  --  number of read buffer entries (2 to 2*line size)
+//
+// Typically, the number of read buffer entries should be 8.  This is enough
+// to hold two 4-word lines of read data which are needed if there are
+// simultaneous I-cache and D-cache misses.  The read buffer allows the system
+// memory to transfer lines as fast as possible without having to wait for cache
+// to absorb the data.  The read buffer will never overflow when set to 8
+// (two lines).
+// 
+// However, to save area, the number of entries can be reduced with some cost to
+// bus utilization.  If the read buffer fills while memory is trying to send
+// read data, the LBC will deassert IRDY until it can accept more data, thus
+// reducing bus utilization.  By reducing the number of entries to 4, the buffer
+// will still be able to accommodate one full line, so IRDY would be deasserted
+// only in the relatively infrequent case where there are simultaneous I-cache
+// and D-cache misses.  By reducing the depth to 2 -- the minimum -- area is
+// optimized in favor of bus utilization.
+// 
+// Note: 2 read buffer entries are all that are needed for a synchronous LBC.
+//
+// default: LBC_RBUF = 8;
+//
+///////////////////////////////////////////////////////
+
+LBC_RBUF = 2;
+
+
+///////////////////////////////////////////////////////
+//
+// LBC_RDBYPASS -- Lexra Bus Controller read bypass enable
+//
+// configuration choices:  YES NO EXPORT
+//
+//        "YES"  --  enable read bypass of LBC write buffer
+//         "NO"  --  disable read bypass of LBC write buffer
+//     "EXPORT"  --  external logic drives CFG_LBCWBDISABLE port of LX module
+//
+// The LBC's write buffer normally allows read operations presented
+// by the processor to bypass write operations that are pending
+// in the write buffer.  If the line address of a read operation
+// matches the line address of any writes pending in the write
+// buffer, the LBC will stall the read until the writes
+// are completed.  This type of operation is achieved by
+// setting LBC_RDBYPASS to YES.
+// 
+// The read bypass acceleration can be disabled by setting
+// LBC_RDBYPASS to NO.  This will cause all reads presented
+// to the LBC to wait for the write buffer empty.
+// 
+// The first two choices result in hardwired setting of bypass control.
+// The third choice allows application specific logic to drive a
+// configuration value onto the CFG_LBCWBDISABLE port of lx2.v
+// to specify the attribute setting.  Sourcing a logic one on
+// the wire results in read bypass being disabled, and sourcing a
+// logic zero on the wire results in read bypass being enabled.
+// 
+// If you choose EXPORT, then you must also provide a default simulation
+// setting for the resulting configuration pin.  This is done with the
+// CFGEXP_LBCWBDISABLE Verilog `define symbol.  For example, you can
+// add any of the following statements to your lconfig form input file,
+// which will produce the required `defines in lxr_symbols.vh:
+// 
+//    SYMBOL `define CFGEXP_LBCWBDISABLE 1'b0 // ENABLED
+// 
+//              or
+// 
+//    SYMBOL `define CFGEXP_LBCWBDISABLE 1'b1 // DISABLED
+// 
+//
+// default: LBC_RDBYPASS = "YES";
+//
+///////////////////////////////////////////////////////
+
+LBC_RDBYPASS = YES;
+
+
+///////////////////////////////////////////////////////
+//
+// LBC_SYNC_MODE -- LBC synchronous/asynchronous selection
+//
+// configuration choices:  SYNCHRONOUS DIVIDEBY2 ASYNCHRONOUS
+//
+// "SYNCHRONOUS"  --  Same clock used for SysClk and BusClk
+//  "DIVIDEBY2"  --  Busclk is synchronous to, but half the frequency of Sysclk
+// "ASYNCHRONOUS"  --  Different clock used for SysClk and BusClk
+//
+// The following settings are required when LBC_SYNC_MODE = DIVIDEBY2:
+//
+//      BUSCLK_PHASE = 0
+//
+//
+// By default, the LBC is asynchronous and allows the SysClk and the
+// BusClk to be driven from two independent clock generators.  The
+// BusClk frequency can be anywhere between DC and twice the frequency
+// of the SysClk.  If the SysClk and the BusClk will be generated from
+// the same source, select "SYNCHRONOUS" mode.  This will cause the
+// asynchronous interface to be bypassed and will greatly reduce the
+// latency caused by the asynchronous interface.
+//
+// default: LBC_SYNC_MODE = "SYNCHRONOUS";
+//
+///////////////////////////////////////////////////////
+
+LBC_SYNC_MODE = SYNCHRONOUS;
+
+
+///////////////////////////////////////////////////////
+//
+// LINE_SIZE -- cache line size, in words
+//
+// configuration choices:  4 8 16 32
+//
+//          "4"  --  line size is 4 words
+//          "8"  --  line size is 8 words
+//         "16"  --  line size is 16 words
+//         "32"  --  line size is 32 words
+//
+// This setting declares the line size, in words, of the ICACHE, DCACHE,
+// IMEM and LBC.  Your memory system must supply this number of words in
+// response to a system bus line read command.
+//
+// default: LINE_SIZE = "4";
+//
+///////////////////////////////////////////////////////
+
+LINE_SIZE = 4;
+
+
+///////////////////////////////////////////////////////
+//
+// ICACHE -- instruction cache size
+//
+// configuration choices:  NONE 64K_2 32K_2 16K_2 8K_2 4K_2 2K_2 1K_2 64K_1 32K_1 16K_1 8K_1 4K_1 2K_1 1K_1
+//
+//       "NONE"  --  no instruction cache
+//      "64K_2"  --  64K byte 2-way set associative instruction cache
+//      "32K_2"  --  32K byte 2-way set associative instruction cache
+//      "16K_2"  --  16K byte 2-way set associative instruction cache
+//       "8K_2"  --  8K byte 2-way set associative instruction cache
+//       "4K_2"  --  4K byte 2-way set associative instruction cache
+//       "2K_2"  --  2K byte 2-way set associative instruction cache
+//       "1K_2"  --  1K byte 2-way set associative instruction cache
+//      "64K_1"  --  64K byte direct mapped instruction cache
+//      "32K_1"  --  32K byte direct mapped instruction cache
+//      "16K_1"  --  16K byte direct mapped instruction cache
+//       "8K_1"  --  8K byte direct mapped instruction cache
+//       "4K_1"  --  4K byte direct mapped instruction cache
+//       "2K_1"  --  2K byte direct mapped instruction cache
+//       "1K_1"  --  1K byte direct mapped instruction cache
+//
+// The instruction cache Lexra Memory Interface (LMI) responds to all
+// instruction fetches that are not mapped to an IMEM or IROM range except
+// for addresses in the KSEG1 memory region, logical addresses 0xA0000000
+// to 0xBFFFFFFF.
+// 
+// The ICACHE is configured with a size and a set associativity.  The size
+// specifies the amount of memory, in bytes, of the combination of all
+// sets.  The ICACHE may be configured as direct mapped or 2-way set
+// associative.
+//
+// default: ICACHE = "2K_1";
+//
+///////////////////////////////////////////////////////
+
+ICACHE = 8K_2;
+
+
+///////////////////////////////////////////////////////
+//
+// DCACHE -- data cache size
+//
+// configuration choices:  NONE 64K_2 32K_2 16K_2 8K_2 4K_2 2K_2 1K_2 64K_1 32K_1 16K_1 8K_1 4K_1 2K_1 1K_1
+//
+//       "NONE"  --  no data cache
+//      "64K_2"  --  64K byte 2-way set associative data cache
+//      "32K_2"  --  32K byte 2-way set associative data cache
+//      "16K_2"  --  16K byte 2-way set associative data cache
+//       "8K_2"  --  8K 2-way set associative data cache
+//       "4K_2"  --  4K 2-way set associative data cache
+//       "2K_2"  --  2K 2-way set associative data cache
+//       "1K_2"  --  1K 2-way set associative data cache
+//      "64K_1"  --  64K byte direct mapped data cache
+//      "32K_1"  --  32K byte direct mapped data cache
+//      "16K_1"  --  16K byte direct mapped data cache
+//       "8K_1"  --  8K byte direct mapped data cache
+//       "4K_1"  --  4K byte direct mapped data cache
+//       "2K_1"  --  2K byte direct mapped data cache
+//       "1K_1"  --  1K byte direct mapped data cache
+//
+// The data cache Lexra Memory Interface (LMI) responds to all instruction
+// fetches that are not mapped to a DMEM range except for addresses in the
+// KSEG1 memory region, logical addresses 0xA0000000 to 0xBFFFFFFF.
+// 
+// The DCACHE is configured with a size and a set associativity.  The size
+// specifies the amount of memory, in bytes, of the combination of all
+// sets.  The ICACHE may be configured as direct mapped or 2-way set
+// associative.
+//
+// default: DCACHE = "2K_1";
+//
+///////////////////////////////////////////////////////
+
+DCACHE = 8K_2;
+
+
+///////////////////////////////////////////////////////
+//
+// DCACHE_POLICY -- Dcache WriteBack/WriteThrough Policy selection
+//
+// configuration choices:  WRITETHROUGH WRITEBACK EXPORT
+//
+// "WRITETHROUGH"  --  WriteThrough Dcache Policy
+//  "WRITEBACK"  --  WriteBack Dcache Policy
+//     "EXPORT"  --  Export Dcache Policy option
+//
+// The following settings are required when DCACHE_POLICY = WRITETHROUGH:
+//
+// WRITETHROUGH_RANGE = NONE
+//
+//
+// 
+// This option selects whether the Dcache will act as a WriteBack or
+// WriteThrough Dcache.
+// 
+// If you choose EXPORT you must specify a 1-bit value
+// connected to the CFGEXP_DCPOLICYISWB port of the lx2 module.
+// 
+// If you choose EXPORT, then you must also provide a default simulation
+// setting for the resulting configuration pin.  This is done with the
+// CFGEXP_DCPOLICYISWB Verilog `define symbol.  For example, you can
+// add one of the following statements to your lconfig form input file,
+// which will produce the required `defines in lxr_symbols.vh:
+// 
+//    SYMBOL `define CFGEXP_DCPOLICYISWB 1'b0
+// 
+//              or
+// 
+//    SYMBOL `define CFGEXP_DCPOLICYISWB 1'b1
+// 
+// A value of 0 indicates WRITETHROUGH while an value of 1 indicates
+// WRITEBACK.
+//
+// default: DCACHE_POLICY = "WRITEBACK";
+//
+///////////////////////////////////////////////////////
+
+DCACHE_POLICY = WRITEBACK;
+
+
+///////////////////////////////////////////////////////
+//
+// WRITETHROUGH_RANGE -- WriteThrough Range for WriteBack Dcache
+//
+// configuration choices:  NONE RANGE
+//
+//                           "NONE"  --  No WriteThrough Range
+// RANGE (0xMMMM_LLL0, 0xMMMM_TTTf)  --  BASE and TOP values
+//
+// With the Dcache is configured as a Writeback Dcache, A Writethrough
+// Range can be specified to force the Dcache controller to treat a range
+// of cacheable addresses as WriteThrough. This address range is
+// specified within the PHYSICAL address space. The address range is
+// specified with a base and top address range(inclusive). The
+// addressable region defined by this pair must be a power of 2 and must
+// be naturally aligned. That is, a 1K byte region must be aligned to a
+// modulo 1K byte address, a 2K byte region must be aligned at a modulo
+// 2K byte address, etc.
+//
+// default: WRITETHROUGH_RANGE = "NONE";
+//
+///////////////////////////////////////////////////////
+
+WRITETHROUGH_RANGE = NONE;
+
+
+///////////////////////////////////////////////////////
+//
+// IMEM -- local instruction RAM
+//
+// configuration choices:  NONE RANGE
+//
+//                           "NONE"  --  not present
+// RANGE (0xMMMM_LLL0, 0xMMMM_TTTf)  --  BASE and TOP values
+//
+// The decode logic for this Lexra Memory Interface (LMI) is configured
+// with a base and top address range (inclusive).  The addressable region
+// defined by this pair must be a power of 2, from 1K bytes up to 256K
+// bytes.  The region must be naturally aligned.  That is, a 1K byte
+// region must be aligned to a modulo 1K byte address, a 2K byte region
+// must be aligned at a modulo 2K byte address, etc.  The restrictions are
+// imposed by the RLX4181's LMI address decode logic to optimize for timing.
+// 
+// This address range is specified within the PHYSICAL address space.
+// Keep in mind that the RLX4181 transforms logical addresses to physical
+// addresses before accessing local memory or sourcing transactions on the
+// system bus. This translation affects the upper three bits of the address,
+// and is shown here for convenience:
+// 
+//    LOGICAL      PHYSICAL        SEGMENT NAME
+//     000           010           kuseg (cached)
+//     001           011           kuseg (cached)
+//     010           100           kuseg (cached)
+//     011           101           kuseg (cached)
+//     100           000           kseg0 (cached)
+//     101           000           kseg1 (uncached)
+//     110           110           kseg2 (cached)
+//     111           111           kseg2 (cached)
+// 
+// Note that kseg0 and kseg1 map to the same physical address region.
+// Also, the physical address region with the upper three bits = 001 is
+// unreachable, i.e. there is no logical address that maps to that region.
+// Example RANGE specifications:
+// 
+//     RANGE (0x4004_1000, 0x4004_17ff)
+//     RANGE (0xa000_0000, 0xa000_03ff)
+//  
+//
+// default: IMEM = "NONE";
+//
+///////////////////////////////////////////////////////
+
+//IMEM = RANGE (0xa000_0000, 0xa000_1fff);
+
+
+///////////////////////////////////////////////////////
+//
+// DMEM -- local scratch pad data RAM
+//
+// configuration choices:  NONE RANGE
+//
+//                           "NONE"  --  not present
+// RANGE (0xMMMM_LLL0, 0xMMMM_TTTf)  --  BASE and TOP values
+//
+// The decode logic for this Lexra Memory Interface (LMI) is configured
+// with a base and top address range (inclusive).  The addressable region
+// defined by this pair must be a power of 2, from 1K bytes up to 256K
+// bytes.  The region must be naturally aligned.  That is, a 1K byte
+// region must be aligned to a modulo 1K byte address, a 2K byte region
+// must be aligned at a modulo 2K byte address, etc.  The restrictions are
+// imposed by the RLX4181's LMI address decode logic to optimize for timing.
+// 
+// This address range is specified within the PHYSICAL address space.
+// Keep in mind that the RLX4181 transforms logical addresses to physical
+// addresses before accessing local memory or sourcing transactions on the
+// system bus. This translation affects the upper three bits of the address,
+// and is shown here for convenience:
+// 
+//    LOGICAL      PHYSICAL        SEGMENT NAME
+//     000           010           kuseg (cached)
+//     001           011           kuseg (cached)
+//     010           100           kuseg (cached)
+//     011           101           kuseg (cached)
+//     100           000           kseg0 (cached)
+//     101           000           kseg1 (uncached)
+//     110           110           kseg2 (cached)
+//     111           111           kseg2 (cached)
+// 
+// Note that kseg0 and kseg1 map to the same physical address region.
+// Also, the physical address region with the upper three bits = 001 is
+// unreachable, i.e. there is no logical address that maps to that region.
+// Example RANGE specifications:
+// 
+//     RANGE (0x4004_1000, 0x4004_17ff)
+//     RANGE (0xa000_0000, 0xa000_03ff)
+// 
+//
+// default: DMEM = "NONE";
+//
+///////////////////////////////////////////////////////
+
+DMEM = RANGE (0x1000_0000, 0x1000_1fff);
+
+
+///////////////////////////////////////////////////////
+//
+// LMI_RANGE_SOURCE -- source of LMI address ranges
+//
+// configuration choices:  HARDWIRED EXPORT
+//
+//  "HARDWIRED"  --  hardwired values derived from configuration RANGE values
+//     "EXPORT"  --  inputs to LX module
+//
+// Selecting HARDWIRED will force the LMI address ranges to
+// those entered above with the IMEM and DMEM 'RANGE' settings.
+// Otherwise, selecting EXPORT will enable application specific
+// logic to drive configuration values onto CFG_IWBASE[31:10],
+// CFG_IWTOP[23:10], CFG_DWBASE[31:10], and CFG_DWTOP[23:10]
+// inputs to specify the range settings. See the description
+// for IMEM and DMEM, and the RLX4181 data sheet for additional
+// information.
+//
+// default: LMI_RANGE_SOURCE = "HARDWIRED";
+//
+///////////////////////////////////////////////////////
+
+LMI_RANGE_SOURCE = COPTC;
+
+
+///////////////////////////////////////////////////////
+//
+// IMEM_ARB -- allow external agents to arbitrate for IMEM
+//
+// configuration choices:  NO YES
+//
+//         "NO"  --  do not provide arbitration for IMEM
+//        "YES"  --  provide arbitration for IMEM
+//
+// The following settings are required when IMEM_ARB = YES:
+//
+//              IMEM = RANGE
+//
+//
+// Selecting YES allows external agent to request access to the IMEM that
+// that is normally controlled by the RLX4181 IMEM LMI.  The IMEM LMI supplies
+// a request line input and grant line output.  When the IMEM LMI's request
+// input is asserted, the LMI will assert its grant line to the external
+// agent when it is safe to allow the agent to access the IMEM.  The LMI
+// will inhibit its own accesses to the IMEM until the external request
+// line is de-asserted.
+// 
+// The request/grant lines of IMEM are ports on the lx2 module, and are present
+// only if IMEM_ARB is set to YES and the IMEM is populated.
+// An input in the list below is an input to the RLX4181, at the lx2 module
+// level.  An output is an output from the lx2 module level.
+// 
+//   input  EXT_IWREQRAM_R; // external agent drives 1'b1 to request IMEM
+//   output IW_GNTRAM_R;    // IMEM LMI drives 1'b1 to grant external agent
+//
+// default: IMEM_ARB = "NO";
+//
+///////////////////////////////////////////////////////
+
+IMEM_ARB = NO;
+
+
+///////////////////////////////////////////////////////
+//
+// DMEM_ARB -- allow external agents to arbitrate for DMEM
+//
+// configuration choices:  NO YES
+//
+//         "NO"  --  do not provide arbitration for DMEM
+//        "YES"  --  provide arbitration for DMEM
+//
+// The following settings are required when DMEM_ARB = YES:
+//
+//              DMEM = RANGE
+//
+//
+// Selecting YES allows external agent to request access to the DMEM that
+// that is normally controlled by the RLX4181 DMEM LMI.  The DMEM LMI supplies
+// a request line input and grant line output.  When the DMEM LMI's request
+// input is asserted, the LMI will assert its grant line to the external
+// agent when it is safe to allow the agent to access the DMEM.  The LMI
+// will inhibit its own accesses to the DMEM until the external request
+// line is de-asserted.
+// 
+// The request/grant lines of DMEM are ports on the lx2 module, and are present
+// only if DMEM_ARB is set to YES and the DMEM is populated.
+// An input in the list below is an input to the RLX4181, at the lx2 module
+// level.  An output is an output from the lx2 module level.
+// 
+//   input  EXT_DWREQRAM_R; // external agent drives 1'b1 to request DMEM
+//   output DW_GNTRAM_R;    // DMEM LMI drives 1'b1 to grant external agent
+//
+// default: DMEM_ARB = "NO";
+//
+///////////////////////////////////////////////////////
+
+DMEM_ARB = NO;
+
+
+///////////////////////////////////////////////////////
+//
+// JTAG -- Internal JTAG Tap controller with EJTAG support
+//
+// configuration choices:  NO EXPORT EXPORT_EXTENDED
+//
+//         "NO"  --  EJTAG support is NOT added
+//     "EXPORT"  --  JTAG tap is added, tap wires exported to outside of lx2
+// "EXPORT_EXTENDED"  --  JTAG tap IS added, tap wires and additional state signals exported to outside of chip
+//
+// This option controls instancing of the internal JTAG Tap controller.
+// 
+// Select "EXPORT" if you wish to use the Lexra supplied TAP controller with
+// EJTAG, and you do not require additional scan chains.  The TAP ports will
+// be exported from the lx2 layer.
+// 
+// Select "EXPORT_EXTENDED" to instance the TAP controller in lx1 and export
+// additional scan chain ports that you can connect to your own scan chains.
+// The standard TAP ports and additional chains will be exported from the
+// lx2 layer.
+// 
+// Select "NO" if you do not wish to use Lexra's TAP controller.  If you
+// you choose NO and your configuration includes EJTAG, then the EJTAG
+// scan chain ports will be exported from the lx2 layer, and you must
+// connect them to your own TAP controller.
+//
+// default: JTAG = "NO";
+//
+///////////////////////////////////////////////////////
+
+JTAG = EXPORT;
+
+
+///////////////////////////////////////////////////////
+//
+// EJTAG -- EJTAG Debug Support
+//
+// configuration choices:  NO YES
+//
+//         "NO"  --  EJTAG support is NOT added
+//        "YES"  --  EJTAG support IS added
+//
+// The following settings are required when EJTAG = YES:
+//
+//              JTAG = EXPORT or EXPORT_EXTENDED
+//
+//
+// This includes the EJTAG Debug Support hardware, including breakpoint support
+// of the instruction, data, and Lexra busses, as well as the PC Trace facility, EJTAG DMA
+// facility, and EJTAG interrupts.  You must select YES if configuring any breakpoint
+// support.  (See the next three options.)  If you select YES but do not specify
+// breakpoint support, the resulting configuration will support PC Trace,
+// EJTAG DMA and EJTAG interrupts.  Selecting NO removes all support for these items.
+//
+// default: EJTAG = "NO";
+//
+///////////////////////////////////////////////////////
+
+EJTAG = YES;
+
+
+///////////////////////////////////////////////////////
+//
+// EJTAG_INST_BREAK -- Number of instruction breaks to be compiled
+//
+// configuration choices:  <integer>
+//
+//    <integer>  --  number of instruction breaks (0 to 15)
+//
+// This is the number of EJTAG instruction breakpoints to be compiled.
+// If the number of breakpoints is non-zero, the ejtag_imatch module
+// will be instanced in the chip module.
+//
+// default: EJTAG_INST_BREAK = 0;
+//
+///////////////////////////////////////////////////////
+
+EJTAG_INST_BREAK = 2;
+
+
+///////////////////////////////////////////////////////
+//
+// EJTAG_DATA_BREAK -- Number of data breaks to be compiled
+//
+// configuration choices:  <integer>
+//
+//    <integer>  --  number of data breaks (0 to 15)
+//
+// This is the number of EJTAG data breakpoints to be compiled.
+// If the number of breakpoints is non-zero, the ejtag_dmatch module
+// will be instanced in the chip module.
+//
+// default: EJTAG_DATA_BREAK = 0;
+//
+///////////////////////////////////////////////////////
+
+EJTAG_DATA_BREAK = 1;
+
+
+///////////////////////////////////////////////////////
+//
+// JTAG_TRST_IS_TPC -- TRST pin is used as TPC out to eliminate TDO/TPC mux
+//
+// configuration choices:  YES NO
+//
+//        "YES"  --  TRST input replaced by TPC output
+//         "NO"  --  TDI/DINT and TDO/TPC are muxed as in the EJTAG spec
+//
+// Normally, when PCRACE is enabled, the meaning of the TDI and TDO pins change
+// to DINT and TPC.  On a multiprocessor system with multiple TAP controllers
+// cascaded, if one CPU goes into PCTRACE modes, the scan chain is broken.
+// Furthermore, any attempt to scan will likely generate an unwanted DINT.
+// 
+// When this option is "YES", TPC becomes a separate output signal to the
+// probe.  Since there  are no extra pins available, TRST is sacrificed.  This
+// is generally ok since the TAP controller can be reset with five consecutive
+// TMS=1.  The loss of DINT is easily worked around since DINT is also
+// a scannable control bit.
+// 
+// A side advantage to this is that the TPC signal is no longer multiplexed and
+// the skew between it and other TPC bits (if any) becomes zero.
+// 
+// This option should be turned on when there are multiple CPUs and/or when
+// a compatible probe is going to be connected.
+// 
+// NOTE: IF THIS OPTION IS TURNED ON AND A NON-EPI-MODIFIED PROBE IS USED,
+// THERE MAY BE CONFLICTING SIGNALS ON THE PROBE CONNECTOR (TPC and TRST).
+// 
+// Turn this off if a non-EPI probe or older EPI probe is being used.  Off is
+// the EJTAG "standard" selection.
+//
+// default: JTAG_TRST_IS_TPC = "NO";
+//
+///////////////////////////////////////////////////////
+
+JTAG_TRST_IS_TPC = NO;
+
+
+///////////////////////////////////////////////////////
+//
+// PC_TRACE -- EJTAG PC trace pins
+//
+// configuration choices:  NO EXPORT
+//
+//         "NO"  --  EJTAG PC trace pins not added to lx2
+//     "EXPORT"  --  EJTAG PC trace pins are added to lx2
+//
+// The following settings are required when PC_TRACE = EXPORT:
+//
+//              JTAG = EXPORT or EXPORT_EXTENDED
+//             EJTAG = YES
+//
+//
+// This option provides EJTAG PC trace port on the lx2 module.
+//
+// default: PC_TRACE = "NO";
+//
+///////////////////////////////////////////////////////
+
+PC_TRACE = NO;
+
+
+///////////////////////////////////////////////////////
+//
+// EJTAG_DCLK_N -- EJTAG PCTrace DCLK N parameter
+//
+// configuration choices:  1 2 3 4 EXPORT
+//
+//          "1"  --  1-1 DCLK:SysClk period ratio.
+//          "2"  --  2-1 DCLK:SysClk period ratio.
+//          "3"  --  3-1 DCLK:SysClk period ratio.
+//          "4"  --  4-1 DCLK:SysClk period ratio.
+//     "EXPORT"  --  CFG_EJTNMINUS1 input port on LX module
+//
+// This is the integral ratio between the DCLK period and the
+// processor core clock (SysClk) period.
+// 
+// If you choose EXPORT you must specify N-minus1 as a 2-bit value
+// connected to the CFG_EJTNMINUS1 port of the lx2 module.
+// 
+// If you choose EXPORT, then you must also provide a default simulation
+// setting for the resulting configuration pin.  This is done with the
+// CFGEXP_EJTNMINUS1 Verilog `define symbol.  For example, you can add
+// any of the following statements to your lconfig form input file,
+// which will produce the required `defines in lxr_symbols.vh:
+// 
+// 
+//    SYMBOL `define CFGEXP_EJTNMINUS1 2'b00
+// 
+//              or
+// 
+//    SYMBOL `define CFGEXP_EJTNMINUS1 2'b01
+// 
+//    etc.
+// 
+// The correspondence between these values and the actual
+// value of N is:
+// 
+//   CFGEXP_EJTNMINUS1   N
+//   ----------          ---
+//    2'b00               1
+//    2'b01               2
+//    2'b10               3
+//    2'b11               4
+//
+// default: EJTAG_DCLK_N = "1";
+//
+///////////////////////////////////////////////////////
+
+EJTAG_DCLK_N = 2;
+
+
+///////////////////////////////////////////////////////
+//
+// EJTAG_TPC_M -- EJTAG PCTrace TPC M parameter
+//
+// configuration choices:  1 2 4 8 EXPORT
+//
+//          "1"  --  1 TPC bit  per DCLK.
+//          "2"  --  2 TPC bits per DCLK.
+//          "4"  --  4 TPC bits per DCLK.
+//          "8"  --  8 TPC bits per DCLK.
+//     "EXPORT"  --  CFG_EJTMLOG2 input port on LX module
+//
+// This is the number of valid TPC bits driven during PCTracing
+// at each DCLK.
+// 
+// If you choose EXPORT you must specify M-log2 as a 2-bit value
+// connected to the CFG_EJTMLOG2 port of the lx2 module.
+// 
+// If you choose EXPORT, then you must also provide a default simulation
+// setting for the resulting configuration pin.  This is done with the
+// CFGEXP_EJTMLOG2 Verilog `define symbol.  For example, you can add
+// any of the following statements to your lconfig form input file,
+// which will produce the required `defines in lxr_symbols.vh:
+// 
+//    SYMBOL `define CFGEXP_EJTMLOG2 2'b00
+// 
+//              or
+// 
+//    SYMBOL `define CFGEXP_EJTMLOG2 2'b01
+// 
+//    etc.
+// 
+// The correspondence between these values and the actual
+// value of M is:
+// 
+//   CFGEXP_EJTMLOG2   M
+//   --------          ---
+//    2'b00            1
+//    2'b01            2
+//    2'b10            4
+//    2'b11            8
+//
+// default: EJTAG_TPC_M = "1";
+//
+///////////////////////////////////////////////////////
+
+EJTAG_TPC_M = 1;
+
+
+///////////////////////////////////////////////////////
+//
+// EJTAG_XV_BITS -- EJTAG PCTrace Number of Exception Vector bits
+//
+// configuration choices:  4 3 EXPORT
+//
+//          "4"  --  4-bit Exception Vector TPC output.
+//          "3"  --  3-bit Exception Vector TPC output.
+//     "EXPORT"  --  CFG_EJT3BITXVTPC input port on LX module
+//
+// This is the number of bits to be used for the EJTAG PCTrace
+// Exception Vector driven serially on the TPC line(s) when the
+// EXP code is output on the PCST lines.
+// 
+// If you use hardware low overhead vectored interrupts,
+// then a 4-bit code (with the most significant bit set to 1)
+// is used to indicate which one of the hardware interrupt vectors
+// (numbered 8 through 15) has been taken when the EXP code is output.
+// For other exceptions, the 4-bit code (with the most significant
+// bit set to 0) has the standard value on its 3 least significant
+// bits when the EXP code is output.
+// 
+// If your EJTAG probe vendor does not support this Lexra-specific
+// extension to 4-bits, or if you do not use hardware vectored interrupts,
+// you may use this parameter to disable the 4-bit code. In that case,
+// only the standard 3-bit code is used when the EXP code is output.
+// 
+// (If the 4-bit code is disabled and a hardware vectored interrupt
+// is taken, the NMI/Reset 3-bit code is used when the EXP code is output.)
+// 
+// If you choose EXPORT you must specify a 1-bit value
+// connected to the CFG_EJT3BITXVTPC port of the lx2 module.
+// 
+// If you choose EXPORT, then you must also provide a default simulation
+// setting for the resulting configuration pin.  This is done with the
+// CFGEXP_EJT3BITXVTPC Verilog `define symbol.  For example, you can
+// add one of the following statements to your lconfig form input file,
+// which will produce the required `defines in lxr_symbols.vh:
+// 
+//    SYMBOL `define CFGEXP_EJT3BITXVTPC 1'b0
+// 
+//              or
+// 
+//    SYMBOL `define CFGEXP_EJT3BITXVTPC 1'b1
+// 
+//    etc.
+// 
+// The correspondence between these values and the actual
+// width of the Exception Vector is:
+// 
+//   EJT3BITXVTPC  XV-width
+//   ------------  --------
+//    1'b0           4-bits
+//    1'b1           3-bits
+//
+// default: EJTAG_XV_BITS = "4";
+//
+///////////////////////////////////////////////////////
+
+EJTAG_XV_BITS = 4;
+
+
+///////////////////////////////////////////////////////
+//
+// LOW_POWER_CORE -- Lower power enhancement in cpu core
+//
+// configuration choices:  YES NO
+//
+//        "YES"  --  Apply low power enhancement in RLX4181
+//         "NO"  --  Do not apply low power enhancement in RLX4181
+//
+//   * The RLX4181 implemented low power scheme, such as 
+// clock gating and signal gating to reduce power consumption 
+// when executings instructions.
+//   * If you select NO as the LOW_POWER_CORE option, no clock 
+// gating will be performed in the RLX4181 RTL design.
+//   * If you select YES as the LOW_POWER_CORE option, clock 
+// gating will be performed in the RLX4181 RTL design. 
+// Currently, only register file is gated.  
+//   * Select YES as the LOW_POWER_CORE will lower the dynamic 
+// power consumed by clock tree. However, it may slightly 
+// reduce the clock rate of  and require additional 
+// synthesis scripts depend on cell library.
+//
+// default: LOW_POWER_CORE = "NO";
+//
+///////////////////////////////////////////////////////
+
+LOW_POWER_CORE = "NO";
+
+
+///////////////////////////////////////////////////////
+//
+// SCAN_INSERT -- Controls scan insertion and synthesis
+//
+// configuration choices:  YES NO
+//
+//        "YES"  --  Insert scan in the Lexra core and optional modules
+//         "NO"  --  No Scan insertion will be performed
+//
+// The following settings are required when SCAN_INSERT = NO:
+//
+//          SCAN_SCL = NO
+//
+//
+//   * If you select NO as the SCAN_INSERT option, all scan signals will
+//   be tied off in the top level netlists generated for you.
+//   * If you select YES as the SCAN_INSERT option, scan will also be
+//   inserted on the MAC and EJTAG options (if selected) and their scan
+//   enable and chains will be brought to lx2.
+//   In this case, there will be one scan chain for the mac, and one or
+//   three scan chains for EJTAG, depending on the SCAN_MIX_CLOCKS option.
+// 
+// If you have select YES as the SCAN_INSERT option, scan will be inserted in
+// the entire Lexra RLX4181 up to the lx1 level, and the chains will be
+// merged according to the SCAN_NUM_CHAINS and SCAN_MIX_CLOCKS constraints.
+// 
+//
+// default: SCAN_INSERT = "NO";
+//
+///////////////////////////////////////////////////////
+
+SCAN_INSERT = YES;
+
+
+///////////////////////////////////////////////////////
+//
+// SCAN_MIX_CLOCKS -- Scan Chains can cross clock boundaries with lock-up latches
+//
+// configuration choices:  YES NO
+//
+//        "YES"  --  Scan Chains may cross clock boundaries
+//         "NO"  --  Scan chains may not cross clock boundaries
+//
+// default: SCAN_MIX_CLOCKS = "YES";
+//
+///////////////////////////////////////////////////////
+
+SCAN_MIX_CLOCKS = NO;
+
+
+///////////////////////////////////////////////////////
+//
+// SCAN_NUM_CHAINS -- Number of scan chains in LX1
+//
+// configuration choices:  1 2 3 4 8
+//
+//          "1"  --  One scan chain will be present
+//          "2"  --  Two scan chains will be present
+//          "3"  --  Three scan chains will be present
+//          "4"  --  Four scan chains will be present
+//          "8"  --  Eight scan chains will be present
+//
+// default: SCAN_NUM_CHAINS = "4";
+//
+///////////////////////////////////////////////////////
+
+SCAN_NUM_CHAINS = 4;
+
+
+///////////////////////////////////////////////////////
+//
+// SCAN_SCL -- A Scan collar will be inserted in lx1
+//
+// configuration choices:  NO YES
+//
+//         "NO"  --  Scan collar will not be inserted
+//        "YES"  --  Scan collar will be inserted in lx1
+//
+// The SCAN_SCL form option will control the inclusion of a scan collar
+// in the lx1 module.  A script will be run as part of the synthesis process
+// to insert the scan collar at the lx1 level.  Please refer to the datasheet
+// on how to configure the scan collar parameters.
+//
+// default: SCAN_SCL = "NO";
+//
+///////////////////////////////////////////////////////
+
+SCAN_SCL = NO;
+
+
+///////////////////////////////////////////////////////
+//
+// UNIQUE_NAME -- Apply a unique name to the RTL
+//
+// configuration choices:  NONE <string>
+//
+//       "NONE"  --  Do not apply a unique name to the RTL
+//     <string>  --  Apply the given name as a prefix to the RTL
+//
+// This parameter allows a unique prefix to be added to the
+// RTL module names of lx2 and below.  The prefix is lower-
+// cased and a tailing underscore '_' is applied.  For example,
+// if "foo" were chosen for the unique name, "foo_lx2" will
+// be the lx2 module name in the rtl.
+//
+// default: UNIQUE_NAME = "NONE";
+//
+///////////////////////////////////////////////////////
+
+UNIQUE_NAME = NONE;
+
+
+///////////////////////////////////////////////////////
+//
+// SLEEP -- include clock SLEEP support
+//
+// configuration choices:  YES NO
+//
+//        "YES"  --  include clock SLEEP support
+//         "NO"  --  do not include clock SLEEP support
+//
+// An optional sleep mode can be accessed via software or hardware if
+// enabled via this option.  The LX4380 uses clock gating to implement
+// its sleep mode.  Users who do not allow clock gating should select
+// "NO" for option, and will not have access to the LX4181 sleep mode.
+// 
+// Sleep mode is implemented in the lx2/lx1/lx0/reset_dist module,
+// when enabled by this setting, and can be accessed via software or
+// hardware as described in the LX4380 data sheet.
+// 
+// The clock gating for sleep mode is implemented in the clock buffers.
+// For the LX4380 RTL product, these buffers reside either inside or
+// outside the lx2 module, as determined by the CLOCK_BUFFERS setting
+// below.  When sleep is enabled, clock sleep terms are sourced by
+// the reset_dist module and received by the clock buffers for gating
+// with the free running input clock.
+// 
+// default: SLEEP = "NO";
+//
+///////////////////////////////////////////////////////
+
+SLEEP = NO;   
+
+
+///////////////////////////////////////////////////////
+//
+// SYSTEM_WIDTH -- system bus width
+//
+// configuration choices:  32_LOW_LAT 32_HIGH_FREQ 64
+//
+// "32_LOW_LAT"  --  Add a low latency lexra 64 to 32 bits bridge as bus interface
+// "32_HIGH_FREQ"  --  Add a high clock rate lexra 64 to 32 bits bridge as bus interface
+//         "64"  --  Use native LEXRA 64 bits bus interface
+//
+// The following settings are required when SYSTEM_WIDTH = 32_LOW_LAT:
+//
+//  SYSTEM_INTERFACE = LBUS
+//    MEM_LINE_ORDER = SEQUENTIAL
+//
+//
+// The following settings are required when SYSTEM_WIDTH = 32_HIGH_FREQ:
+//
+//  SYSTEM_INTERFACE = LBUS
+//    MEM_LINE_ORDER = SEQUENTIAL
+//
+//
+// The system bus of RLX4181 is natively 64-bits. For many projects that
+// include 32-bits IPs that are developed before, A 64-bits to 32-bits
+// bridge is supported to be backward compitible to old IPs.
+// 
+// If choosing SYSTEM_WIDTH = 32_LOW_LAT, a data transaction is performed over
+// 32 bits bus without further latency. However, to achieve this goal, there
+// are many combinational input and output. Hence, the timing may be critial
+// in input and output ports, especially in output ports, The boundary timing
+// need to be taken notice in particular.
+// 
+// If choosing SYSTEM_WIDTH = 32_HIGH_FREQ, the lexra bus ports can easily
+// meet the native lexra bus timing constraints, i.e. muximum output delay is
+// 80 percent of the clock period and muximun input delay is 50 percent of the
+// clock period with the cost of more clock latencies.  
+// 
+// default: SYSTEM_WIDTH = "64";
+//
+///////////////////////////////////////////////////////
+
+SYSTEM_WIDTH = "64";
+
+

@@ -1,0 +1,481 @@
+menu "Realtek platform dependent drivers"
+
+config RTK_KDRIVER_SUPPORT
+    bool "RTK284X platform dependent drivers"
+    default n
+    depends on ARCH_RTK284X
+    select RTK_KDRIVER
+    ---help---
+
+config RTK_KDRIVER
+    bool
+	depends on RTK_KDRIVER_SUPPORT
+	default n
+
+#PCBMGR
+source "drivers/rtk_kdriver/pcbmgr/Kconfig"
+
+#SCALER
+source "drivers/rtk_kdriver/tvscalercontrol/Kconfig"
+
+#THERMAL
+source "drivers/rtk_kdriver/thermal/Kconfig"
+
+# Try_lock
+config RTK_SEMAPHORE
+	bool "Provide rtk_semaphore for RTK Semaphore"
+  	default y if !ARCH_RTK299O && !ARCH_RTK289X
+	help
+	 rtk_semaphore
+
+config RTK_SEMAPHORE_TEST
+	bool "Provide test case for RTK Semaphore"
+	depends on RTK_SEMAPHORE
+	default n
+
+
+# AMP
+# Please notice that this is only for REALTEK_AMP_TAS5711 & REALTEK_AMP_ACL1310
+# If use different IC, please change this.
+config RTK_KDRV_AMP
+         bool "Do AMP_TAS5711 or ACL1310 init in kernel STR , if not,do not enable"
+         default y if !CUSTOMER_TV006 && !ARCH_RTK299O
+         help
+          Amp initial
+
+
+config RTK_AMP_USER_RESUME
+	bool "do RTK Amp ACL1310 resume() in user resume flow"
+	depends on RTK_KDRV_AMP
+	default y if RTK_KDRV_AMP
+	help
+	  Amp resume() happen in user resume flow
+
+#RPC
+config RTK_KDRV_RPC
+	bool "Use RPC to communicate with Audio & Video."
+	default y
+	help
+	  Use RPC mechanism
+
+# AVCPU
+config RTK_KDRV_AVCPU
+	bool "AVCPU Driver"
+	default n
+	help
+	  Driver used to control Audio & Video cpu.
+
+config RTK_KDRV_SUPPORT_ACPU2
+	bool "Support ACPU2"
+	depends on RTK_KDRV_AVCPU
+	default n
+	help
+	  Enable ACPU2 support
+
+config RTK_KDRV_SUPPORT_VCPU2
+	bool "Support VCPU2"
+	depends on RTK_KDRV_AVCPU
+	default n
+	help
+	  Enable VCPU2 support
+
+# EMCU
+config RTK_KDRV_EMCU
+	bool "EMCU Driver"
+	default y
+	help
+	  Driver use to control EMCU in standby mode
+
+choice
+    depends on RTK_KDRV_EMCU
+    prompt "Customer Parameter"
+    default TV001_PLATFORM
+    ---help---
+        Select layout of share memory for customer
+
+    config TV001_PLATFORM
+        bool "EMCU_TV001"
+        ---help---
+            for TV001 platform
+
+    config TV030_PLATFORM
+        bool "EMCU_TV030"
+        ---help---
+            for TV030 platform
+
+endchoice
+
+config EMCU_AUTO_PARSER
+	bool "EMCU driver auto parse pcb parameter"
+	default n
+	help
+	  EMCU parse pcb parameter by self. It's need bootcode setting pcb param.
+
+config RTK_KDRV_EMCU_DCOFF_TIMEOUT
+	int "EMCU timeout to wait for WFIL2"
+	default 3
+	depends on RTK_KDRV_EMCU
+	help
+	  The second EMCU will wait for WFIL2, and then AC reboot.
+	  Config as 0 will stop EMCU reboot, to keep for debugging.
+
+# RTD LOGBUF
+config REALTEK_LOGBUF
+	bool "Realtek Logbuf"
+	default n
+	help
+		Support Realtek Logbuf
+
+# USBDUMP
+config RTK_USBDUMP_ENABLE
+        bool "Realtek usb dump enable"
+        default n
+        help
+                Support Realtek usbdump
+
+# ONLINE-HLEP
+config RTK_ONLINE_HELP
+        bool "Realtek on-line help"
+        default y
+        help
+                Support on-line help
+
+# SB2
+config RTK_KDRV_SB2
+	bool "SB2 Driver"
+	depends on RTK_KDRIVER_SUPPORT
+	select RTK_KDRIVER
+	default n
+	help
+	  System Bridge II Driver
+
+# GPIO
+source "drivers/rtk_kdriver/gpio/Kconfig"
+
+# PWM
+config RTK_KDRV_PWM
+	bool "PWM Driver"
+	default n
+	depends on RTK_KDRIVER_SUPPORT
+	select RTK_KDRIVER
+	help
+	  PWM Device Driver
+# I2C
+source drivers/rtk_kdriver/i2c/Kconfig
+
+source drivers/rtk_kdriver/diseqc/Kconfig
+
+# PCMCIA
+config RTK_KDRV_PCMCIA
+	bool "PCMCIA Driver"
+	default n
+	depends on RTK_KDRIVER_SUPPORT
+	select RTK_KDRIVER
+	select RTK_KDRV_GPIO
+	help
+	  PCMCIA Device Driver
+
+# LG BOARD
+config RTK_KDRV_LG_BOARD
+        bool "LG BOARD arbiter to load one of the PCMCIA and smart card driver"
+        default n
+        depends on RTK_KDRIVER_SUPPORT
+        select RTK_KDRIVER
+        help
+          LG BOARD arbiter to load one of the PCMCIA and smart card driver"
+
+
+# LNB UART patch
+config RTK_KDRV_LNB_UART
+	bool "LG PCB LNB UART patch Driver"
+	depends on RTK_KDRIVER_SUPPORT
+	select RTK_KDRIVER
+	default n
+	help
+	  LG PCB LNB UART patch Driver
+
+# PINMUX
+config RTK_KDRV_PINMUX
+        bool "Pinmux Driver"
+        default n
+        depends on RTK_KDRIVER_SUPPORT
+        select RTK_KDRIVER
+        help
+          Pinmux Driver
+
+#Misc driver
+config RTK_KDRV_MISC_DEV
+	bool "Misc device Driver"
+	default n
+	depends on RTK_KDRIVER_SUPPORT
+        select RTK_KDRIVER
+        help
+          Misc Driver
+
+#ETN driver
+config RTK_KDRV_R8168
+	tristate "Realtek 8168 gigabit ethernet support"
+	select FW_LOADER
+	select CRC32
+	select NET_CORE
+	select MII
+	select RTK_KDRIVER
+	depends on ETHERNET
+	depends on RTK_KDRIVER_SUPPORT
+	default y if !ARCH_RTK289X
+	---help---
+	  Say Y here if you have a Realtek 8168 Gigabit Ethernet adapter.
+
+	  To compile this driver as a module, choose M here: the module
+	  will be called r8168.  This is recommended.
+
+config RTK_KDRV_8168_EVENT
+    	bool "Use kobject link down/up event"
+	depends on RTK_KDRV_R8168
+    	default n
+    	help
+      	  If you want to use kobject link down/up event, say Y.
+
+
+source "drivers/rtk_kdriver/smartcard/Kconfig"
+source "drivers/rtk_kdriver/cec/Kconfig"
+source "drivers/rtk_kdriver/ddc/Kconfig"
+source "drivers/rtk_kdriver/switch/Kconfig"
+
+# OTP : One Time Programming memory
+config RTK_KDRV_OTP
+	bool "OTP Driver"
+	depends on RTK_KDRIVER_SUPPORT
+	select RTK_KDRIVER
+	default n
+	help
+	  OTP (One Time Programming) Device
+
+# OTP : Enable get HDCP key from OTP API
+config RTK_KDRV_HDCP_KEY_FROM_OTP
+	bool "Enable get HDCP key from OTP API"
+	depends on RTK_KDRV_OTP
+	default n
+	help
+	  get HDCP key from OTP API
+
+
+# CW : Control Word
+source "drivers/rtk_kdriver/cw/Kconfig"
+
+# RNG : Random Number Generator
+config RTK_KDRV_RNG
+	bool "RNG (Random Number Generator) Driver."
+	depends on RTK_KDRIVER_SUPPORT
+	select RTK_KDRIVER
+	default n
+	help
+	  provide HW Random number generator
+
+# CP
+source "drivers/rtk_kdriver/mcp/Kconfig"
+
+# DV : Dolbyvision engine
+config RTK_KDRV_DV
+	bool "DV (Dolbyvision Engine) Driver."
+	depends on RTK_KDRIVER_SUPPORT
+	select RTK_KDRIVER
+	default n
+	help
+	  Dolbyvision Engine
+
+# MD : Move data engine
+config RTK_KDRV_MD
+	bool "MD (Move Data Engine) Driver."
+	depends on RTK_KDRIVER_SUPPORT
+	select RTK_KDRIVER
+	default n
+	help
+	  Move Data engine
+
+
+config RTK_KDRV_MD_TEST
+  bool "MD driver test cases"
+  depends on RTK_KDRV_MD
+  default n
+  help
+    MD driver test cases
+
+# LSADC: Low-speed ADC
+config RTK_KDRV_LSADC
+	bool "LSADC (Low-speed ADC) Driver."
+	depends on RTK_KDRIVER_SUPPORT
+	select RTK_KDRIVER
+	default y
+	help
+	  low speed ADC
+
+# KEYPAD
+config RTK_KDRV_KEYPAD
+	bool "KeyPad Driver."
+	depends on RTK_KDRV_LSADC && RTK_KDRV_GPIO
+	default y
+	help
+	  Driver of Realtek use to control keypad
+
+#RTC
+config RTK_KDRV_RTC
+	bool "RTC (Real-Time Clock Engine) Driver."
+	depends on RTK_KDRIVER_SUPPORT
+	select RTK_KDRIVER
+	default n
+	help
+	  Real-Time Clock feature support
+
+#Watch Dog
+config RTK_KDRV_WATCHDOG
+	bool "Watch Dog Driver."
+	depends on RTK_KDRIVER_SUPPORT
+	select RTK_KDRIVER
+	default y if (RTK_KDRV_AVCPU || (REALTEK_SECURE && !OPTEE))
+	help
+	  Watch Dog feature support
+
+#CPU Frequency
+config RTK_KDRV_CPU_FREQUENCY
+	bool "CPU Frequency Driver"
+	depends on RTK_KDRIVER_SUPPORT
+	select RTK_KDRIVER
+	default n
+	help
+	  CPU Frequency
+
+config REALTEK_ARM_WRAPPER
+	bool "ARM WRAPPER Detector Enable"
+	default n
+	help
+	  support ARM WRAPPER Detector
+
+#Memory Trash Detecter
+config RTK_KDRV_DC_MEMORY_TRASH_DETCTER
+	bool "DCU Memory Trash Detector"
+	depends on RTK_KDRIVER_SUPPORT
+	select RTK_KDRIVER
+	default n
+	help
+	  Memory Trash Detecter
+
+#QoS Control
+config RTK_KDRV_QOS_CONTROL
+	bool "QoS Control"
+	depends on RTK_KDRIVER_SUPPORT
+	select RTK_KDRIVER
+	default n
+	help
+	  QoS Control
+
+#Watch point
+config RTK_KDRV_WATCHPOINT
+	bool "Simple Hardware Watchpoint"
+	depends on HAVE_HW_BREAKPOINT
+	default n
+	help
+	  Simple hardware watchpoint driver
+
+#Frame Buffer
+config RTK_KDRV_VENUS_FB
+	tristate "RTK Frame Buffer Support"
+	select FB
+	select FB_CFB_FILLRECT
+	select FB_CFB_COPYAREA
+	select FB_CFB_IMAGEBLIT
+	select FB_SOFT_CURSOR
+	select MAGELLAN_CANVAS
+	select SET_WIN_ALPHA_AS_FF
+	default n
+	help
+	   Frame buffer driver for Realtek
+
+#RTICE
+source "drivers/rtk_kdriver/rtice/Kconfig"
+
+#Voltage
+config REALTEK_VOLTAGE_CTRL
+	bool "SCPU voltage control"
+	default y
+	help
+	  SCPU Voltage Control.
+
+# IR
+source "drivers/rtk_kdriver/ir/Kconfig"
+
+#VGIP ISR
+config RTK_KDEV_VGIP_INTERRUPT
+	bool "Handle VGIP interrupt in SCPU"
+	depends on RTK_KDRIVER_SUPPORT
+	select RTK_KDRIVER
+	default n
+	help
+	  handle VGIP interrupt in SCPU.
+
+#MEMC HW SUPPORT
+config HW_SUPPORT_MEMC
+	bool "HW_SUPPORT_MEMC"
+	depends on RTK_KDRIVER_SUPPORT
+	default n
+	help
+	  handle MEMC HW SUPPORT.
+
+
+#MEMC ISR
+config RTK_KDEV_MEMC_INTERRUPT
+	bool "Handle MEMC interrupt in SCPU" if HW_SUPPORT_MEMC
+	depends on RTK_KDRIVER_SUPPORT
+	select RTK_KDRIVER
+	default n
+	help
+		handle MEMC interrupt in SCPU.
+
+#D_histogram HW SUPPORT
+config HW_SUPPORT_D_HISTOGRAM
+	bool "HW_SUPPORT_D_HISTOGRAM"
+	depends on RTK_KDRIVER_SUPPORT
+	default n
+	help
+	  handle D_HISTOGRAM HW SUPPORT.
+
+#ISR Debug
+config RTK_KDEV_DEBUG_ISR
+	bool "Handle Debug MEMC interrupt in SCPU"
+	depends on RTK_KDRIVER_SUPPORT
+	select RTK_KDRIVER
+	default n
+	help
+		handle Debug MEMC interrupt in SCPU.
+
+#USB HCD platform
+source "drivers/rtk_kdriver/usb/Kconfig"
+
+comment "DTV Related Drivers"
+
+source "drivers/rtk_kdriver/demod/Kconfig"
+source "drivers/rtk_kdriver/ademod/Kconfig"
+source "drivers/rtk_kdriver/tp/Kconfig"
+source "drivers/rtk_kdriver/atsc3_dmx/Kconfig"
+
+comment "HAL Drivers"
+
+source "drivers/rtk_kdriver/demux/Kconfig"
+source "drivers/rtk_kdriver/audio/Kconfig"
+source "drivers/rtk_kdriver/vdec/Kconfig"
+source "drivers/rtk_kdriver/teeproxy/Kconfig"
+source "drivers/rtk_kdriver/audio_hw/Kconfig"
+source "drivers/rtk_kdriver/crm/Kconfig"
+source "drivers/rtk_kdriver/omx/Kconfig"
+
+comment "GAL realted Drivers"
+source "drivers/rtk_kdriver/gal/Kconfig"
+
+comment "RTK Uart Drivers"
+source "drivers/rtk_kdriver/uart/Kconfig"
+
+###################################################################
+# DTV Related drivers
+###################################################################
+
+endmenu

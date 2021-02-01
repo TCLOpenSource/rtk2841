@@ -1,0 +1,106 @@
+menu "Android"
+
+config ANDROID
+	bool "Android Drivers"
+	---help---
+	  Enable support for various drivers needed on the Android platform
+
+if ANDROID
+
+config ANDROID_VERSION
+        int "Number of Android version"
+	default 7
+	help
+		This option tell which android version use.
+
+config USE_ANDROID_O_DRIVER
+       bool "Use Drivers for Android Oreo"
+       default n
+       ---help---
+      Newner kernel driver may not compatible for old Android.
+
+      Select this to use drivers for Android O, otherwise,
+      use drivers for Android N.
+
+config ANDROID_BINDER_DEVICES
+    string "Android Binder devices"
+    depends on ANDROID_BINDER_IPC && USE_ANDROID_O_DRIVER
+    default "binder,hwbinder,vndbinder"
+    ---help---
+      Default value for the binder.devices parameter.
+
+      The binder.devices parameter is a comma-separated list of strings
+      that specifies the names of the binder device nodes that will be
+      created. Each binder device has its own context manager, and is
+      therefore logically separated from the other devices.
+
+config ANDROID_BINDER_IPC
+	bool "Android Binder IPC Driver"
+	depends on MMU
+	default n
+	---help---
+	  Binder is used in Android for both communication between processes,
+	  and remote method invocation.
+
+	  This means one Android process can call a method/routine in another
+	  Android process, using Binder to identify, invoke and pass arguments
+	  between said processes.
+	  
+config ANDROID_BINDER_IPC_SELFTEST
+	bool "Android Binder IPC Driver Selftest"
+	depends on ANDROID_BINDER_IPC && USE_ANDROID_O_DRIVER
+	---help---
+	  This feature allows binder selftest to run.
+
+	  Binder selftest checks the allocation and free of binder buffers
+	  exhaustively with combinations of various buffer sizes and
+	  alignments.
+
+config ANDROID_BINDER_IPC_32BIT
+	bool
+	depends on !64BIT && ANDROID_BINDER_IPC
+	default y
+	---help---
+	  The Binder API has been changed to support both 32 and 64bit
+	  applications in a mixed environment.
+
+	  Enable this to support an old 32-bit Android user-space (v4.4 and
+	  earlier).
+
+	  Note that enabling this will break newer Android user-space.
+
+config ANDROID_TV
+	bool "Android TV Drivers"
+	default n
+	---help---
+	  Enable support for various drivers needed on the Android platform without TvServer
+
+choice
+        prompt "Android Version"
+        default ANDROID_Nougat
+
+config ANDROID_KITKAT
+        bool "KitKat"
+        help
+          Used Android version is KitKat (4.4)
+
+config ANDROID_LOLLIPOP
+        bool "Lollipop"
+        help
+          Used Android version is Lollipop (5.x)
+
+config ANDROID_MARSHNALLOW
+        bool "Marshmallow"
+        help
+          Used Android version is Lollipop (6.x)
+
+config ANDROID_Nougat
+        bool "Nougat"
+        help
+          Used Android version is Nougat (7.x)
+
+endchoice
+
+endif # if ANDROID
+
+endmenu

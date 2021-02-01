@@ -1,0 +1,22 @@
+menu "RTK USB Kdriver"
+
+config RTK_KDRV_USB
+	bool "RTK USB driver support"
+	depends on USB && RTK_KDRIVER_SUPPORT
+
+if RTK_KDRV_USB
+
+config RTK_KDRV_EHCI_HCD_PLATFORM
+	bool "RTK EHCI HCD Platform driver"
+	depends on USB_EHCI_HCD_PLATFORM
+	help
+
+config EHCI_HUB_POLLING_CHECK
+	bool "ehci HUB POLLING CHECK"
+	depends on RTK_KDRV_EHCI_HCD_PLATFORM
+	default y
+	help
+
+endif
+
+endmenu

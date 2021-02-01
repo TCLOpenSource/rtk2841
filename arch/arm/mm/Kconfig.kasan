@@ -1,0 +1,28 @@
+menu "Kernel Address Sanitizer support"
+	depends on KASAN
+
+config KASAN_SHADOW_OFFSET
+	hex "KASan shadow memory offset"
+	---help---
+	  It must be calculated as "KASAN_SHADOW_VIRT - (MODULES_VADDR >>
+	  KASAN_SHADOW_SCALE_SHIFT)."
+
+config KASAN_SHADOW_PHYS
+	hex "Physical address to KASan shadow memory"
+	---help---
+	  It must be an 1MB-aligned physical address to normal memory.
+
+config KASAN_SHADOW_VIRT
+	hex "Virtual address to KASan shadow memory"
+	---help---
+	  Currently, the KASan shadow memory should be reside within
+	  the vmalloc area. It must be an 1MB-aligned address.
+
+config KASAN_SHADOW_SIZE
+	hex "Size of KASan shadow memory"
+	---help---
+	  Needed size of the KASan shadow memory can be calculated as
+	  "(lowmem_size + 16MB) >> KASAN_SHADOW_SCALE_SHIFT." It must
+	  be an 1MB-aligned size.
+
+endmenu

@@ -1,0 +1,243 @@
+menu "LG115x options"
+	depends on ARCH_LG115X
+
+choice
+	prompt "LG115x system type"
+
+config MACH_LG1152
+	bool "LG1152-based board"
+	select HAVE_ARM_SCU if SMP
+	select HAVE_ARM_TWD if LOCAL_TIMERS
+	select MIGHT_HAVE_CACHE_L2X0
+	select USB_ARCH_HAS_EHCI
+	select USB_ARCH_HAS_OHCI
+	select ARCH_HIBERNATION_POSSIBLE
+	help
+	  Include support for the LG1152(AKA L9)-based board.
+
+config MACH_LG1154
+	bool "LG1154-based board"
+	select HAVE_ARM_SCU if SMP
+	select HAVE_ARM_TWD if LOCAL_TIMERS
+	select MIGHT_HAVE_CACHE_L2X0
+	select USB_ARCH_HAS_EHCI
+	select USB_ARCH_HAS_OHCI
+	select USB_ARCH_HAS_XHCI
+	select USB_XHCI_PLATFORM
+	select ARCH_HIBERNATION_POSSIBLE
+	select CLOCK_DETECTION
+	select COMMON_CLK_LG1K
+	help
+	  Include support for the LG1154(AKA H13)-based board.
+
+config MACH_LG1156
+	bool "LG1156-based board"
+	select USB_ARCH_HAS_XHCI
+	select USB_XHCI_PLATFORM
+	help
+	  Include support for the LG1156(AKA H14)-based board.
+
+endchoice
+
+choice
+	prompt "LG1152 chip revision"
+	depends on MACH_LG1152
+
+config LG1152_B0
+	bool "LG1152 B0"
+	select ARM_ERRATA_754322
+	select ARM_ERRATA_764369
+	select PL310_ERRATA_727915
+	select PL310_ERRATA_753970
+	select PL310_ERRATA_769419
+	help
+	  Cortex-A9 MPcore revision: r2p9
+	  PL310 L2 Cache Controller revision: r3p0
+
+endchoice
+
+choice
+	prompt "LG1154 chip revision"
+	depends on MACH_LG1154
+
+config LG1154_A0
+	bool "LG1154 A0"
+	select ARM_ERRATA_754322
+	select ARM_ERRATA_764369
+	help
+	  Cortex-A9 MPcore revision: r3p0
+	  PL310 L2 Cache Controller revision: r3p2
+
+config LG1311_A0
+	bool "LG1311 A0"
+	select ARM_ERRATA_754322
+	select ARM_ERRATA_764369
+	help
+	  Cortex-A9 MPcore revision: r3p0
+	  PL310 L2 Cache Controller revision: r3p2
+
+endchoice
+
+choice
+	prompt "LG1156 chip revision"
+	depends on MACH_LG1156
+
+config LG1156_A0
+	bool "LG1156 A0"
+	help
+	  Cortex-A15 MPcore revision: r3p1
+
+endchoice
+
+config CLOCK_DETECTION
+	bool
+
+comment "Clocks and timers"
+
+config AMBA_CLOCK_MHZ
+	int "AMBA bus clock frequency (MHz)"
+	default 198
+
+config PERI_CLOCK_MHZ
+	int "MPcore peripheral clock frequency (MHz)"
+	default 396
+	depends on LOCAL_TIMERS && !CLOCK_DETECTION
+
+config PERI_CLOCK_ADJ
+	int "MPcore peripheral clock frequency adjustment (Hz)"
+	default 0
+	depends on LOCAL_TIMERS && !CLOCK_DETECTION
+	help
+	  Use this value for fine-tuning.
+
+config SP804_CLOCKSOURCE_PRESET
+	bool "Use preset mult/shift for the clocksource using SP804"
+	default y
+
+config SP804_CLOCKSOURCE_PRESET_MULT
+	int "Preset mult"
+	default 2711573867
+	depends on SP804_CLOCKSOURCE_PRESET
+
+config SP804_CLOCKSOURCE_PRESET_SHIFT
+	int "Preset shift"
+	default 29
+	depends on SP804_CLOCKSOURCE_PRESET
+
+comment "Level-2 cache controller options"
+
+config L2CC_ECC
+	bool "Enable L2 ECC and parity"
+	default y
+	depends on MACH_LG1156
+	help
+	  Enable L2-cache ECC and parity implemented in Cortex-A15 MPcore.
+
+config L2CC_LATENCY_TAG
+	hex "Intenal tag-RAM latency"
+	default 0x333
+	depends on CACHE_L2X0
+	help
+	  [10: 8] RAM write access latency
+	  [ 6: 4] RAM read access latency
+	  [ 2: 0] RAM setup latency
+	  b000 = 1 cycle of latency, there is no additional latency.
+	  b001 = 2 cycles of latency.
+	  b010 = 3 cycles of latency.
+	  b011 = 4 cycles of latency.
+	  b100 = 5 cycles of latency.
+	  b101 = 6 cycles of latency.
+	  b110 = 7 cycles of latency.
+	  b111 = 8 cycles of latency.
+
+config L2CC_LATENCY_DATA
+	hex "Internal data-RAM latency"
+	default 0x333
+	depends on CACHE_L2X0
+	help
+	  [10: 8] RAM write access latency
+	  [ 6: 4] RAM read access latency
+	  [ 2: 0] RAM setup latency
+	  b000 = 1 cycle of latency, there is no additional latency.
+	  b001 = 2 cycles of latency.
+	  b010 = 3 cycles of latency.
+	  b011 = 4 cycles of latency.
+	  b100 = 5 cycles of latency.
+	  b101 = 6 cycles of latency.
+	  b110 = 7 cycles of latency.
+	  b111 = 8 cycles of latency.
+
+config L2CC_PREFETCH_DATA
+	bool "Enable data-prefetch"
+	default n
+	depends on CACHE_L2X0
+
+config L2CC_PREFETCH_INST
+	bool "Enable instruction-prefetch"
+	default n
+	depends on CACHE_L2X0
+
+config L2CC_PREFETCH_OFFSET
+	int "Prefetch-offset (0-7, 15, 23, 31)"
+	default 0
+	depends on CACHE_PL310 && (L2CC_PREFETCH_DATA || L2CC_PREFETCH_INST)
+	help
+	  In some systems, it might be better to prefetch more in advance
+	  to achieve better performance. The prefetch offset enables this
+	  by setting the address of the prefetched cache line to
+	  Cache Line + 1 + Offset. The optimal value of the prefetch offset
+	  depends on the L3 read latency and on the L1 read issuing capability.
+	  It is recommended to perform system experiments by varying
+	  the prefetch offset, to find the optimal value.
+
+config L2CC_DEBUG_DCL
+	bool "DCL: Disable Cache Linefill"
+	default n
+	depends on CACHE_L2X0
+	help
+	  If you set the DCL bit to 1, no allocation occurs on either reads or
+	  writes. This mode of operation is required for debug so that the
+	  memory image, as seen by the processor, can be examined in a
+	  non-invasive manner. Cache hits read data words from the cache, and
+	  cache misses from a cacheable region read words directly from memory.
+
+config L2CC_DEBUG_DWB
+	bool "DWB: Diable Write-Back (force write-through)"
+	default n
+	depends on CACHE_L2X0
+	help
+	  If you set the DWB bit to 1, it forces the cache controller to treat
+	  all cacheable writes as though they were in a write-through no write-
+	  allocate region of memory. The setting of the DWB bit overrides the
+	  access attributes. If the cache contains dirty cache lines, these
+	  remain dirty while the DWB bit is set, unless they are written back
+	  because of a write-back eviction after a linefill, or because of an
+	  explicit clean operation.
+	  While the DWB bit is set, lines that are clean are not marked as
+	  dirty if they are updated. This functionality enables a debugger to
+	  download code or data to external memory, without the requirement to
+	  clean part or the entire cache to ensure that the code or data being
+	  downloaded has been written to external memory.
+	  If you have set the DWB bit to 1, and a write is made to a cache line
+	  that is dirty, then both the cache line and the external memory are
+	  updated with the write data.
+
+comment "Ethernet MAC/PHY options"
+
+choice
+	prompt "GPIO used to cold-reset Ethernet PHY"
+
+config EPHY_RESET_GPIO27
+	bool "GPIO27"
+
+config EPHY_RESET_GPIO29
+	bool "GPIO29"
+
+endchoice
+
+comment "Miscellaneous options"
+
+config ARCH_HIBERNATION_POSSIBLE
+	def_bool n
+
+endmenu

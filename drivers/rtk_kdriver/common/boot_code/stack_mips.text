@@ -1,0 +1,28 @@
+
+stack_mips.o:     file format elf32-littlemips
+
+Disassembly of section .text:
+
+ffffffff80003000 <_test_pass>:
+ffffffff80003000:	1000ffff 	b	ffffffff80003000 <_test_pass>
+ffffffff80003004:	00000000 	nop
+ffffffff80003008:	beefbeef 	cache	0xf,-16657($s7)
+ffffffff8000300c:	beefbeef 	cache	0xf,-16657($s7)
+ffffffff80003010:	beefbeef 	cache	0xf,-16657($s7)
+ffffffff80003014:	beefbeef 	cache	0xf,-16657($s7)
+ffffffff80003018:	beefbeef 	cache	0xf,-16657($s7)
+ffffffff8000301c:	beefbeef 	cache	0xf,-16657($s7)
+
+ffffffff80003020 <_test_fail>:
+ffffffff80003020:	1000ffff 	b	ffffffff80003020 <_test_fail>
+ffffffff80003024:	00000000 	nop
+ffffffff80003028:	deaddead 	ldc3	$13,-8531($s5)
+ffffffff8000302c:	deaddead 	ldc3	$13,-8531($s5)
+ffffffff80003030:	deaddead 	ldc3	$13,-8531($s5)
+ffffffff80003034:	deaddead 	ldc3	$13,-8531($s5)
+ffffffff80003038:	deaddead 	ldc3	$13,-8531($s5)
+ffffffff8000303c:	deaddead 	ldc3	$13,-8531($s5)
+	...
+
+ffffffff80003ffc <_stack>:
+ffffffff80003ffc:	cafecafe                                ....

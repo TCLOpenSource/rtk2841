@@ -1,0 +1,200 @@
+/dts-v1/;
+
+#include <dt-bindings/gpio/gpio.h>
+
+/ {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	model = "LG Electronics, DTV SoC LG1156";
+	compatible = "lge,lg1156";
+	interrupt-parent = <&gic>;
+
+	memory@0 {
+		reg = <0x00000000 0x50000000>;
+	};
+
+	chosen {
+		bootargs = "";
+	};
+
+	cpus {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		cpu0: cpu@0 {
+			compatible = "arm,cortex-a15";
+			device_type = "cpu";
+			reg = <0>;
+			operating-points = <
+				1416000 1100000
+				1104000  930000
+				 912000  850000
+				 576000  800000
+			>;
+			clocks = <&clk_cpu>;
+			clock-names = "CLK";
+			clock-latency = <100000>;
+			cpu0-supply = <&reg_cpu>;
+		};
+		cpu1: cpu@1 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a15";
+			reg = <1>;
+		};
+	};
+
+	gic: interrupt-controller@f0001000 {
+		#interrupt-cells = <3>;
+
+		compatible = "arm,cortex-a15-gic";
+		interrupt-controller;
+		reg = <0xf0001000 0x1000>,
+		      <0xf0002000 0x1000>;
+	};
+
+	pmu {
+		compatible = "arm,cortex-a15-pmu";
+		interrupts = <0 86 4>,
+			     <0 87 4>;
+	};
+
+	timer {
+		compatible = "arm,armv7-timer";
+		interrupts = <1 13 0xf08>,
+		             <1 14 0xf08>;
+	};
+
+	ctrl_regs {
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		compatible = "simple-bus";
+		ranges;
+
+		zero_page: zero_page {
+			reg = <0x00000000 0x1000>;
+			static-map;
+		};
+		chip_ctrl: chip_ctrl {
+			reg = <0xc001c000 0x1000>;
+			static-map;
+		};
+		core_ctrl: core_ctrl {
+			reg = <0xfd300000 0x1000>;
+			static-map;
+		};
+	};
+
+	clocks {
+		clk_xtal: clk_xtal {
+			#clock-cells = <0>;
+
+			compatible = "fixed-clock";
+			clock-frequency = <24000000>;
+			clock-output-names = "XTAL";
+		};
+		clk_cpu: clk_cpu {
+			#clock-cells = <0>;
+
+			compatible = "lge,lg1156-clock";
+			clock-output-names = "CLK";
+			clocks = <&clk_xtal>;
+			clock-names = "XTAL";
+			npc-fix = <0x02>;
+			nsc-fix = <0x00>;
+		};
+		clk_bus: clk_bus {
+			#clock-cells = <0>;
+
+			compatible = "fixed-clock";
+			clock-frequency = <198000000>;
+			clock-output-names = "BUSCLK";
+		};
+	};
+
+	regulators {
+		compatible = "simple-bus";
+
+		reg_cpu: reg_cpu {
+			compatible = "lge,lg115x-regulator";
+			regulator-name = "cpu0";
+			regulator-min-microvolt = < 650000>;
+			regulator-max-microvolt = <1950000>;
+			regulator-boot-on;
+			regulator-always-on;
+		};
+	};
+
+	soc {
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		compatible = "simple-bus";
+		interrupt-parent = <&gic>;
+		ranges;
+
+		pms: pms {
+			compatible = "lge,lg1156-pms";
+			reg = <0xf7083e00 0x0100>,
+			      <0xf709a108 0x0010>;
+			status = "skip";
+		};
+
+		sdhci: mmc@ff000000 {
+			compatible = "lge,lg1156-sdhci";
+			reg = <0xff000000 0x1000>;
+			interrupts = <0 18 0>;
+		};
+
+		xhci0: usb@f5000000 {
+			compatible = "lge,lg115x-xhci", "xhci-platform";
+			reg = <0xf5000000 0x1000>;
+			interrupts = <0 19 0>;
+			status = "skip";
+		};
+
+		xhci1: usb@f6000000 {
+			compatible = "lge,lg115x-xhci", "xhci-platform";
+			reg = <0xf6000000 0x1000>;
+			interrupts = <0 21 0>;
+			status = "skip";
+		};
+
+		xhci2: usb@f2000000 {
+			compatible = "lge,lg115x-xhci", "xhci-platform";
+			reg = <0xf2000000 0x1000>;
+			interrupts = <0 23 0>;
+			status = "skip";
+		};
+
+		xhci3: usb@f3000000 {
+			compatible = "lge,lg115x-xhci", "xhci-platform";
+			reg = <0xf3000000 0x1000>;
+			interrupts = <0 41 0>;
+			status = "skip";
+		};
+		
+		eth0: ethernet@f4010000 {
+			compatible = "lge,lg115x-macb", "cdns,gem";
+			reg = <0xf4010000 0x1000>;
+			interrupts = <0 38 0>;
+			clocks = <&clk_bus>, <&clk_bus>;
+			clock-names = "hclk", "pclk";
+			phy-mode = "rmii";
+			/* Filled in by lxboot */
+			mac-address = [ 00 00 00 00 00 00 ];
+
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			phy0: ethernet-phy@3 {
+				compatible = "realtek,rtl8201f";
+				reg = <3>;
+				reset-gpios = <&gpio3 3 GPIO_ACTIVE_LOW>;
+			};
+		};
+	};
+
+	/include/ "lg1k.dtsi"
+};

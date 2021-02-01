@@ -1,0 +1,135 @@
+
+excp_handler_bev0_mips.o:     file format elf32-littlemips
+
+Disassembly of section .text:
+
+ffffffff80000180 <excp_handler_bev0_mips>:
+ffffffff80000180:	401a6000 	mfc0	$k0,$status
+ffffffff80000184:	401a4000 	mfc0	$k0,$vaddr
+ffffffff80000188:	401a7000 	mfc0	$k0,$epc
+	...
+ffffffff8000019c:	340000ff 	li	$zero,0xff
+	...
+ffffffff800001b0:	401b6800 	mfc0	$k1,$cause
+	...
+ffffffff800001d4:	34000011 	li	$zero,0x11
+	...
+ffffffff800001ec:	337a0400 	andi	$k0,$k1,0x400
+ffffffff800001f0:	13400005 	beqz	$k0,ffffffff80000208 <excp_handler_bev0_mips+0x88>
+ffffffff800001f4:	00000000 	nop
+ffffffff800001f8:	3c1a8000 	lui	$k0,0x8000
+ffffffff800001fc:	375a1048 	ori	$k0,$k0,0x1048
+ffffffff80000200:	10000027 	b	ffffffff800002a0 <HW_INT>
+ffffffff80000204:	00000000 	nop
+ffffffff80000208:	337a0800 	andi	$k0,$k1,0x800
+ffffffff8000020c:	13400005 	beqz	$k0,ffffffff80000224 <excp_handler_bev0_mips+0xa4>
+ffffffff80000210:	00000000 	nop
+ffffffff80000214:	3c1a8000 	lui	$k0,0x8000
+ffffffff80000218:	375a104c 	ori	$k0,$k0,0x104c
+ffffffff8000021c:	10000020 	b	ffffffff800002a0 <HW_INT>
+ffffffff80000220:	00000000 	nop
+ffffffff80000224:	337a1000 	andi	$k0,$k1,0x1000
+ffffffff80000228:	13400005 	beqz	$k0,ffffffff80000240 <excp_handler_bev0_mips+0xc0>
+ffffffff8000022c:	00000000 	nop
+ffffffff80000230:	3c1a8000 	lui	$k0,0x8000
+ffffffff80000234:	375a1050 	ori	$k0,$k0,0x1050
+ffffffff80000238:	10000019 	b	ffffffff800002a0 <HW_INT>
+ffffffff8000023c:	00000000 	nop
+ffffffff80000240:	337a2000 	andi	$k0,$k1,0x2000
+ffffffff80000244:	13400005 	beqz	$k0,ffffffff8000025c <excp_handler_bev0_mips+0xdc>
+ffffffff80000248:	00000000 	nop
+ffffffff8000024c:	3c1a8000 	lui	$k0,0x8000
+ffffffff80000250:	375a1054 	ori	$k0,$k0,0x1054
+ffffffff80000254:	10000012 	b	ffffffff800002a0 <HW_INT>
+ffffffff80000258:	00000000 	nop
+ffffffff8000025c:	337a4000 	andi	$k0,$k1,0x4000
+ffffffff80000260:	13400005 	beqz	$k0,ffffffff80000278 <excp_handler_bev0_mips+0xf8>
+ffffffff80000264:	00000000 	nop
+ffffffff80000268:	3c1a8000 	lui	$k0,0x8000
+ffffffff8000026c:	375a1058 	ori	$k0,$k0,0x1058
+ffffffff80000270:	1000000b 	b	ffffffff800002a0 <HW_INT>
+ffffffff80000274:	00000000 	nop
+ffffffff80000278:	337a8000 	andi	$k0,$k1,0x8000
+ffffffff8000027c:	13400005 	beqz	$k0,ffffffff80000294 <excp_handler_bev0_mips+0x114>
+ffffffff80000280:	00000000 	nop
+ffffffff80000284:	3c1a8000 	lui	$k0,0x8000
+ffffffff80000288:	375a105c 	ori	$k0,$k0,0x105c
+ffffffff8000028c:	10000004 	b	ffffffff800002a0 <HW_INT>
+ffffffff80000290:	00000000 	nop
+ffffffff80000294:	401a7000 	mfc0	$k0,$epc
+ffffffff80000298:	235a0004 	addi	$k0,$k0,4
+ffffffff8000029c:	42000018 	eret
+
+ffffffff800002a0 <HW_INT>:
+ffffffff800002a0:	27bdfffc 	addiu	$sp,$sp,-4
+ffffffff800002a4:	afa10000 	sw	$at,0($sp)
+ffffffff800002a8:	3c010001 	lui	$at,0x1
+ffffffff800002ac:	34219070 	ori	$at,$at,0x9070
+
+ffffffff800002b0 <scpu>:
+ffffffff800002b0:	8fa10000 	lw	$at,0($sp)
+ffffffff800002b4:	27bd0004 	addiu	$sp,$sp,4
+ffffffff800002b8:	8f5a0000 	lw	$k0,0($k0)
+ffffffff800002bc:	13400003 	beqz	$k0,ffffffff800002cc <DEFAULT>
+ffffffff800002c0:	00000000 	nop
+ffffffff800002c4:	03400008 	jr	$k0
+ffffffff800002c8:	00000000 	nop
+
+ffffffff800002cc <DEFAULT>:
+ffffffff800002cc:	42000018 	eret
+	...
+
+ffffffff80000400 <init_mips_cache>:
+ffffffff80000400:	400a8001 	mfc0	$t2,$config,1
+ffffffff80000404:	4080e000 	mtc0	$zero,$taglo
+ffffffff80000408:	4080e800 	mtc0	$zero,$taghi
+ffffffff8000040c:	4080e002 	mtc0	$zero,$taglo,2
+ffffffff80000410:	4080e802 	mtc0	$zero,$taghi,2
+
+ffffffff80000414 <invalid_dcache>:
+ffffffff80000414:	7d4b1280 	ext	$t3,$t2,10,3
+ffffffff80000418:	11600014 	beqz	$t3,ffffffff8000046c <invalid_icache>
+ffffffff8000041c:	00000000 	nop
+ffffffff80000420:	240e0002 	li	$t6,2
+ffffffff80000424:	016e5804 	sllv	$t3,$t6,$t3
+ffffffff80000428:	7d4c1340 	ext	$t4,$t2,13,3
+ffffffff8000042c:	240e0040 	li	$t6,64
+ffffffff80000430:	018e6004 	sllv	$t4,$t6,$t4
+ffffffff80000434:	7d4d11c0 	ext	$t5,$t2,7,3
+ffffffff80000438:	21ad0001 	addi	$t5,$t5,1
+ffffffff8000043c:	718d6002 	mul	$t4,$t4,$t5
+ffffffff80000440:	3c0e8000 	lui	$t6,0x8000
+ffffffff80000444:	01807825 	move	$t7,$t4
+ffffffff80000448:	bdc90000 	cache	0x9,0($t6)
+ffffffff8000044c:	21efffff 	addi	$t7,$t7,-1
+ffffffff80000450:	15e0fffd 	bnez	$t7,ffffffff80000448 <invalid_dcache+0x34>
+ffffffff80000454:	01cb7020 	add	$t6,$t6,$t3
+ffffffff80000458:	00000000 	nop
+ffffffff8000045c:	0000000f 	sync
+ffffffff80000460:	7d4b14c0 	ext	$t3,$t2,19,3
+ffffffff80000464:	11600011 	beqz	$t3,ffffffff800004ac <end_init_mips_cache>
+ffffffff80000468:	00000000 	nop
+
+ffffffff8000046c <invalid_icache>:
+ffffffff8000046c:	240e0002 	li	$t6,2
+ffffffff80000470:	016e5804 	sllv	$t3,$t6,$t3
+ffffffff80000474:	7d4c1580 	ext	$t4,$t2,22,3
+ffffffff80000478:	240e0040 	li	$t6,64
+ffffffff8000047c:	018e6004 	sllv	$t4,$t6,$t4
+ffffffff80000480:	7d4d1400 	ext	$t5,$t2,16,3
+ffffffff80000484:	21ad0001 	addi	$t5,$t5,1
+ffffffff80000488:	718d6002 	mul	$t4,$t4,$t5
+ffffffff8000048c:	3c0e8000 	lui	$t6,0x8000
+ffffffff80000490:	01807825 	move	$t7,$t4
+ffffffff80000494:	bdc80000 	cache	0x8,0($t6)
+ffffffff80000498:	21efffff 	addi	$t7,$t7,-1
+ffffffff8000049c:	15e0fffd 	bnez	$t7,ffffffff80000494 <invalid_icache+0x28>
+ffffffff800004a0:	01cb7020 	add	$t6,$t6,$t3
+ffffffff800004a4:	00000000 	nop
+ffffffff800004a8:	0000000f 	sync
+
+ffffffff800004ac <end_init_mips_cache>:
+ffffffff800004ac:	03400008 	jr	$k0
+ffffffff800004b0:	00000000 	nop
+	...
+ffffffff80000bfc:	cafecafe 	lwc2	$30,-13570($s7)

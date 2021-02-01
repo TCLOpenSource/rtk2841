@@ -1,0 +1,46 @@
+#ifndef __SCALER_VPQLEDDEV_H
+#define  __SCALER_VPQLEDDEV_H
+
+#include <scalercommon/vipCommon.h>
+#include <scalercommon/scalerDrvCommon.h>
+
+
+#define VPQ_LED_IOC_MAGIC 'l'
+
+typedef enum {
+	PQ_LED_DEV_NOTHING = 0,
+	PQ_LED_DEV_INIT_DONE,
+	PQ_LED_DEV_UNINIT,
+} PQ_LED_DEV_STATUS;
+
+
+enum vpq_led_ioc_cmd {
+	VPQ_LED_CMD_INIT = 0,
+	VPQ_LED_CMD_UNINIT = 1,
+	VPQ_LED_CMD_SET_LD_INIT = 2,
+	VPQ_LED_CMD_SET_LDEnable = 3,
+	VPQ_LED_CMD_SET_LDSetLUT = 4,
+	VPQ_LED_CMD_SET_LDEnablePixelCompensation = 5,
+	VPQ_LED_CMD_SET_LDCtrlDemoMode = 6,
+	VPQ_LED_CMD_SET_LDCtrlSPI = 7,
+	VPQ_LED_CMD_LDGetAPL = 8,
+	VPQ_LED_CMD_LDSetDBLUT = 9,
+};
+
+#define VPQ_LED_IOC_INIT								_IO(VPQ_LED_IOC_MAGIC, VPQ_LED_CMD_INIT)
+#define VPQ_LED_IOC_UNINIT								_IO(VPQ_LED_IOC_MAGIC, VPQ_LED_CMD_UNINIT)
+#define VPQ_LED_IOC_SET_LD_INIT							_IOW(VPQ_LED_IOC_MAGIC, VPQ_LED_CMD_SET_LD_INIT, HAL_LED_PANEL_INFO_T)
+#define VPQ_LED_IOC_SET_LDEnable						_IOW(VPQ_LED_IOC_MAGIC, VPQ_LED_CMD_SET_LDEnable, bool)
+#define VPQ_LED_IOC_SET_LDSetLUT						_IOW(VPQ_LED_IOC_MAGIC, VPQ_LED_CMD_SET_LDSetLUT, UINT8)
+#define VPQ_LED_IOC_SET_LDEnablePixelCompensation		_IOW(VPQ_LED_IOC_MAGIC, VPQ_LED_CMD_SET_LDEnablePixelCompensation, bool)
+#define VPQ_LED_IOC_SET_LDCtrlDemoMode					_IOW(VPQ_LED_IOC_MAGIC, VPQ_LED_CMD_SET_LDCtrlDemoMode, DRV_HAL_VPQ_LED_LDCtrlDemoMode)
+#define VPQ_LED_IOC_SET_LDCtrlSPI					_IOW(VPQ_LED_IOC_MAGIC, VPQ_LED_CMD_SET_LDCtrlSPI, UINT8)
+#define VPQ_LED_IOC_LDGetAPL						_IOR(VPQ_LED_IOC_MAGIC, VPQ_LED_CMD_LDGetAPL, UINT16)
+#define VPQ_LED_IOC_LDSetDBLUT						_IOW(VPQ_LED_IOC_MAGIC, VPQ_LED_CMD_LDSetDBLUT, KADP_LED_DB_LUT_T)
+
+
+void vpqled_HAL_VPQ_LED_LDCtrlSPI(unsigned char *LDCtrlSPI);
+unsigned char vpqled_get_LD_GetAPL_TV006(UINT16* BLValue);
+
+
+#endif

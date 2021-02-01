@@ -1,0 +1,166 @@
+/*
+ *Copyright (C) 2007-2013 Realtek Semiconductor Corporation.
+ */
+#ifndef __RTK_PCMCIA_PINMUX_H__
+#define __RTK_PCMCIA_PINMUX_H__
+
+
+
+#ifdef Mac5p_DEMO_PCB
+/*
+address 0 : AB28 ,  address 1 : AC28 , address 2 : AD29 ,  address 3 : AE31 , address 4 : AD27
+address 5 : AF32  ,  address 6 : AF30 , address 7 : AF29  , address 8 : AH27 , address 9 : AK31 ,
+address 10 : AM30 , address 11 : AL31 , address 12 : AG31 , address 13 : AJ30 , address 14 : AH28 ,
+*/
+
+#define PCMCIA_ADDRESS_0_REG   0xB8000860
+#define PCMCIA_ADDRESS_0_UP     23
+#define PCMCIA_ADDRESS_0_LOW  20
+
+#define PCMCIA_ADDRESS_1_REG   0xB800085C
+#define PCMCIA_ADDRESS_1_UP     7
+#define PCMCIA_ADDRESS_1_LOW  4
+
+#define PCMCIA_ADDRESS_2_REG   0xB800085C
+#define PCMCIA_ADDRESS_2_UP     23
+#define PCMCIA_ADDRESS_2_LOW  20
+
+#define PCMCIA_ADDRESS_3_REG   0xB8000858
+#define PCMCIA_ADDRESS_3_UP     7
+#define PCMCIA_ADDRESS_3_LOW  4
+
+#define PCMCIA_ADDRESS_4_REG   0xB8000858
+#define PCMCIA_ADDRESS_4_UP     23
+#define PCMCIA_ADDRESS_4_LOW  20
+
+#define PCMCIA_ADDRESS_5_REG   0xB8000854
+#define PCMCIA_ADDRESS_5_UP     7
+#define PCMCIA_ADDRESS_5_LOW  4
+
+#define PCMCIA_ADDRESS_6_REG   0xB8000854
+#define PCMCIA_ADDRESS_6_UP     23
+#define PCMCIA_ADDRESS_6_LOW  20
+
+#define PCMCIA_ADDRESS_7_REG   0xB8000850
+#define PCMCIA_ADDRESS_7_UP     7
+#define PCMCIA_ADDRESS_7_LOW  4
+
+#define PCMCIA_ADDRESS_8_REG   0xB8000844
+#define PCMCIA_ADDRESS_8_UP     31
+#define PCMCIA_ADDRESS_8_LOW  28
+
+#define PCMCIA_ADDRESS_9_REG   0xB8000840
+#define PCMCIA_ADDRESS_9_UP     15
+#define PCMCIA_ADDRESS_9_LOW  12
+
+#define PCMCIA_ADDRESS_10_REG   0xB800083C
+#define PCMCIA_ADDRESS_10_UP     23
+#define PCMCIA_ADDRESS_10_LOW  20
+
+#define PCMCIA_ADDRESS_11_REG   0xB8000840
+#define PCMCIA_ADDRESS_11_UP     31
+#define PCMCIA_ADDRESS_11_LOW  28
+
+#define PCMCIA_ADDRESS_12_REG   0xB8000850
+#define PCMCIA_ADDRESS_12_UP     23
+#define PCMCIA_ADDRESS_12_LOW  20
+
+#define PCMCIA_ADDRESS_13_REG   0xB8000844
+#define PCMCIA_ADDRESS_13_UP     15
+#define PCMCIA_ADDRESS_13_LOW  12
+
+#define PCMCIA_ADDRESS_14_REG   0xB8000848
+#define PCMCIA_ADDRESS_14_UP     31
+#define PCMCIA_ADDRESS_14_LOW  28
+
+/*
+data 0 : AA27 ,  data 1: Y27   , data 2 : Y29 ,  data 3 : AF25 ,
+data 4 : AH25 ,  data 5 : AH26  , data 6 : AJ27  , data 7 : AL29  ,
+*/
+#define PCMCIA_DATA_0_REG   0xB8000860
+#define PCMCIA_DATA_0_UP     7
+#define PCMCIA_DATA_0_LOW  4
+
+#define PCMCIA_DATA_1_REG   0xB8000864
+#define PCMCIA_DATA_1_UP     23
+#define PCMCIA_DATA_1_LOW  20
+
+#define PCMCIA_DATA_2_REG   0xB8000864
+#define PCMCIA_DATA_2_UP     7
+#define PCMCIA_DATA_2_LOW  4
+
+#define PCMCIA_DATA_3_REG   0xB8000830
+#define PCMCIA_DATA_3_UP     15
+#define PCMCIA_DATA_3_LOW  12
+
+#define PCMCIA_DATA_4_REG   0xB8000834
+#define PCMCIA_DATA_4_UP     31
+#define PCMCIA_DATA_4_LOW  28
+
+#define PCMCIA_DATA_5_REG   0xB8000834
+#define PCMCIA_DATA_5_UP     15
+#define PCMCIA_DATA_5_LOW  12
+
+#define PCMCIA_DATA_6_REG   0xB8000838
+#define PCMCIA_DATA_6_UP     31
+#define PCMCIA_DATA_6_LOW  28
+
+#define PCMCIA_DATA_7_REG   0xB8000838
+#define PCMCIA_DATA_7_UP     15
+#define PCMCIA_DATA_7_LOW  12
+
+/*
+reg : AD28  ,  ce1  : AL30  , oe        : AK30 ,  we : AH30 ,
+iord : AM31 ,  iowr : AL32  , inpack0 : AE30 ,  wait0 : AE28 ,
+reset0 : AF31 , CD0 : AG24 , ireq0 : AF24
+*/
+
+#define PCMCIA_REG_REG   0xB800085C
+#define PCMCIA_REG_UP     31
+#define PCMCIA_REG_LOW  28
+
+#define PCMCIA_CE1_REG   0xB800083C
+#define PCMCIA_CE1_UP     31
+#define PCMCIA_CE1_LOW  28
+
+#define PCMCIA_OE_REG   0xB800083C
+#define PCMCIA_OE_UP     15
+#define PCMCIA_OE_LOW  12
+
+#define PCMCIA_WE_REG   0xB8000848
+#define PCMCIA_WE_UP     15
+#define PCMCIA_WE_LOW  12
+
+#define PCMCIA_IORD_REG   0xB800083C
+#define PCMCIA_IORD_UP     7
+#define PCMCIA_IORD_LOW  4
+
+#define PCMCIA_IOWR_REG   0xB8000840
+#define PCMCIA_IOWR_UP     23
+#define PCMCIA_IOWR_LOW  20
+
+#define PCMCIA_INPACK0_REG   0xB8000858
+#define PCMCIA_INPACK0_UP     15
+#define PCMCIA_INPACK0_LOW  12
+
+#define PCMCIA_WAIT0_REG   0xB8000858
+#define PCMCIA_WAIT0_UP     31
+#define PCMCIA_WAIT0_LOW  28
+
+#define PCMCIA_RESET0_REG   0xB8000854
+#define PCMCIA_RESET0_UP     15
+#define PCMCIA_RESET0_LOW  12
+
+#define PCMCIA_CD0_REG   0xB8000830
+#define PCMCIA_CD0_UP     23
+#define PCMCIA_CD0_LOW  20
+
+#define PCMCIA_IREQ0_REG   0xB8000830
+#define PCMCIA_IREQ0_UP     31
+#define PCMCIA_IREQ0_LOW  28
+#endif
+
+
+
+#endif
+

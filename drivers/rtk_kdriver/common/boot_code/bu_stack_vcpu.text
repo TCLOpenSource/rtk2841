@@ -1,0 +1,59 @@
+
+bu_stack_vcpu.o:     file format elf32-bigmips
+
+
+Disassembly of section .text:
+
+80103000 <_test_pass>:
+80103000:	1000000f 	b	80103040 <bu_test_pass>
+80103004:	00000000 	nop
+80103008:	beefbeef 	cache	0xf,-16657(s7)
+8010300c:	beefbeef 	cache	0xf,-16657(s7)
+80103010:	beefbeef 	cache	0xf,-16657(s7)
+80103014:	beefbeef 	cache	0xf,-16657(s7)
+80103018:	beefbeef 	cache	0xf,-16657(s7)
+8010301c:	beefbeef 	cache	0xf,-16657(s7)
+
+80103020 <_test_fail>:
+80103020:	10000012 	b	8010306c <bu_test_fail>
+80103024:	00000000 	nop
+80103028:	deaddead 	0xdeaddead
+8010302c:	deaddead 	0xdeaddead
+80103030:	deaddead 	0xdeaddead
+80103034:	deaddead 	0xdeaddead
+80103038:	deaddead 	0xdeaddead
+8010303c:	deaddead 	0xdeaddead
+
+80103040 <bu_test_pass>:
+80103040:	3c08a000 	lui	t0,0xa000
+80103044:	35082100 	ori	t0,t0,0x2100
+80103048:	8d090020 	lw	t1,32(t0)
+8010304c:	8d0a000c 	lw	t2,12(t0)
+80103050:	24010001 	li	at,1
+80103054:	15210003 	bne	t1,at,80103064 <bu_test_pass+0x24>
+80103058:	00000000 	nop
+8010305c:	01400008 	jr	t2
+80103060:	00000000 	nop
+80103064:	01400008 	jr	t2
+80103068:	00000000 	nop
+
+8010306c <bu_test_fail>:
+8010306c:	3c0bdead 	lui	t3,0xdead
+80103070:	356bdead 	ori	t3,t3,0xdead
+80103074:	3c08a000 	lui	t0,0xa000
+80103078:	35082100 	ori	t0,t0,0x2100
+8010307c:	8d090020 	lw	t1,32(t0)
+80103080:	8d0a000c 	lw	t2,12(t0)
+80103084:	24010001 	li	at,1
+80103088:	15210004 	bne	t1,at,8010309c <bu_test_fail+0x30>
+8010308c:	00000000 	nop
+80103090:	ad0b0004 	sw	t3,4(t0)
+80103094:	01400008 	jr	t2
+80103098:	00000000 	nop
+8010309c:	ad0b0004 	sw	t3,4(t0)
+801030a0:	01400008 	jr	t2
+801030a4:	00000000 	nop
+	...
+
+80103ffc <_stack>:
+80103ffc:	cafecafe                                ....

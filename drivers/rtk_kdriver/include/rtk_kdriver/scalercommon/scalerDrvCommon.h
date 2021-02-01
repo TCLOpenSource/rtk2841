@@ -1,0 +1,805 @@
+/***************************************************************************
+                          scalerDrv.c  -  description
+                             -------------------
+    begin                : Mon Dec 12 2008
+    copyright            : (C) 2008 by Joshlin
+    email                : joshlin@realtek.com
+ ***************************************************************************/
+
+#ifndef _COMMON_SCALERDRV_H__
+#define _COMMON_SCALERDRV_H__
+//#include <VideoRPC_System.h>
+
+#include <scalercommon/scalerCommon.h>
+#include <mach/rtk_platform.h>
+
+enum
+{
+	SCALERIOC_INIT = 0,
+	SCALERIOC_DEINIT,
+	SCALERIOC_ALLOBUFFER,
+	SCALERIOC_FREEBUFFER,
+	SCALERIOC_GETCOLORHISTOGRAM,
+	SCALERIOC_GETCOLORHISTOGRAM_SUB,
+
+
+SCALERIOC_SETADAPTIVE3D,
+SCALERIOC_GETYCSEP,
+SCALERIOC_SETYCSEP,
+SCALERIOC_CLRMOTIONCNT,
+SCALERIOC_SETDISPINFO,
+SCALERIOC_SETSRCINFO,
+SCALERIOC_SETTVSCANMODE,
+SCALERIOC_GETFH1DFLAG,
+SCALERIOC_GETPRINT3DFLAG,
+SCALERIOC_SETPRINT3DFLAG,
+// oliver-
+//#if NEW_VOINFO_INTERFACE
+SCALERIOC_SETVOINFOADDR,
+SCALERIOC_GETVOINFO,
+SCALERIOC_NEWVOINFO,
+SCALERIOC_REQUESTVOINFO,
+SCALERIOC_SENDASPECTRATIO,
+SCALERIOC_GET3DDETECTINFO,
+
+SCALERIOC_SENDRATIOSMOOTHTOGGLEINFO,
+SCALERIOC_SENDSMOOTHTOGGLESTATE,
+SCALERIOC_SENDSCALERDATAMODE,
+SCALERIOC_SENDSMOOTHTOGGLEUPDATEFLAG,
+SCALERIOC_SENDVGIPRATIO,
+SCALERIOC_SENDPANELPARAMTERINFO,
+SCALERIOC_GETSMOOTHTOGGLEUPDATEFLAG,
+SCALERIOC_SENDSCALERMEMORYINFO,
+
+// oliver-
+//#else
+SCALERIOC_GETMVDINFO,
+SCALERIOC_SETMVDINFO,
+// oliver-
+//#endif
+SCALERIOC_SETHISTFLAG,
+SCALERIOC_GETHISTFLAG,
+SCALERIOC_SETRTNR_Y,
+SCALERIOC_SETRTNR_C,
+SCALERIOC_UPDATERTNR_Y,
+SCALERIOC_UPDATERTNR_C,
+SCALERIOC_CLEARMPEGNRDATA,
+SCALERIOC_GET3DTABLEINDEX,
+SCALERIOC_SET3DTABLEINDEX,
+SCALERIOC_SETAUTOMAFLAG,
+SCALERIOC_GETAUTOMAFLAG,
+//#ifdef CONFIG_VBI_CC
+SCALERIOC_VBICCPLAY,
+SCALERIOC_VBICCSTOP,
+SCALERIOC_VBICCSETBUF,
+SCALERIOC_VBITTXSETBUF,
+SCALERIOC_VBI_GETWSS,
+//#endif // #ifdef CONFIG_VBI_CC
+SCALERIOC_SET_MPEGNR,
+SCALERIOC_GET_MPEGNR,
+SCALERIOC_GETAUTONR,
+SCALERIOC_SETAUTONR,
+SCALERIOC_GETAUTONR_by_Low_Mid_High,
+SCALERIOC_SETAUTONR_by_Low_Mid_High,
+SCALERIOC_GETAUTONR_Low_Mid_High,
+SCALERIOC_SETAUTONR_Low_Mid_High,
+SCALERIOC_SETDNR,
+SCALERIOC_UPDATEDNR,
+SCALERIOC_SETBRIGHTNESS,
+SCALERIOC_SETCONTRAST,
+SCALERIOC_SET_TABLENRSPATIAL,
+SCALERIOC_GET_TABLENRSPATIAL,
+SCALERIOC_SET_PICTURE_MODE,
+SCALERIOC_SET_RGB2YUV_GAIN,
+SCALERIOC_SET_RGB2YUV_OFFSET,
+SCALERIOC_CORINGLV,
+SCALERIOC_SEND_DISP_READY_IRC,
+// Erin add for AT engineer mode 100414
+SCALERIOC_VIP_TABLE_STRUCT,
+
+SCALERIOC_SET_CORRECTIONBIT1_DUTY_DEBUG,
+SCALERIOC_SETAUTOMA_VD_3D,
+SCALERIOC_GETAUTOMA_VD_3D,
+
+SCALERIOC_GETVONOSIGNALFLAG,
+
+// Erin 100624
+SCALERIOC_SETAUTOMADBFLAG,
+SCALERIOC_GETAUTOMADBFLAG,
+SCALERIOC_MAIN_TOTAL_PIXEL_INV,
+
+//===============planck add for TV AutoNR==============
+SCALERIOC_GET_TABLENRTEMPORAL,
+SCALERIOC_GET_TABLE_RTNR_Y,
+SCALERIOC_GET_TABLE_RTNR_C,
+
+SCALERIOC_GET_TABLE_UnShpMask,
+SCALERIOC_GET_TABLE_SCALEPK,
+SCALERIOC_GET_TABLE_SHP1D2D_EGSM,
+SCALERIOC_SENDVFLIP,
+SCALERIOC_SETVOINFO,
+//==============================================
+SCALERIOC_SET_MMAP_MODE,
+SCALERIOC_FREE_MMAP_ALLOBUF,
+SCALERIOC_GETBUFFER,
+SCALERIOC_VBITT_DUMP_DMA,
+SCALERIOC_VBITT_FUNCTION,
+
+SCALERIOC_GET_TABLE_SNR_Y,
+SCALERIOC_GET_TABLE_SNR_C,
+//SCALERIOC_SET_TABLE_TV_AutoNR_Signal_Status,
+
+SCALERIOC_VO_ROTATE_ENABLE,
+SCALERIOC_VIDEO_DELAY_ENABLE,
+SCALERIOC_VIDEO_FILMMODE_ENABLE,
+
+SCALERIOC_VBI_ENABLE,
+SCALERIOC_VO_SE_SCALING_ENABLE,
+
+//===============================================
+SCALERIOC_SET_DNR_LEVEL_TABLE,
+SCALERIOC_SENDZOOM,
+SCALERIOC_SENDPOSFINETUNE,
+SCALERIOC_SET_DOUBLEBUF,
+SCALERIOC_SETKBFLAG,
+SCALERIOC_SETKBINFO,
+
+SCALERIOC_SETDISP3DINFO,
+
+SCALERIOC_PIN_BL_ADJ,
+SCALERIOC_PIN_BL_ON_OFF,
+SCALERIOC_BACKLIGHT_ON,
+SCALERIOC_IS_INCREASE_MODE,
+SCALERIOC_DCR_MAX_VALUE,
+SCALERIOC_DCR_TABLE,
+SCALERIOC_DCR_ON_OFF,
+SCALERIOC_BL_LV_FROM_USER,
+SCALERIOC_BL_LV_ACT_MAX,
+SCALERIOC_BL_LV_ACT_MIN,
+SCALERIOC_INIT3DFMTDETECT,
+SCALERIOC_GET3DDETECTFMT,
+SCALERIOC_SET_MPEGNR_H,
+SCALERIOC_SET_MPEGNR_V,
+SCALERIOC_SET_TABLE_NTSC_3D,
+SCALERIOC_SET_TABLE_PAL_3D,
+
+SCALERIOC_SET_TV_SCAN_STATUS,
+
+SCALERIOC_GET_TABLEDCTI,
+//SCALERIOC_GET_INTRA_RANGE,
+
+SCALERIOC_SET_2D3D_CVT_MODE,
+SCALERIOC_SET_2D3D_HORI_DEC_MODE,
+SCALERIOC_SET_3D_PR_ENTER_3DDMA,
+
+SCALERIOC_GETTVCHECK3DFLAG,
+SCALERIOC_SETTVCHECK3DFLAG,
+
+
+SCALERIOC_GET_ICM_Global_Sat,
+SCALERIOC_GET_Scaler_FIR_H,
+SCALERIOC_GET_Scaler_FIR_V,
+
+SCALERIOC_SET_PANEL_INFO,
+
+SCALERIOC_GET_Peaking_POS_RANGE_MAX,
+SCALERIOC_GET_Peaking_NEG_RANGE_MAX,
+SCALERIOC_GET_Peaking_Coring,
+SCALERIOC_GET_Peaking_Level,
+
+
+SCALERIOC_SET_TVAUTONR_Mode,
+SCALERIOC_GET_TVAUTONR_Mode,
+
+SCALERIOC_SET_NRAVGCOUNT,
+SCALERIOC_GET_NRAVGCOUNT,
+SCALERIOC_GETDNR_log,
+SCALERIOC_SETDNR_log,
+SCALERIOC_GETRTNR_log,
+SCALERIOC_SETRTNR_log,
+SCALERIOC_GETSNR_log,
+SCALERIOC_SETSNR_log,
+SCALERIOC_GETINR_log,
+SCALERIOC_SETINR_log,
+
+SCALERIOC_GET_TABLE_HMCNR,
+SCALERIOC_GET_TABLE_VerticalNR,
+
+//SCALERIOC_GETDNRTABLE,		// move to system info and replace by PQA table, elieli
+//SCALERIOC_SETDNRTABLE,		// move to system info and replace by PQA table, elieli
+
+SCALERIOC_UPDATE_ACTIVE_BACKLIGHT_TABLE,
+SCALERIOC_SET_COEFF_BY_Y,
+SCALERIOC_SET_NR_TABLE32,
+SCALERIOC_SET_NR_TABLE8,
+ //SCALERIOC_SET_PQA_TABLE_OFFSET_TEMP,     // move to share memory access struct, elieli
+SCALERIOC_SET_TSB_style_ON,		//20120426 roger
+SCALERIOC_GET_NR_style,
+SCALERIOC_SET_NR_style,		//rock :: NR style
+
+SCALERIOC_SET_OPEN_CELL_PANEL_OD_ON,
+SCALERIOC_SET_YC2D3D,
+SCALERIOC_Set_New_DCCmode,
+
+SCALERIOC_VIP_ICM_TABLE,
+
+SCALERIOC_Set_Dcr_Panasonic,
+
+
+SCALERIOC_GET_DEBUG_AUTO_NR,
+SCALERIOC_SET_DEBUG_AUTO_NR,
+
+SCALERIOC_GET_DEBUG_VD_NOISE,
+SCALERIOC_SET_DEBUG_VD_NOISE,
+SCALERIOC_GET_DEBUG_RTNR_MAD,
+SCALERIOC_SET_DEBUG_RTNR_MAD,
+SCALERIOC_GET_DEBUG_HISTOGRAM_MEAN,
+SCALERIOC_SET_DEBUG_HISTOGRAM_MEAN,
+
+SCALERIOC_SET_MDOM_VI_WH,//bit 31:16 wiwth, bit15:0 height
+
+//20130706 added by Diane for Dynamic Peaking Display
+SCALERIOC_SET_Mem_Edge_AutoPk_data,//yuan::add Edge_peaking
+SCALERIOC_GET_RTNR_MAD_count_Y_sum_avg,
+SCALERIOC_GET_DCC_Histogram_Mean_value,
+
+//20130820 Elsie: add for RTNR K force
+SCALERIOC_SET_RTNR_K_FORCE,
+SCALERIOC_SET_SRGB_HUE_SAT,
+
+//SCALERIOC_SET_DisplayInformation_table,
+
+//======TPV ambiligh sensor=======
+SCALERIOC_Set_Profile_RGB_Data_Flag_V,
+SCALERIOC_Get_Profile_RGB_Data_Flag_V,
+SCALERIOC_Get_Profile_R_Data_V,
+SCALERIOC_Get_Profile_G_Data_V,
+SCALERIOC_Get_Profile_B_Data_V,
+SCALERIOC_Set_Profile_RGB_Data_Flag_H,
+SCALERIOC_Get_Profile_RGB_Data_Flag_H,
+SCALERIOC_Get_Profile_R_Data_H,
+SCALERIOC_Get_Profile_G_Data_H,
+SCALERIOC_Get_Profile_B_Data_H,
+//===================================
+//======= TPV new DCR=========
+SCALERIOC_SET_DCR_DEFAULT,
+//=================================
+
+SCALERIOC_SET_VIP_QUALITY_INIT,
+SCALERIOC_SET_VIP_PICMODE_INIT,
+
+SCALERIOC_GET_Scaler_FIR_H_8TAP,
+SCALERIOC_GET_Scaler_FIR_V_6TAP,
+
+SCALERIOC_VIP_TV003_share_memory_table,
+
+SCALERIOC_VIP_system_info_structure,//VIP for video fw system fw info, CSFC
+SCALERIOC_VIP_SMARTPIC_CLUS, // VIP for SMARTPIC_CLUS
+
+SCALERIOC_VIP_TABLE_CUSTOM_STRUCT,
+SCALERIOC_SENDZOOMINFO,//rika 20140627 added for fpp tcl zoom api
+SCALERIOC_GETZOOMSTATE,//rika 20140714 added for fpp tcl zoom api
+//#ifdef ENABLE_SE_ROTATE_M_DOMAIN_BLOCK_MODE
+SCALERIOC_SEND_ROTATE_INFO_VI_BLOCK_READ,
+//#endif
+SCALERIOC_GET_V_UZD_BUFFER_MODE,//rika 20141021 added for uzd buffer_mode
+SCALERIOC_VBIVPSSETBUF,
+SCALERIOC_VBICGMSENABLE,
+SCALERIOC_GAMMA_ENABLE_PATCH,
+SCALERIOC_SETSMOOTHENABLE,//rika 20150109 added
+SCALERIOC_SET_MDOMAIN_COMPRESSION_ENABLE,
+SCALERIOC_SET_DC2H_SWMODE_ENABLE,
+//#ifdef RUN_MERLIN_MEMC_ENABLE
+//======MEMC RPC======
+SCALERIOC_MEMC_INITIALIZATION,
+SCALERIOC_MEMC_SETMOTIONCOMP,
+SCALERIOC_MEMC_SETBLURLEVEL,
+SCALERIOC_MEMC_SETJUDDERLEVEL,
+SCALERIOC_MEMC_MOTIONCOMPONOFF,
+SCALERIOC_MEMC_LOWDELAYMODE,
+SCALERIOC_MEMC_SETRGBYUVMode,
+SCALERIOC_MEMC_GETFRAMEDELAY,
+SCALERIOC_MEMC_SETVIDEOBLOCK,
+SCALERIOC_MEMC_SETTRUEMOTIONDEMO,
+SCALERIOC_MEMC_GETFIRMWAREVERSION,
+SCALERIOC_MEMC_SETBYPASSREGION,
+SCALERIOC_MEMC_SETREVERSECONTROL,
+SCALERIOC_MEMC_FREEZE,
+SCALERIOC_MEMC_SETDEMOBAR,
+SCALERIOC_MEMC_SETINOUTUSECASE,
+SCALERIOC_MEMC_SETINPUTOUTPUTFORMAT,
+SCALERIOC_MEMC_SETINPUTOUTPUTRESOLUTION,
+//SCALERIOC_MEMC_SETINPUTFRAMERATE,
+//SCALERIOC_MEMC_SETOUTPUTFRAMERATE,
+SCALERIOC_MEMC_SETINOUTPUTFRAMERATE,
+SCALERIOC_MEMC_SETMEMCFRAMEREPEATENABLE,
+SCALERIOC_MEMC_SETMEMCINOUTMODE,
+SCALERIOC_MEMC_SETCINEMAMODE,
+SCALERIOC_MEMC_INSTANBOOT_INITPHASETABLE,
+//===== HDR DolbuVision ===
+SCALERIOC_GET_HDMI_HDR_FRAMEINFO,
+SCALERIOC_GET_OTT_HDR_FRAMEINFO,
+//=====END HDR DolbuVision  RPC====
+SCALERIOC_SEND_VO_OVERSCAN_INFO,
+//#endif
+SCALERIOC_SET_RGB2YUV_TRIGGER,
+SCALERIOC_SENDZORDER,
+SCALERIOC_SMOOTHTOGGLE_SHARE_INFO,
+SCALERIOC_SET_GAMMA,
+/* === checksum ========== */
+SCALERIOC_VIP_TABLE_CRC_STRUCT,
+/*==========================*/
+SCALERIOC_VIP_FW_FILM,
+SCALERIOC_ADAPTIVE_STREAM_FLAG,
+SCALERIOC_VIP_SET_DCC_FORCE_UPDATE,
+SCALERIOC_I2RND_SET_BUFFER,
+SCALERIOC_I2RND_SET_APVR_INFO,
+SCALERIOC_PST_SET_BUFFER,
+SCALERIOC_WB_MODE_FLAG,	//Send white balance mdoe to video //WOSQRTK-7731
+//SCALERIOC_VIP_PQ_DEVICE,
+SCALERIOC_I2RND_SEND_TABLE_IDX,
+SCALERIOC_SMOOTHTOGGLE_SHAREMEMORY_SYNC_FALG,//This is for vo smooth toggle share memory sync finish flag
+SCALERIOC_SMOOTHTOGGLE_SHIFTXY_SHAREMEMORY_SYNC_FALG,
+VO_RUN_SCALER_FLAG,
+SCALERIOC_DM_CONNECT_FLAG,
+SCALERIOC_I3DDMA_FORMAT_CHANGE_SHAREMEMORY_FLAG,//For i3dddma format change condition
+SCALERIOC_VBI_SHAREMEMORY_DATA,
+SCALERIOC_SET_IV2PV_DELAY,
+//Dump register
+SCALERIOC_DUMP_REGISTER_COUNTER,
+SCALERIOC_DUMP_REGISTER_INFO,
+
+SCALERIOC_VIP_RPC_TABLE_STRUCT,
+SCALERIOC_VIP_RPC_system_info_structure,
+SCALERIOC_VIP_RPC_SMARTPIC_CLUS,
+SCALERIOC_DRIVER_CONFIG_INFO,//driver config
+
+SCALERIOC_DUAL_CHANNEL_FLAG,  //hbbtv dual channel flag
+
+SCALERIOC_LATESTITEM,
+/***** keep SCALERIOC_LATESTITEM be the lastest one!*****/
+};
+
+
+typedef struct _PANEL_INFO
+{
+	unsigned int ulVTotal;
+	unsigned int ulDEN_STA_VPOS;
+	unsigned int ulDEN_END_VPOS;
+	unsigned int ul3DPanelType;		// 3D panel type: 0:2D only, 1:SG, 2:PR
+	unsigned int ulPanelVflip;
+} PANEL_INFO;
+
+
+
+typedef struct _VIDEO_SCALER_MESSAGE
+{
+	unsigned int msgType;
+	unsigned int msgSubType;
+	unsigned int msgIntData;
+	unsigned int msgBodyByteSize;
+	unsigned int msgDataPtrAddr;
+	unsigned int isValidate;
+	unsigned int isSmoothtoggle;
+} VIDEO_SCALER_MESSAGE;
+
+
+enum PresetModeDef
+{
+	_MODE_640x350_70HZ = 0,			// Mode 00:
+	_MODE_640x350_85HZ,				// Mode 01:
+	_MODE_640x400_56HZ,				// Mode 02:
+	_MODE_640x400_70HZ,				// Mode 03:
+	_MODE_640x400_85HZ,				// Mode 04:
+	_MODE_720x400_50HZ,				// Mode 05:
+	_MODE_720x400_70HZ,				// Mode 06:
+	_MODE_720x400_85HZ,				// Mode 07:
+	_MODE_720x480_60HZ,				// Mode 08:
+	_MODE_640x480_50HZ,				// Mode 09:
+	_MODE_640x480_60HZ,				// Mode 10:
+	_MODE_640x480_67HZ,				// Mode 11:
+	_MODE_640x480_70HZ,				// Mode 12:
+	_MODE_640x480_72HZ,				// Mode 13:
+	_MODE_640x480_75HZ,				// Mode 14:
+	_MODE_640x480_85HZ,				// Mode 15:
+	_MODE_800x600_50HZ,				// Mode 16:
+	_MODE_800x600_56HZ,				// Mode 17:
+	_MODE_800x600_60HZ,				// Mode 18:
+	_MODE_800x600_72HZ,				// Mode 19:
+	_MODE_800x600_75HZ,				// Mode 20:
+	_MODE_800x600_85HZ,				// Mode 21:
+	_MODE_832x624_75HZ,				// Mode 22:
+	_MODE_1024x768_50HZ,				// Mode 23:
+	_MODE_1024x768_60HZ,				// Mode 24:
+	_MODE_1024x768_66HZ,				// Mode 25:
+	_MODE_1024x768_70HZ,				// Mode 26:
+	_MODE_1024x768_75HZ,				// Mode 27:
+	_MODE_1024x768_85HZ,				// Mode 28:
+	_MODE_1152x864_60HZ,				// Mode 29:
+	_MODE_1152x864_75HZ,				// Mode 30:
+	_MODE_1152x870_75HZ,				// Mode 31:
+	_MODE_1152x900_66HZ,				// Mode 32:
+	_MODE_1280x720_50HZ,				// Mode 33:
+	_MODE_1280x720_60HZ,				// Mode 34:
+	_MODE_1280x720_60HZ_RB,			// Mode 35:
+	_MODE_1280x720_85HZ,				// Mode 36:
+	_MODE_1280x768_50HZ,				// Mode 37:
+	_MODE_1280x768_60HZ,				// Mode 38:
+	_MODE_1280x768_60HZ_RB,			// Mode 39:
+	_MODE_1280x768_75HZ,				// Mode 40:
+	_MODE_1280x768_85HZ,				// Mode 41:
+	_MODE_1280x800_60HZ,				// Mode 42:
+	_MODE_1280x800_60HZ_RB,			// Mode 43:
+	_MODE_1280x800_75HZ,				// Mode 44:
+	_MODE_1280x960_50HZ,				// Mode 45:
+	_MODE_1280x960_60HZ,				// Mode 46:
+	_MODE_1280x960_75HZ,				// Mode 47:
+	_MODE_1280x960_85HZ,				// Mode 48:
+	_MODE_1280x1024_50HZ,			// Mode 49:
+	_MODE_1280x1024_60HZ,			// Mode 50:
+	_MODE_1280x1024_60HZ_RB,			// Mode 51:
+	_MODE_1280x1024_72HZ,			// Mode 52:
+	_MODE_1280x1024_75HZ,			// Mode 53:
+	_MODE_1280x1024_85HZ,			// Mode 54:
+	_MODE_1360x768_60HZ,				// Mode 55:
+	_MODE_1360x768_60HZ_RB,			// Mode 56:
+	_MODE_1366x768_60HZ,				// Mode 57:	//VGA1366x768@60
+	_MODE_1400x1050_50HZ,			// Mode 58:
+	_MODE_1400x1050_60RHZ,			// Mode 59:(Reduced Blanking)
+	_MODE_1400x1050_60HZ,			// Mode 60:
+	_MODE_1400x1050_75HZ,			// Mode 61:
+	_MODE_1440x900_60HZ,				// Mode 62:
+	_MODE_1440x900_60RHZ,			// Mode 63:(Reduced Blanking)
+	_MODE_1440x900_75HZ,				// Mode 64:
+	_MODE_1440x900_85HZ,				// Mode 65:
+	_MODE_1600x1200_50HZ,			// Mode 66:
+	_MODE_1600x1200_60HZ,			// Mode 67:
+	_MODE_1600x1200_65HZ,			// Mode 68:
+	_MODE_1600x1200_70HZ,			// Mode 69:
+	_MODE_1600x1200_75HZ,			// Mode 70:
+	_MODE_1600x1200_85HZ,			// Mode 71:
+
+	_MODE_1680x1050_50HZ,			// Mode 72:
+	_MODE_1680x1050_60HZ,			// Mode 73:
+	_MODE_1680x1050_60RHZ,			// Mode 74:(Reduced Blanking)
+	_MODE_1680x1050_75HZ,			// Mode 75:
+	_MODE_1680x1050_85HZ,			// Mode 76:
+	_MODE_1920x1080_50HZ,			// Mode 77:
+	_MODE_1920x1080_60HZ,			// Mode 78:
+	_MODE_1920x1080_60HZ_138,		// Mode 79:(Reduced Blanking)
+	_MODE_1920x1080_60HZ_148,		// Mode 80:(Reduced Blanking)
+	_MODE_1920x1080_75HZ,			// Mode 81:
+
+
+	_MODE_VGA_480I,					// Mode 82: RGB 480i
+	_MODE_VGA_576I,					// Mode 83: RGB 576i
+	_MODE_VGA_480P,					// Mode 84: RGB 480p
+	_MODE_VGA_576P,					// Mode 85: RGB 576p
+	_MODE_VGA_720P50,					// Mode 86: RGB 720px50Hz
+	_MODE_VGA_720P60,					// Mode 87: RGB 720px60Hz
+	_MODE_VGA_1080I25,				// Mode 88: RGB 1080ix50Hz
+	_MODE_VGA_1080I30,				// Mode 89: RGB 1080ix60Hz
+	_MODE_VGA_1080P50,   				// Mode 90: VGA 1920x1080ix50HZ (802R) //CSW+ 0971001
+	_MODE_VGA_1080P60,	 			// Mode 91: VGA 1920x1080ix60HZ (802R) //CSW+ 0971001
+	//[Code Sync][AlanLi][0980527][1]
+	_MODE_848x480_60HZ,
+	_MODE_1600x900_60HZ_RB,
+	//add MAC timing
+	_MODE_1024x576_60HZ,				// Mode 92:for MAC
+	_MODE_1920x1080_60Hz_173MAC,	// Mode 93:for MAC
+	//[Code Sync][AlanLi][0980527][1][end]
+	_MODE_PC_TIMING_END = _MODE_1920x1080_60Hz_173MAC,	//93 By Gilbert(2009/6/19) Set the end point of PC Timing
+
+//for YPbPr & Video8
+	_MODE_480I,						// Mode 94:
+	_MODE_576I,						// Mode 95:
+	_MODE_480P,						// Mode 96: YPbPr  720x 480px50HZ (802R)
+	_MODE_576P,						// Mode 97: YPbPr  720x 576px50HZ (802R)
+	_MODE_720P50,						// Mode 98: YPbPr 1280x 720px50HZ
+	_MODE_720P60,						// Mode 99: YPbPr 1280x 720px60HZ (802R)
+	_MODE_1080I25,						// Mode 100: YPbPr 1920x1080ix50HZ (802R)
+	_MODE_1080I30,						// Mode 101: YPbPr 1920x1080ix60HZ (802R)
+	_MODE_1080P50,					// Mode 102: YPbPr 1920x1080px50HZ (802R)
+	_MODE_1080P60,					// Mode 103:  YPbPr 1920x1080px60HZ (802R)
+
+	// CSW+ 0971225 Add YPbPr timing 1080P/25HZ/24HZ/23.97HZ/29.97HZ/30HZ
+	_MODE_1080P23,					// Mode 104: YPbPr 1920x1080px23.976HZ (802R)
+	_MODE_1080P24,					// Mode 105: YPbPr 1920x1080px24HZ (802R)
+	_MODE_1080P25,					// Mode 106: YPbPr 1920x1080px25HZ (802R)
+	_MODE_1080P29,					// Mode 107: YPbPr 1920x1080px29.976HZ (802R)
+	_MODE_1080P30,					// Mode 108 YPbPr 1920x1080px30HZ (802R)};
+// for HDMI :Justin
+	_MODE_1080PM50,					// Mode 109:  HDMI 960x1080px50HZ (802R) //forster modified 050823
+	_MODE_1080PM60,					// Mode 110:  HDMI 960x1080px60HZ (802R) //forster modified 050823
+	_MODE_480I_DH,          // Mode 111
+	_MODE_576I_DH,          // Mode 112
+#if (defined BUILD_TV005_1_ATV)||(defined BUILD_TV005_1_ATSC) || defined(BUILD_TV057_1_ATV) || (defined TV003_ADTV)
+	_MODE_1440_576P,
+	_MODE_1440_480P,
+	_MODE_VIDEO_TIMING_END = _MODE_1440_480P,
+#else
+	_MODE_VIDEO_TIMING_END = _MODE_576I_DH, //for API have same video timing condition
+#endif
+#if defined(TV15_1_3D)//eric 20120711
+	_MODE_3D_FP_1080P,
+	_MODE_3D_FP_720P,
+#endif
+	_MODE_1920x1200_60HZ,			// Mode 111
+#if (defined BUILD_TV005_1_ISDB)
+	_MODE_720P24,
+	_MODE_720P30,
+#endif
+	_MODE_3D_FP_720P_50,
+	_MODE_3D_FP_720P_60,
+	_MODE_4k2kI30,
+	_MODE_4k2kP30,
+	_MODE_4k2kP24,
+	_MODE_4k2kP25,
+	_MODE_4k2kP48,
+	_MODE_4k2kP50,
+	_MODE_4k2kP60,
+
+	_MODE_NEW
+};
+
+
+typedef enum
+{
+	MODE_2D3D_DISABLED = 0,
+	MODE_2D3D_TYPE_VO, // VO double frame rate
+	MODE_2D3D_TYPE_IM, // I/M double clock
+} MODE_2D3D_TYPE;
+
+
+typedef enum _VO_FR_CTRL_OPCODE{
+	_OPCODE_TABLE_CHANGE=0,
+	_OPCODE_MODE_CHANGE=1,
+	_OPCODE_NUM=2,
+}VO_FR_CTRL_OPCODE;
+
+
+// VO frame rate control
+#define DEFAULT_ENABLE_FORCE_FRAMERATE		FALSE
+#define DEFAULT_FORCE_FRAMERATE			59940
+#define DEFAULT_ENABLE_DOUBLE_DVS		FALSE
+#define DEFAULT_DOUBLE_DVS_THRESHOLD		31000
+#define DEFAULT_ENABLE_HIGH_BOUND		TRUE//FALSE
+#define DEFAULT_HIGH_BOUND			60000
+#define DEFAULT_HIGH_ADJUST			60000
+#define DEFAULT_ENABLE_LOW_BOUND		TRUE
+#if 0
+#define DEFAULT_LOW_BOUND			50000
+#define DEFAULT_LOW_BOUND_FOR_MEMC		47900
+#define DEFAULT_LOW_ADJUST			59940
+#else
+#define DEFAULT_LOW_BOUND			47900
+#define DEFAULT_LOW_BOUND_FOR_MEMC		23500
+#define DEFAULT_LOW_ADJUST			60000
+#endif
+
+#define VO_FR_CTRL_FORCE_FRAMERATE_MAX	120000
+
+#define SMOOTH_TOGGLE_DATAFRCFS_TEST
+
+// over capture for 4k2k video RTNR boundary issue
+#define VO_4K2K_OVER_CAP_PIXEL	2
+
+
+#define DDR_IN2_BLOCK_SELECT_BIT_START	6
+#define DDR_IN2_BLOCK_SELECT_MASK			(0x3 << DDR_IN2_BLOCK_SELECT_BIT_START)
+
+//KME memory size
+#define MEMC_KME_00_TOTAL_SIZE (0x100000 * 6)
+#define MEMC_KME_00_SHIFT 0x100000
+
+#define MEMC_KME_04_TOTAL_SIZE (0x100000 * 2)
+#define MEMC_KME_04_SHIFT 0x100000
+
+#define MEMC_KME_05_TOTAL_SIZE (0x60000 * 2)
+#define MEMC_KME_05_SHIFT 0x60000
+
+#define MEMC_KME_08_TOTAL_SIZE (0x100000 * 1)
+#define MEMC_KME_08_SHIFT 0x100000
+
+#define MEMC_KME_10_TOTAL_SIZE (0x80000 * 1)
+#define MEMC_KME_10_SHIFT 0x80000
+
+#define MEMC_KME_12_TOTAL_SIZE (0x21c00 * 1)
+#define MEMC_KME_12_SHIFT 0x21c00
+
+#define MEMC_KME_14_TOTAL_SIZE (0x8700 * 1)
+#define MEMC_KME_14_SHIFT 0x8700
+
+//KMC memory size
+#define MEMC_KMC_00_START_TOTAL_SIZE (0xb13000 * 6 / 2)
+#define MEMC_KMC_00_START_SHIFT 0xb13000
+
+#define MEMC_KMC_01_START_TOTAL_SIZE (0xb13000 * 6 / 2)
+#define MEMC_KMC_01_START_SHIFT 0xb13000
+
+#define KME_TOTAL_SIZE (MEMC_KME_00_TOTAL_SIZE + MEMC_KME_04_TOTAL_SIZE + MEMC_KME_05_TOTAL_SIZE + MEMC_KME_08_TOTAL_SIZE + MEMC_KME_10_TOTAL_SIZE + MEMC_KME_12_TOTAL_SIZE + MEMC_KME_14_TOTAL_SIZE)
+#define KMC_TOTAL_SIZE (MEMC_KMC_00_START_TOTAL_SIZE + MEMC_KMC_01_START_TOTAL_SIZE)
+#define KMEMC_TOTAL_SIZE (KME_TOTAL_SIZE + KMC_TOTAL_SIZE)
+#if ( SCALER_MEMC_SIZE && (KMEMC_TOTAL_SIZE > SCALER_MEMC_SIZE) )
+#error "Scaler MEMC reserved memory size is large than before!"
+#endif
+/*mac5p 2k1k model*/
+//Modify to use panel size define @Crixus 20170504
+#define MDOMAIN_MAIN_SUB_BUFFER_SUM_SIZE (1024 * 1024 * 12)
+//Update to use compression 32-align width @Crixus 20171226
+#define MDOMAIN_MAIN_BUFFER_SIZE_30BITS ((_DISP_WID + (32 - (_DISP_WID % 32))) *  _DISP_LEN * 30 / 8 + CONFIG_MDOMAIN_BURST_SIZE)
+#define MDOMAIN_MAIN_BUFFER_SIZE_12BITS ((_DISP_WID + (32 - (_DISP_WID % 32))) *  _DISP_LEN * 12 / 8 + CONFIG_MDOMAIN_BURST_SIZE)//M-domain 4k2k 12bits
+#define MDOMAIN_MAIN_BUFFER_SIZE_24BITS ((1920 + (32 - (1920 % 32))) *  1080 * 24 / 8 + CONFIG_MDOMAIN_BURST_SIZE)//M-domain RGB444 mode
+#define MDOMAIN_MAIN_BUFFER_SIZE_16BITS ((_DISP_WID + (32 - (_DISP_WID % 32))) *  _DISP_LEN * 16 / 8 + CONFIG_MDOMAIN_BURST_SIZE)//livezoomcase
+#define MDOMAIN_MAIN_BUFFER_SIZE_10BITS ((_DISP_WID + (32 - (_DISP_WID % 32))) *  _DISP_LEN * 10 / 8 + CONFIG_MDOMAIN_BURST_SIZE)//livezoomcase
+#define MDOMAIN_MAIN_BUFFER_SIZE MDOMAIN_MAIN_BUFFER_SIZE_12BITS//(3840 * 2160 * 30 / 8) //4k2k 30 bits
+//#define MDOMAIN_MAIN_BUFFER_SIZE_VO (_DISP_WID * _DISP_LEN * 20 / 8) //4k2k 16 bits for playback case
+
+/*mac5p apvr and livezoom sub size*/
+#define MDOMAIN_SUB_BUFFER_SIZE (720 * 576 * 16 / 8) //2k1k 16 bits
+//I2rnd multiview case
+#define MDOMAIN_MULTIVIEW_BUFFER_SIZE (720 * 576 * 16 / 8) //multiview i2rnd only support 576p size
+//DI_1 memory size
+#define VIP_DI_1_BUFFER_SIZE (1024 * 1024 * 8) //Mac5p DI 1 : 8M
+#define VIP_DI_2_BUFFER_SIZE (1024 * 1024 * 0) // Mac5p DI 2 : 0M
+#define VIP_DMAto3DTable_BUFFER_SIZE (1024 * 1024 * 0) //Mac5p DMAto3DTable 0 MB
+
+
+#if 0//remove address define @Crixus 20170505
+#define MDOMAIN_SUB_BUFFER_START_ADDRESS (MDOMAIN_START_ADDRESS_KERNEL + MDOMAIN_MAIN_BUFFER_SIZE_12BITS*3)
+#define DI_START_ADDRESS_KERNEL (MDOMAIN_START_ADDRESS_KERNEL + MDOMAIN_MAIN_SUB_BUFFER_SUM_SIZE)
+#define DI_2_START_ADDRESS_KERNEL_KxL (DI_START_ADDRESS_KERNEL + 0x2880000)	/* 40.5Mb = 0x2880000, 82Mb(total) = 40.5(DI+MA_SNR+DeXc in 1080p main) + 40.5(DI+MA_SNR+DeXc in 1080p sub) + 1(Demura) */
+#define DI_2_START_ADDRESS_KERNEL_KxLp (DI_START_ADDRESS_KERNEL + 0x1D00000)	/* 29Mb = 0x1D00000, 34Mb(total) = 29(DI+MA_SNR in 4k main) + 4(DI+MA_SNR in 576i sub APVR) + 1(Demura) */
+#define DI_BUFFER_SIZE_VO (1920 * 1080 * 20 / 8) //4k2k 16 bits for playback case
+#define MDOMAIN_MULTIVIEW_SUB_ADDRESS (MDOMAIN_START_ADDRESS_KERNEL + (MDOMAIN_MULTIVIEW_BUFFER_SIZE * 3))
+#define DI_MULTIVIEW_ADDRESS_MAIN (MDOMAIN_START_ADDRESS_KERNEL + (MDOMAIN_MULTIVIEW_BUFFER_SIZE * 6))
+#define DI_MULTIVIEW_ADDRESS_SUB	(DI_MULTIVIEW_ADDRESS_MAIN + MDOMAIN_MULTIVIEW_BUFFER_SIZE * 3)
+#endif
+
+void VPScaler_RPC_SendMessage(VIDEO_SCALER_MESSAGE *a_ptMsg);
+
+int scalerDrv_ioctl(unsigned int cmd, unsigned long arg);
+
+//[mark by crixus-mac3 linux based]int scalerDrv_Init(SCALER_RPC_SHARE_MEM *a_ptShareMem);
+unsigned int VODMA_2D3D_Get_curFrameCount(VO_VIDEO_PLANE VideoPlane);
+void VODMA_2D3D_Set_DoubleIndex  (VO_VIDEO_PLANE, unsigned int) ;
+void VODMA_2D3D_Set_newVIsrTimestamp(VO_VIDEO_PLANE, unsigned int) ;
+void VODMA_2D3D_Set_fieldSignal(VO_VIDEO_PLANE VideoPlane, unsigned int fieldSignalLevel);
+unsigned int VO_2d3d_cvt_getCurrntSubCapBuffIdx(void);
+unsigned int VO_2d3d_cvt_getCurrntSubVgipFieldStatus(void);
+unsigned int VO_2d3d_cvt_getCurrntSubVgipInterlaceMode(void);
+//[mark by crixus-mac3 linux based]int VO_2D3D_cvt_configVOInit(VO_2D3D_CONFIG *config_data);
+//[mark by crixus-mac3 linux based]int VO_Capture_configVOInit(VO_CAPTURE_CONFIG *config_data);
+void VO_SetScalerDisplayReady	  (short isReady) ;
+
+typedef enum
+{
+	VBI_PAL_TELETEXT = 0,
+	VBI_PAL_WSS,
+	VBI_PAL_VPS,
+	VBI_NTSC_CC,
+	VBI_NTSC_WSS,
+	VBI_CGMS,
+	VBI_TYPE_ALL
+}VBI_TYPE_T;
+
+typedef enum _HDR_MODE {
+    HDR_MODE_DISABLE 		= 0x0,
+    HDR_DOLBY_HDMI			= 0x1,
+    HDR_DOLBY_COMPOSER		= 0x2,
+    HDR_DOLBY_CERT_DM422		= 0x4,
+    HDR_DOLBY_CERT_DM420		= 0x5,
+    HDR_DOLBY_CERT_COMPOSER	= 0x6,
+    HDR_HDR10_HDMI			= 0x10,
+    HDR_HDR10_VDEC	= 0x11
+} HDR_MODE;
+
+typedef struct _I2RND_START_ADDR {
+	unsigned int	s0_vo_st_addr;
+	unsigned int	s1_vo_st_addr;
+	unsigned int	s0_vo_cur_addr;
+	unsigned int	s1_vo_cur_addr;
+	unsigned int	i2rnd_enable_addr;//in2rnd enable flag
+	unsigned int	write_cmd_num_addr;
+	unsigned int	read_cmd_num_addr;
+	unsigned int	cmd_buffer_size;
+} I2RND_START_ADDR;
+
+
+typedef struct _I2RND_APVR_INFO {
+	unsigned int	i2rnd_enable;
+	unsigned int	s1_buf_addr1;
+	unsigned int	s1_buf_addr2;
+	unsigned int	s1_buf_addr3;
+} I2RND_APVR_INFO;
+
+typedef struct _PST_START_ADDR {
+    unsigned int	i_m_st_addr;
+    unsigned int	i_s_st_addr;
+    unsigned int	dispm_st_addr;
+    unsigned int	disps_st_addr;
+    unsigned int	gdma_st_addr;
+    unsigned int	i_m_cur_addr;
+    unsigned int	i_s_cur_addr;
+    unsigned int	dispm_cur_addr;
+    unsigned int	disps_cur_addr;
+    unsigned int	gdma_cur_addr;
+    unsigned int	pst_enable_addr;//pst enable flag
+    unsigned int	write_dispm_cmd_num_addr;
+    unsigned int	read_dispm_cmd_num_addr;
+    unsigned int	pst_mode;
+    unsigned int	dispm_cmd_buffer_size;
+} PST_START_ADDR;
+
+typedef struct _VBI_UPDATE_DATA_INFO{
+	unsigned int vbi_valid[VBI_TYPE_ALL];
+	unsigned int vbi_data[VBI_TYPE_ALL];
+}VBI_UPDATE_DATA_INFO;
+
+typedef enum{
+	I2RND_TABLE_OFF = 0,
+	I2RND_MAIN_S0_TABLE,
+	I2RND_SUB_S1_TABLE,
+	I2RND_TABLE_MAX,
+}_I2RND_DISPLAY_TABLE_T;
+
+typedef struct _VIDEO_RPC_DUMP_REGISTER{
+	/*unsigned int register_sta1;
+	unsigned int register_end1;
+	unsigned int register_sta2;
+	unsigned int register_end2;*/
+	unsigned int register_sta[16];
+	unsigned int register_end[16];
+	unsigned int cmd;
+} VIDEO_RPC_DUMP_REGISTER;
+
+typedef struct _DUMP_REGISTER_INFO{
+    unsigned int pts;
+	unsigned int register_counter;
+	unsigned int vgip_line_cnt;
+	unsigned int uzudtg_line_cnt;
+	unsigned int memcdtg_line_cnt;
+	unsigned int registeraddr;
+	unsigned int rw_flag;
+	unsigned int value;
+} DUMP_REGISTER_INFO;
+
+typedef enum {
+     HDMI_2K1K_30 = 0,    	//hdmi timimng<=2k1k framerate<=30
+     HDMI_2K1K_60,	  	//hdmi timimng<=2K1K  30<framerate<=60
+     HDMI_4K2K_30,	 	//hdmi 2k1k<timimng<=4K2K  framerate<=30
+     HDMI_4K2K_60,		//hdmi 2k1k<timimng<=4K2K  30<framerate<=60
+     VO_2K1K_30,		//vo timimng<=2k1k framerate<=30
+     VO_2K1K_60,		//vo timimng<=2K1K  30<framerate<=60
+     VO_4K2K_30,		//vo 2k1k<timimng<=4K2K  framerate<=30
+     VO_4K2K_60,		//vo 2k1k<timimng<=4K2K  30<framerate<=60
+     HDMI_HDR_4K2K_60,	//hdmi hdr 2k1k<timimng<=4K2K  30<framerate<=60
+     TIMING_INVAILD
+} INPUT_TIMING_INDEX;
+
+typedef enum {
+	DRIVER_RTNR_PATTERN,
+	DRIVER_OD_PATTERN,
+	DRIVER_DEXC_PATTERN,
+	DRIVER_FREERUN_PATTERN,
+	DRIVER_VECOMP_PATTERN,
+	DRIVER_DIPQC_BIT_PATTERN,
+	DRIVER_MASNR_PATTERN,
+}DRIVER_LIST_INFO;
+
+typedef struct VSC_DRIVER_PATTERN{
+	INPUT_TIMING_INDEX	timing_index;
+	unsigned int			rtnr_mode; //0:rtnr off , 1:422,  2:420, 3:400
+	unsigned int			od_en;     //0:od off,   3-7: 3/4/5/6/7 bit
+	unsigned int			dexc_en;   //0:dexc off,1:dexc on
+	unsigned int			free_run;  //0:frc,       1:frame sync
+	unsigned int			ve_comp;   //0:off        1:on
+	unsigned int 			dipqc_bit; //6:6bit      10:10bit
+	unsigned int			ma_snr;	   //0:off,	1:on
+}VSC_DRIVER_PATTERN;
+
+typedef struct _DRIVER_CONFIG_DATA_INFO{
+	VSC_DRIVER_PATTERN vsc_driver[TIMING_INVAILD+1];
+}DRIVER_CONFIG_DATA_INFO;
+
+#endif

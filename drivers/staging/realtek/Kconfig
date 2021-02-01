@@ -1,0 +1,30 @@
+menu "REALTEK_STAGING"
+
+config REALTEK_STAGING
+	bool "Realtek Staging Drivers"
+	default N
+	---help---
+	  Enable support for various drivers needed on the Realtek platform
+
+if REALTEK_STAGING
+
+config USER_INITCALL
+	bool "User Initcall support"
+	default y
+	help
+	  Support for user level initcall. This special initcall is invoked by
+	  writing group name to /proc/usercalls in user space. The group name
+	  is sepcified by user_initcall_grp macro in specific driver.
+	  If unsure, say N.
+
+config USER_INITCALL_USB
+	bool "User Initcall usb support"
+	depends on USER_INITCALL
+	default y
+	help
+	  Apply user initcall to usb device and usb storage driver.
+	  If unsure, say N.
+
+endif # REALTEK_STAGING
+
+endmenu

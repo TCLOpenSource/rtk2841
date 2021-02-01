@@ -1,0 +1,29 @@
+
+stack.o:     file format elf32-bigmips
+
+
+Disassembly of section .text:
+
+80003000 <_test_pass>:
+80003000:	1000ffff 	b	80003000 <_test_pass>
+80003004:	00000000 	nop
+80003008:	beefbeef 	cache	0xf,-16657(s7)
+8000300c:	beefbeef 	cache	0xf,-16657(s7)
+80003010:	beefbeef 	cache	0xf,-16657(s7)
+80003014:	beefbeef 	cache	0xf,-16657(s7)
+80003018:	beefbeef 	cache	0xf,-16657(s7)
+8000301c:	beefbeef 	cache	0xf,-16657(s7)
+
+80003020 <_test_fail>:
+80003020:	1000ffff 	b	80003020 <_test_fail>
+80003024:	00000000 	nop
+80003028:	deaddead 	0xdeaddead
+8000302c:	deaddead 	0xdeaddead
+80003030:	deaddead 	0xdeaddead
+80003034:	deaddead 	0xdeaddead
+80003038:	deaddead 	0xdeaddead
+8000303c:	deaddead 	0xdeaddead
+	...
+
+80003ffc <_stack>:
+80003ffc:	cafecafe                                ....

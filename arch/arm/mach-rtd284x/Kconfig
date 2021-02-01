@@ -1,0 +1,92 @@
+if ARCH_RTK284X
+
+menu "RTK284X specific features"
+	depends on ARCH_RTK284X
+
+config REALTEK_FPGA
+	bool "Support Realtek FPGA"
+	default n
+
+config REALTEK_2K_MODEL_ENABLED
+        bool "Enable 2K-model"
+        default n
+        help
+                If your project is 2K-model, please select it
+
+config REALTEK_SECURE
+	bool "Enable Secure Solution"
+	default n
+	help
+		Provide realtek secure solution.
+config REALTEK_RESCUE_LINUX
+	bool "Rescue Linux"
+	default n
+
+config REALTEK_POWER_CUT
+        bool "Enable Realtek Power Cut"
+        default n
+
+config REALTEK_SECURE_OS
+	bool "Enable Secure OS"
+	default n
+	help
+		If you want build secure OS, please select it
+
+config REALTEK_DEV_MEM
+	bool "Provide the /dev/rtkmem interface."
+	default n
+	help
+		Provide an interface to replace /dev/mem.
+
+config REALTEK_MANAGE_OVERLAPPED_REGION
+        bool "Manage the memory region overlapped by RBUS & NOR."
+        default n
+        help
+          Put the memory region overlapped by RBUS & NOR under the control of linux.
+
+config REALTEK_PCBMGR
+	bool "Use Realtek PCB Manager sysfs"
+	default n
+	help
+		pcb manager enable, pcb manager will export the pcb info at /sys/realtek_boards/pcb_enum
+
+config REALTEK_ARM_WRAPPER
+	bool "ARM WRAPPER Detector Enable"
+	default n
+	help
+	  support ARM WRAPPER Detector
+
+config REALTEK_KEYPAD
+	bool "keypad"
+	default n
+	help
+	  support keypad device
+
+config MHL_INT_SUPPORT
+	bool "Realtek MHL Cbus interrupt"
+	default y
+
+config REALTEK_SCHED_LOG
+	bool "Log the scheduling sequence."
+	default y
+	help
+	  Log the scheduling sequence.
+
+config ANDROID_SW_RENDER
+        bool "Support Android software rendering"
+        default n
+        help
+                If android bringup without ddk, this should be enabled.
+
+#Recovery kernel
+config RTK_KDRV_RECOVERY_KERNEL
+	bool "Build for android rescue kernel"
+	default n
+	help
+	  Android rescue kernel for Realtek
+
+endmenu
+
+source "drivers/rtk_kdriver/Kconfig"
+
+endif

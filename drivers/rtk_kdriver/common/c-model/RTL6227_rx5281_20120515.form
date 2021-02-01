@@ -1,0 +1,1125 @@
+// lconfig configuration form for RX4281/RX5281-release-1.4
+// 
+// RealTek Semiconductor
+// ALL RIGHTS RESERVED
+// 
+// Taroko
+// 
+// This form is processed by the lconfig tool to configure the
+// RX4281/RX5281 RTL source code for user specific options.  To
+// configure the RTL source code, edit this form to indicate the
+// desired options, and from the include directory execute the
+// ../bin/lconfig utility.
+// 
+// A starting form with properly configured default values can be
+// obtained with the command
+// 
+//   "lconfig -blank_form <output_filename>"
+// 
+// To configure the RTL, review each of the sections in the new form
+// and fill in the desired values based on your application
+// requirements.  Then process the form with the lconfig tool.
+// The tool will produce the symbol file (lxr_symbols.vh) that is
+// used for RTL simulation and also by the synthesis process.
+// lconfig also produces various other configuration specific
+// files for simulation and synthesis.
+// 
+// DO NOT EDIT THE RESULTING LXR_SYMBOLS.VH FILE BY HAND.
+// 
+// A summary of the configurable elements appears below.  Following
+// this summary are the detailed sections for each configurable
+// element.
+//
+//              PRODUCT -- Realtek Processor
+//           RESET_MODE -- Flip-flop reset method
+//                  MMU -- Memory Management Unit Implementation
+//          TLB_ENTRIES -- Number of entries in the TLB
+//          OSB_ENTRIES -- Number of Non-blocking Cache Line Misses
+//          LIQ_ENTRIES -- Number of Non-blocking Load Misses
+//       DCU_WB_ENTRIES -- Entries of DCache Write Buffer
+//                 COP1 -- Coprocessor interface 1
+//                 COP2 -- Coprocessor interface 2
+//                  CE1 -- Custom engine 1
+//                SLEEP -- Include clock SLEEP support
+//          TRAP_ON_ULS -- Processor Traps or inserts a NOP on an Unaligned Load or Store
+//                   RS -- Return stack size
+//                  BTB -- Branch Target Buffer size
+//                  PHT -- Pattern history table size
+//         WMPU_ENTRIES -- Number of entries in the WMPU
+//                IMEM0 -- Local instruction RAM block 0
+//                IMEM1 -- Local instruction RAM block 1
+//               ICACHE -- Instruction cache size
+//                DMEM0 -- Local scratch pad data RAM
+//                DMEM1 -- Local scratch pad data RAM
+//               DCACHE -- Data cache size
+//   WRITETHROUGH_RANGE -- WriteThrough Range setting for Dcache
+//                L2MEM -- Level-2 local scratch pad RAM
+//       L2C_WBUF_DEPTH -- l2c wbuf depth
+//              L2CACHE -- Level-2 cache size
+//       MEM_FIRST_WORD -- cache line fill first word
+//              EXT_DMA -- Allow external agents to access IMEM0/IMEM1/DMEM0/DMEM1/L2MEM
+//     EJTAG_INST_BREAK -- Number of instruction breaks
+//     EJTAG_DATA_BREAK -- Number of data breaks
+//   EXPORT_TRACE_PORTS -- Export processor information for debugging
+//       LOW_POWER_CORE -- Low power enhancement in cpu core
+//           TECHNOLOGY -- Identifies target technology
+//         RADIAX_ZOVLP -- Configuration on Radiax zero-overhead loop
+// RADIAX_CB_ADDRESSING -- Configuration on Radiax circular buffer addressing support
+//          UNIQUE_NAME -- Apply a unique name to the RTL
+
+
+
+///////////////////////////////////////////////////////
+//
+// PRODUCT -- Realtek Processor
+//
+// configuration choices:  RX4281 RX5281
+//
+//     "RX4281"  --  High performance RISC core
+//     "RX5281"  --  High performance RISC/DSP core
+//
+// The following settings are required when PRODUCT = RX5281:
+//
+//      RADIAX_ZOVLP = LEXRA_STYLE
+//
+//
+// default: PRODUCT = "RX4281";
+//
+///////////////////////////////////////////////////////
+
+PRODUCT = "RX5281";
+
+
+///////////////////////////////////////////////////////
+//
+// RESET_MODE -- Flip-flop reset method
+//
+// configuration choices:  SAMPLED_SYNC BUFFERED_ASYNC
+//
+// "SAMPLED_SYNC"  --  locally distributed reset to synchronously resettable flip-flops
+// "BUFFERED_ASYNC"  --  locally distributed reset with local buffers to asynchronously resettable flip-flops
+//
+// Choose BUFFERED_ASYNC to synchronize reset signal inside RX4281/RX5281 and
+// insert buffers in each major RX4281/RX5281 module. This provides buffering
+// throughout the hierarchy, and may be practical for most applications.
+// BUFFERED_ASYNC requires asynchronously resettable flip-flops.              
+// 
+// Choose SAMPLED_SYNC to insert 2 flip-flop that samples external reset
+// coming into RX4281/RX5281. The sampeld reset is then distributed within the 
+// RX4281/RX5281. This provides purely local timing requirements
+// for reset within each module.  SAMPLED_SYNC requires synchronously
+// resettable flip-flops.
+// 
+//
+// default: RESET_MODE = "BUFFERED_ASYNC";
+//
+///////////////////////////////////////////////////////
+
+RESET_MODE = "BUFFERED_ASYNC";
+
+
+///////////////////////////////////////////////////////
+//
+// MMU -- Memory Management Unit Implementation
+//
+// configuration choices:  SMMU TLB
+//
+//       "SMMU"  --  Use SMMU
+//        "TLB"  --  Use TLB
+//
+// The following settings are required when MMU = SMMU:
+//
+//       TLB_ENTRIES = 0
+//
+//
+// The following settings are required when MMU = TLB:
+//
+//       TLB_ENTRIES = 16, 32 or 64
+//
+//
+// This parameter controls the inclusion of the RX supplied MMU/TLB.
+// If SMMU is chosen, the default virtual-to-physical memory mapping is
+// used.  The RX TLB is not included.  If TLB is chosen, the RX TLB
+// is instanced in the design.  
+//
+// default: MMU = "SMMU";
+//
+///////////////////////////////////////////////////////
+
+MMU = "SMMU";
+
+
+///////////////////////////////////////////////////////
+//
+// TLB_ENTRIES -- Number of entries in the TLB
+//
+// configuration choices:  0 64 32 16
+//
+//          "0"  --  TLB is not configured
+//         "64"  --  TLB has 64 entries
+//         "32"  --  TLB has 32 entries
+//         "16"  --  TLB has 16 entries
+//
+// The following settings are required when TLB_ENTRIES = 0:
+//
+//               MMU = SMMU
+//
+//
+// default: TLB_ENTRIES = "0";
+//
+///////////////////////////////////////////////////////
+
+TLB_ENTRIES = "0";
+
+
+///////////////////////////////////////////////////////
+//
+// OSB_ENTRIES -- Number of Non-blocking Cache Line Misses
+//
+// configuration choices:  1 2 3 4 8
+//
+//          "1"  --  1 non-blocking cache line miss
+//          "2"  --  2 non-blocking cache line misses
+//          "3"  --  3 non-blocking cache line misses
+//          "4"  --  4 non-blocking cache line misses
+//          "8"  --  8 non-blocking cache line misses
+//
+// This option determines the number of non-blocking dcache line misses.
+// The dcache will not block the core pipeline when cache miss as long as
+// there is available entry for holding missing lines. Those non-blocking
+// misses may result in multiple outstanding transactions on the system
+// OCP bus with different TagId.
+//
+// default: OSB_ENTRIES = "4";
+//
+///////////////////////////////////////////////////////
+
+OSB_ENTRIES = "4";
+
+
+///////////////////////////////////////////////////////
+//
+// LIQ_ENTRIES -- Number of Non-blocking Load Misses
+//
+// configuration choices:  4 8
+//
+//          "4"  --  4 non-blocking load misses
+//          "8"  --  8 non-blocking load misses
+//
+// This option determines the number of non-blocking load misses.
+// As long as no load-use data dependency, a load miss will not
+// block the processor's pipeline, and subsequent instructions could be
+// executed continuously and results could be written back to the 
+// register file.
+//
+// default: LIQ_ENTRIES = "4";
+//
+///////////////////////////////////////////////////////
+
+LIQ_ENTRIES = "4";
+
+
+///////////////////////////////////////////////////////
+//
+// DCU_WB_ENTRIES -- Entries of DCache Write Buffer
+//
+// configuration choices:  2 3 4
+//
+//          "2"  --  2-entry DCache Write Buffer
+//          "3"  --  3-entry DCache Write Buffer
+//          "4"  --  4-entry DCache Write Buffer
+//
+// default: DCU_WB_ENTRIES = "4";
+//
+///////////////////////////////////////////////////////
+
+DCU_WB_ENTRIES = "4";
+
+
+///////////////////////////////////////////////////////
+//
+// COP1 -- Coprocessor interface 1
+//
+// configuration choices:  NONE EXPORT
+//
+//       "NONE"  --  Coprocessor 1 not exported from the core
+//     "EXPORT"  --  Coprocessor 1 interface connected to customer logic but not simulated in the RX testbed
+//
+// This option determines whether the coprocessor 1 interface is
+// exported and how it is treated by the RX testbed.
+// 
+// NONE, the coprocessor interface will not be exported from the
+// core.
+// 
+// EXPORT, the coprocessor interface will be exported from the
+// core and connected to a coprocessor model in the RX testbed
+// for regression testing.  This option may be used for initial
+// verification of the core, but should not be used for the
+// customer's final design.
+//
+// default: COP1 = "NONE";
+//
+///////////////////////////////////////////////////////
+
+COP1 = "NONE";
+
+
+///////////////////////////////////////////////////////
+//
+// COP2 -- Coprocessor interface 2
+//
+// configuration choices:  NONE EXPORT
+//
+//       "NONE"  --  Coprocessor 1 not exported from the core
+//     "EXPORT"  --  Coprocessor 1 interface connected to customer logic but not simulated in the RX testbed
+//
+// This option determines whether the coprocessor 2 interface is
+// exported and how it is treated by the RX testbed.
+// 
+// NONE, the coprocessor interface will not be exported from the
+// core.
+// 
+// EXPORT, the coprocessor interface will be exported from the
+// core and connected to a coprocessor model in the RX testbed
+// for regression testing.  This option may be used for initial
+// verification of the core, but should not be used for the
+// customer's final design.
+//
+// default: COP2 = "NONE";
+//
+///////////////////////////////////////////////////////
+
+COP2 = "NONE";
+
+
+///////////////////////////////////////////////////////
+//
+// CE1 -- Custom engine 1
+//
+// configuration choices:  NONE EXPORT
+//
+//       "NONE"  --  Custom engine 1 interface not present
+//     "EXPORT"  --  Export CE1 interface from RX module
+//
+// Custom Engine one (CE1) may connected to user logic to implement custom
+// instruction extensions to the core instruction set.
+//
+// default: CE1 = "NONE";
+//
+///////////////////////////////////////////////////////
+
+CE1 = "EXPORT";
+
+
+///////////////////////////////////////////////////////
+//
+// SLEEP -- Include clock SLEEP support
+//
+// configuration choices:  YES NO
+//
+//        "YES"  --  Include clock SLEEP support
+//         "NO"  --  Do not include clock SLEEP support
+//
+// An optional sleep mode can be controlled via software if select 
+// "YES" in this option.  The RX4281/RX5281 uses clock gating to implement
+// the sleep mode.  If the clock gating is not required, select "NO" 
+// in the option, and there will be no sleep mode in RX4281/RX5281.
+// 
+// Sleep mode is implemented in the rx2/rx1/rx0/reset_ctrl module.
+// The details are described in the RX4281/RX5281 data sheet.
+// 
+//
+// default: SLEEP = "YES";
+//
+///////////////////////////////////////////////////////
+
+SLEEP = "NO";
+
+
+///////////////////////////////////////////////////////
+//
+// TRAP_ON_ULS -- Processor Traps or inserts a NOP on an Unaligned Load or Store
+//
+// configuration choices:  YES NO
+//
+//        "YES"  --  Reserved instruction exception if MIPS-I unaligned load/store executed.
+//         "NO"  --  RX4281/RX5281 supports MIPS-I unaligned load/store.
+//
+// This option will enable/disable the use of MIPS-I unaligned 
+// load-store instruction. Setting it to YES will cause RX4281/RX5281 
+// to raise reserved instruction exception. Setting it to NO 
+// will make RX4281/RX5281 support LWL/LWR/SWL/SWR and hence RX4281/RX5281 
+// can be R3000 compatible.
+// 
+//
+// default: TRAP_ON_ULS = "YES";
+//
+///////////////////////////////////////////////////////
+
+TRAP_ON_ULS = "NO";
+
+
+///////////////////////////////////////////////////////
+//
+// RS -- Return stack size
+//
+// configuration choices:  0 3 4 5 6 7 8
+//
+//          "0"  --  Do not use return stack
+//          "3"  --  RS has 3 entries
+//          "4"  --  RS has 4 entries
+//          "5"  --  RS has 5 entries
+//          "6"  --  RS has 6 entries
+//          "7"  --  RS has 7 entries
+//          "8"  --  RS has 8 entries
+//
+// The return stac(RS) is a return address cache used to
+// accelerate function call return. 32 registers are required for 
+// each entry. Increase the number of RS entries may increase program
+// execution performance.
+//
+// default: RS = "6";
+//
+///////////////////////////////////////////////////////
+
+RS = "6";
+
+
+///////////////////////////////////////////////////////
+//
+// BTB -- Branch Target Buffer size
+//
+// configuration choices:  512 1024 2048 4096
+//
+//        "512"  --  BTB cached 512 addresses.
+//       "1024"  --  BTB has 1024 entries for branch target
+//       "2048"  --  BTB has 2048 entries for branch target
+//       "4096"  --  BTB has 4096 entries for branch target
+//
+// The Branch-Target-Buffer (BTB) cached information about branch instructions
+// executed. Increasing the size of BTB will increase program executing performance
+// whereas more hardware resource, such as SRAM, is needed. For detailed information,
+// please refer to RX4281/RX5281 user guide.
+//
+// default: BTB = "512";
+//
+///////////////////////////////////////////////////////
+
+BTB = "1024";
+
+
+///////////////////////////////////////////////////////
+//
+// PHT -- Pattern history table size
+//
+// configuration choices:  512 1024 2048 4096
+//
+//        "512"  --  PHT has 512 entries for prediction
+//       "1024"  --  PHT has 1024 entries for prediction
+//       "2048"  --  PHT has 2048 entries for prediction
+//       "4096"  --  PHT has 4096 entries for prediction
+//
+// PHT serves as placeholder for conditional branch. Each conditional
+// branch requires 1 entry to save information. Increasing PHT entries
+// may increase program executing performance.
+//
+// default: PHT = "1024";
+//
+///////////////////////////////////////////////////////
+
+PHT = "1024";
+
+
+///////////////////////////////////////////////////////
+//
+// WMPU_ENTRIES -- Number of entries in the WMPU
+//
+// configuration choices:  0 4 8
+//
+//          "0"  --  WMPU is not configured
+//          "4"  --  WMPU has 4 entries
+//          "8"  --  WMPU has 8 entries
+//
+// default: WMPU_ENTRIES = "0";
+//
+///////////////////////////////////////////////////////
+
+WMPU_ENTRIES = "0";
+
+
+///////////////////////////////////////////////////////
+//
+// IMEM0 -- Local instruction RAM block 0
+//
+// configuration choices:  NONE RANGE
+//
+//                           "NONE"  --  Not present
+// RANGE (0xMMMM_LLL0, 0xMMMM_TTTf)  --  BASE and TOP values
+//
+// The decode logic for this RX Memory Interface (LMI) is configured
+// with a base and top address range (inclusive).  The addressable region
+// defined by this pair must be a power of 2, from 1K bytes up to 256K
+// bytes.  The region must be naturally aligned.  That is, a 1K byte
+// region must be aligned to a modulo 1K byte address, a 2K byte region
+// must be aligned at a modulo 2K byte address, etc.  The restrictions are
+// imposed by the RX4281/RX5281's LMI address decode logic to optimize for timing.
+// 
+// This address range is specified within the PHYSICAL address space.
+// Keep in mind that the RX4281/RX5281 transforms logical addresses to physical
+// addresses before accessing local memory or sourcing transactions on the
+// system bus. This translation affects the upper three bits of the address,
+// and is shown here for convenience:
+// 
+//    LOGICAL      PHYSICAL        SEGMENT NAME
+//     000           010           kuseg (cached)
+//     001           011           kuseg (cached)
+//     010           100           kuseg (cached)
+//     011           101           kuseg (cached)
+//     100           000           kseg0 (cached)
+//     101           000           kseg1 (uncached)
+//     110           110           kseg2 (cached)
+//     111           111           kseg2 (cached)
+// 
+// Note that kseg0 and kseg1 map to the same physical address region.
+// Also, the physical address region with the upper three bits = 001 is
+// unreachable, i.e. there is no logical address that maps to that region.
+// Example RANGE specifications:
+// 
+//     RANGE (0x4004_1000, 0x4004_17ff)
+//     RANGE (0xa000_0000, 0xa000_03ff)
+//  
+//
+// default: IMEM0 = "NONE";
+//
+///////////////////////////////////////////////////////
+
+IMEM0 = "NONE";
+
+
+///////////////////////////////////////////////////////
+//
+// IMEM1 -- Local instruction RAM block 1
+//
+// configuration choices:  NONE RANGE
+//
+//                           "NONE"  --  Not present
+// RANGE (0xMMMM_LLL0, 0xMMMM_TTTf)  --  BASE and TOP values
+//
+// The following settings are required when IMEM1 = RANGE:
+//
+//             IMEM0 = RANGE
+//
+//
+// The decode logic for this RX Memory Interface (LMI) is configured
+// with a base and top address range (inclusive).  The addressable region
+// defined by this pair must be a power of 2, from 1K bytes up to 256K
+// bytes.  The region must be naturally aligned.  That is, a 1K byte
+// region must be aligned to a modulo 1K byte address, a 2K byte region
+// must be aligned at a modulo 2K byte address, etc.  The restrictions are
+// imposed by the RX4281/RX5281's LMI address decode logic to optimize for timing.
+// 
+// This address range is specified within the PHYSICAL address space.
+// Keep in mind that the RX4281/RX5281 transforms logical addresses to physical
+// addresses before accessing local memory or sourcing transactions on the
+// system bus. This translation affects the upper three bits of the address,
+// and is shown here for convenience:
+// 
+//    LOGICAL      PHYSICAL        SEGMENT NAME
+//     000           010           kuseg (cached)
+//     001           011           kuseg (cached)
+//     010           100           kuseg (cached)
+//     011           101           kuseg (cached)
+//     100           000           kseg0 (cached)
+//     101           000           kseg1 (uncached)
+//     110           110           kseg2 (cached)
+//     111           111           kseg2 (cached)
+// 
+// Note that kseg0 and kseg1 map to the same physical address region.
+// Also, the physical address region with the upper three bits = 001 is
+// unreachable, i.e. there is no logical address that maps to that region.
+// Example RANGE specifications:
+// 
+//     RANGE (0x4004_1000, 0x4004_17ff)
+//     RANGE (0xa000_0000, 0xa000_03ff)
+//  
+//
+// default: IMEM1 = "NONE";
+//
+///////////////////////////////////////////////////////
+
+IMEM1 = "NONE";
+
+
+///////////////////////////////////////////////////////
+//
+// ICACHE -- Instruction cache size
+//
+// configuration choices:  NONE 4K_4 8K_4 16K_4 32K_4 64K_4 128K_4 256K_4
+//
+//       "NONE"  --  No level-1 instruction cache
+//       "4K_4"  --  4K byte 4-way set associative level-1 instruction cache
+//       "8K_4"  --  8K byte 4-way set associative level-1 instruction cache
+//      "16K_4"  --  16K byte 4-way set associative level-1 instruction cache
+//      "32K_4"  --  32K byte 4-way set associative level-1 instruction cache
+//      "64K_4"  --  64K byte 4-way set associative level-1 instruction cache
+//     "128K_4"  --  128K byte 4-way set associative level-1 instruction cache
+//     "256K_4"  --  256K byte 4-way set associative level-1 instruction cache
+//
+// The following settings are required when ICACHE = NONE:
+//
+//           L2CACHE = NONE
+//
+//
+// The following settings are required when ICACHE = 16K_4:
+//
+//               BTB = 512, 1024, 2048 or 4096
+//               PHT = 512, 1024, 2048 or 4096
+//                RS = 4, 5, 6, 7 or 8
+//
+//
+// The following settings are required when ICACHE = 32K_4:
+//
+//               BTB = 1024, 2048 or 4096
+//               PHT = 1024, 2048 or 4096
+//                RS = 5, 6, 7 or 8
+//
+//
+// The following settings are required when ICACHE = 64K_4:
+//
+//               BTB = 2048 or 4096
+//               PHT = 2048 or 4096
+//                RS = 6, 7 or 8
+//
+//
+// The following settings are required when ICACHE = 128K_4:
+//
+//               BTB = 2048 or 4096
+//               PHT = 2048 or 4096
+//                RS = 6, 7 or 8
+//
+//
+// The following settings are required when ICACHE = 256K_4:
+//
+//               BTB = 2048 or 4096
+//               PHT = 2048 or 4096
+//                RS = 6, 7 or 8
+//
+//
+// The instruction cache Local Memory Interface (LMI) responds to all
+// instruction fetches that are not mapped to an IMEM or IROM range except
+// for addresses in the KSEG1 memory region, logical addresses 0xA0000000
+// to 0xBFFFFFFF.
+// 
+// The ICACHE is configured with a size and a set associativity.  The size
+// specifies the amount of memory in bytes. The ICACHE may be configured as 
+// direct mapped, 2-way set or 4-way set associative. Duo to aliasing of 
+// virtual indexed addressing, each way is up to 4 Kbytes.
+//
+// default: ICACHE = "8K_4";
+//
+///////////////////////////////////////////////////////
+
+ICACHE = "32K_4";
+
+
+///////////////////////////////////////////////////////
+//
+// DMEM0 -- Local scratch pad data RAM
+//
+// configuration choices:  NONE RANGE
+//
+//                           "NONE"  --  Not present
+// RANGE (0xMMMM_LLL0, 0xMMMM_TTTf)  --  BASE and TOP values
+//
+// The decode logic for this RX Memory Interface (LMI) is configured
+// with a base and top address range (inclusive).  The addressable region
+// defined by this pair must be a power of 2, from 1K bytes up to 256K
+// bytes.  The region must be naturally aligned.  That is, a 1K byte
+// region must be aligned to a modulo 1K byte address, a 2K byte region
+// must be aligned at a modulo 2K byte address, etc.  The restrictions are
+// imposed by the RX4281/RX5281's LMI address decode logic to optimize for timing.
+// 
+// This address range is specified within the PHYSICAL address space.
+// Keep in mind that the RX4281/RX5281 transforms logical addresses to physical
+// addresses before accessing local memory or sourcing transactions on the
+// system bus. This translation affects the upper three bits of the address,
+// and is shown here for convenience:
+// 
+//    LOGICAL      PHYSICAL        SEGMENT NAME
+//     000           010           kuseg (cached)
+//     001           011           kuseg (cached)
+//     010           100           kuseg (cached)
+//     011           101           kuseg (cached)
+//     100           000           kseg0 (cached)
+//     101           000           kseg1 (uncached)
+//     110           110           kseg2 (cached)
+//     111           111           kseg2 (cached)
+// 
+// Note that kseg0 and kseg1 map to the same physical address region.
+// Also, the physical address region with the upper three bits = 001 is
+// unreachable, i.e. there is no logical address that maps to that region.
+// Example RANGE specifications:
+// 
+//     RANGE (0x4004_1000, 0x4004_17ff)
+//     RANGE (0xa000_0000, 0xa000_03ff)
+// 
+//
+// default: DMEM0 = "NONE";
+//
+///////////////////////////////////////////////////////
+
+DMEM0 = "RANGE (0x1000_0000,  0x1000_7fff)";
+
+
+///////////////////////////////////////////////////////
+//
+// DMEM1 -- Local scratch pad data RAM
+//
+// configuration choices:  NONE RANGE
+//
+//                           "NONE"  --  Not present
+// RANGE (0xMMMM_LLL0, 0xMMMM_TTTf)  --  BASE and TOP values
+//
+// The following settings are required when DMEM1 = RANGE:
+//
+//             DMEM0 = RANGE
+//
+//
+// The decode logic for this RX Memory Interface (LMI) is configured
+// with a base and top address range (inclusive).  The addressable region
+// defined by this pair must be a power of 2, from 1K bytes up to 256K
+// bytes.  The region must be naturally aligned.  That is, a 1K byte
+// region must be aligned to a modulo 1K byte address, a 2K byte region
+// must be aligned at a modulo 2K byte address, etc.  The restrictions are
+// imposed by the RX4281/RX5281's LMI address decode logic to optimize for timing.
+// 
+// This address range is specified within the PHYSICAL address space.
+// Keep in mind that the RX4281/RX5281 transforms logical addresses to physical
+// addresses before accessing local memory or sourcing transactions on the
+// system bus. This translation affects the upper three bits of the address,
+// and is shown here for convenience:
+// 
+//    LOGICAL      PHYSICAL        SEGMENT NAME
+//     000           010           kuseg (cached)
+//     001           011           kuseg (cached)
+//     010           100           kuseg (cached)
+//     011           101           kuseg (cached)
+//     100           000           kseg0 (cached)
+//     101           000           kseg1 (uncached)
+//     110           110           kseg2 (cached)
+//     111           111           kseg2 (cached)
+// 
+// Note that kseg0 and kseg1 map to the same physical address region.
+// Also, the physical address region with the upper three bits = 001 is
+// unreachable, i.e. there is no logical address that maps to that region.
+// Example RANGE specifications:
+// 
+//     RANGE (0x4004_1000, 0x4004_17ff)
+//     RANGE (0xa000_0000, 0xa000_03ff)
+// 
+//
+// default: DMEM1 = "NONE";
+//
+///////////////////////////////////////////////////////
+
+DMEM1 = "RANGE (0x1000_8000,  0x1000_8fff)";
+
+
+///////////////////////////////////////////////////////
+//
+// DCACHE -- Data cache size
+//
+// configuration choices:  NONE 4K_4 8K_4 16K_4 32K_4 64K_4 128K_4 256K_4
+//
+//       "NONE"  --  No data cache
+//       "4K_4"  --  4K byte 4-way set associative level-1 data cache
+//       "8K_4"  --  8K byte 4-way set associative level-1 data cache
+//      "16K_4"  --  16K byte 4-way set associative level-1 data cache
+//      "32K_4"  --  32K byte 4-way set associative level-1 data cache
+//      "64K_4"  --  64K byte 4-way set associative level-1 data cache
+//     "128K_4"  --  128K byte 4-way set associative level-1 data cache
+//     "256K_4"  --  256K byte 4-way set associative level-1 data cache
+//
+// The following settings are required when DCACHE = NONE:
+//
+//           L2CACHE = NONE
+//
+//
+// The data cache RX Memory Interface (LMI) responds to all instruction
+// fetches that are not mapped to a DMEM0 range except for addresses in the
+// KSEG1 memory region, logical addresses 0xA0000000 to 0xBFFFFFFF.
+// 
+// The DCACHE is configured with a size and a set associativity.  The size
+// specifies the amount of memory in bytes. The DCACHE may be configured as 
+// direct mapped, 2-way set or 4-way set associative. Duo to aliasing of 
+// virtual indexed addressing, each way is up to 4 Kbytes.
+//
+// default: DCACHE = "8K_4";
+//
+///////////////////////////////////////////////////////
+
+DCACHE = "32K_4";
+
+
+///////////////////////////////////////////////////////
+//
+// WRITETHROUGH_RANGE -- WriteThrough Range setting for Dcache
+//
+// configuration choices:  NONE RANGE
+//
+//                           "NONE"  --  No WriteThrough Range
+// RANGE (0xMMMM_LLL0, 0xMMMM_TTTf)  --  BASE and TOP values
+//
+// A write-through range can be specified to force the Dcache controller to 
+// treat a range of cacheable addresses as WriteThrough. This address range 
+// is specified within the PHYSICAL address space. The address range is
+// specified with a base and top address range(inclusive). The
+// addressable region defined by this pair must be a power of 2 and must
+// be naturally aligned. That is, a 1K byte region must be aligned to a
+// modulo 1K byte address, a 2K byte region must be aligned at a modulo
+// 2K byte address, etc.
+//
+// default: WRITETHROUGH_RANGE = "NONE";
+//
+///////////////////////////////////////////////////////
+
+WRITETHROUGH_RANGE = "NONE";
+
+
+///////////////////////////////////////////////////////
+//
+// L2MEM -- Level-2 local scratch pad RAM
+//
+// configuration choices:  NONE RANGE
+//
+//                           "NONE"  --  Not present
+// RANGE (0xMMMM_LLL0, 0xMMMM_TTTf)  --  BASE and TOP values
+//
+// The decode logic for this level-2 local memory (L2MEM) is configured
+// with a base and top address range (inclusive).  The addressable region
+// defined by this pair must be a power of 2, from 1K bytes up to 1M
+// bytes.  The region must be naturally aligned.  That is, a 1K byte
+// region must be aligned to a modulo 1K byte address, a 2K byte region
+// must be aligned at a modulo 2K byte address, etc.  The restrictions are
+// imposed by the RX4281/RX5281's LMI address decode logic to optimize for timing.
+// 
+// This address range is specified within the PHYSICAL address space.
+// Keep in mind that the RX4281/RX5281 transforms logical addresses to physical
+// addresses before accessing local memory or sourcing transactions on the
+// system bus. This translation affects the upper three bits of the address,
+// and is shown here for convenience:
+// 
+//    LOGICAL      PHYSICAL        SEGMENT NAME
+//     000           010           kuseg (cached)
+//     001           011           kuseg (cached)
+//     010           100           kuseg (cached)
+//     011           101           kuseg (cached)
+//     100           000           kseg0 (cached)
+//     101           000           kseg1 (uncached)
+//     110           110           kseg2 (cached)
+//     111           111           kseg2 (cached)
+// 
+// Note that kseg0 and kseg1 map to the same physical address region.
+// Also, the physical address region with the upper three bits = 001 is
+// unreachable, i.e. there is no logical address that maps to that region.
+// Example RANGE specifications:
+// 
+//     RANGE (0x4004_1000, 0x4004_17ff)
+//     RANGE (0xa000_0000, 0xa000_03ff)
+// 
+//
+// default: L2MEM = "NONE";
+//
+///////////////////////////////////////////////////////
+
+L2MEM = "NONE";
+
+
+///////////////////////////////////////////////////////
+//
+// L2C_WBUF_DEPTH -- l2c wbuf depth
+//
+// configuration choices:  4 3
+//
+//          "4"  --  l2c wbuf depth == 4
+//          "3"  --  l2c wbuf depth == 3
+//
+// This setting declares the l2c wbuf depth.
+// 
+//
+// default: L2C_WBUF_DEPTH = "3";
+//
+///////////////////////////////////////////////////////
+
+L2C_WBUF_DEPTH = "3";
+
+
+///////////////////////////////////////////////////////
+//
+// L2CACHE -- Level-2 cache size
+//
+// configuration choices:  NONE 8K_4 16K_4 32K_4 64K_4 128K_4 256K_4 512K_4 1024K_4
+//
+//       "NONE"  --  No Level-2 cache
+//       "8K_4"  --  8K bytes 4-way set associative level-2 cache
+//      "16K_4"  --  16K bytes 4-way set associative level-2 cache
+//      "32K_4"  --  32K bytes 4-way set associative level-2 cache
+//      "64K_4"  --  64K bytes 4-way set associative level-2 cache
+//     "128K_4"  --  128K bytes 4-way set associative level-2 cache
+//     "256K_4"  --  256K bytes 4-way set associative level-2 cache
+//     "512K_4"  --  512K bytes 4-way set associative level-2 cache
+//    "1024K_4"  --  1024K bytes 4-way set associative level-2 cache
+//
+// The level-2 cache serves all instruction and data cache requests from
+// ICACHE and DCACHE respectively, except L2MEM range.
+// 
+// The L2CACHE is configured with a size and a set associativity.  The size
+// specifies the amount of memory, in bytes, of the combination of all
+// sets.  The L2CACHE may be configured as 4-way set associative only.
+//
+// default: L2CACHE = "8K_4";
+//
+///////////////////////////////////////////////////////
+
+L2CACHE = "NONE";
+
+
+///////////////////////////////////////////////////////
+//
+// MEM_FIRST_WORD -- cache line fill first word
+//
+// configuration choices:  DESIRED ZERO
+//
+//    "DESIRED"  --  desired word first
+//       "ZERO"  --  word 0 first
+//
+// This setting declares the line read first word policy of the
+// user's main memory implementation, and configures the RX4281/RX5281
+// to correctly work with that policy.
+// 
+//
+// default: MEM_FIRST_WORD = "DESIRED";
+//
+///////////////////////////////////////////////////////
+
+MEM_FIRST_WORD = "DESIRED";
+
+
+///////////////////////////////////////////////////////
+//
+// EXT_DMA -- Allow external agents to access IMEM0/IMEM1/DMEM0/DMEM1/L2MEM
+//
+// configuration choices:  NO YES
+//
+//         "NO"  --  Do not provide access to IMEM0/IMEM1/DMEM0/DMEM1/L2MEM
+//        "YES"  --  Provide access to IMEM0/IMEM1/DMEM0/DMEM1/L2MEM
+//
+// Selecting YES allows external agent to request access to the IMEM0/IMEM1/DMEM0/DMEM1/L2MEM that
+// that is normally controlled by the RX4281/RX5281.
+// 
+//
+// default: EXT_DMA = "NO";
+//
+///////////////////////////////////////////////////////
+
+EXT_DMA = "YES";
+
+
+///////////////////////////////////////////////////////
+//
+// EJTAG_INST_BREAK -- Number of instruction breaks
+//
+// configuration choices:  0 <integer>
+//
+//          "0"  --  Do not use EJTAG instruction breaks
+//    <integer>  --  number of instruction breaks (0 to 15)
+//
+// This is the number of EJTAG instruction breakpoints.
+// If the number of breakpoints is non-zero, the ejtag_imatch module
+// will be instanced in the chip module.
+//
+// default: EJTAG_INST_BREAK = 0;
+//
+///////////////////////////////////////////////////////
+
+EJTAG_INST_BREAK = 2;
+
+
+///////////////////////////////////////////////////////
+//
+// EJTAG_DATA_BREAK -- Number of data breaks
+//
+// configuration choices:  0 <integer>
+//
+//          "0"  --  Do not use EJTAG data breaks
+//    <integer>  --  number of data breaks (0 to 15)
+//
+// This is the number of EJTAG data breakpoints.
+// If the number of breakpoints is non-zero, the ejtag_dmatch module
+// will be instanced in the chip module.
+//
+// default: EJTAG_DATA_BREAK = 0;
+//
+///////////////////////////////////////////////////////
+
+EJTAG_DATA_BREAK = 1;
+
+
+///////////////////////////////////////////////////////
+//
+// EXPORT_TRACE_PORTS -- Export processor information for debugging
+//
+// configuration choices:  YES NO
+//
+//        "YES"  --  Export debug port in RX4281/RX5281
+//         "NO"  --  Do not export debug port in RX4281/RX5281
+//
+//   * Export RX4281/RX5281 internal state out of top level for debug purpose.
+//   * If selecting NO as the EXPORT_TRACE_PORTS option,  debug port won't be exported
+//     to CPU top ports.
+//   * If selecting YES as the EXPORT_TRACE_PORTS option, debug port will be exported
+//     to CPU top ports.
+//
+// default: EXPORT_TRACE_PORTS = "NO";
+//
+///////////////////////////////////////////////////////
+
+EXPORT_TRACE_PORTS = "NO";
+
+
+///////////////////////////////////////////////////////
+//
+// LOW_POWER_CORE -- Low power enhancement in cpu core
+//
+// configuration choices:  YES NO
+//
+//        "YES"  --  Apply low power enhancement in RX4281/RX5281
+//         "NO"  --  Do not apply low power enhancement in RX4281/RX5281
+//
+//   * The implementation of RX4281/RX5281 low power scheme, such as 
+// clock gating and signal gating, is to reduce power consumption 
+// when executing instructions.
+//   * If selecting NO in the LOW_POWER_CORE option, no clock 
+// gating will be performed in the RX4281/RX5281 RTL design.
+//   * If you select YES in the option, clock gating will be 
+// performed in the RX4281/RX5281 RTL design. Currently, only register 
+// file is gated.  
+//   * Also, selecting YES will lower the dynamic 
+// power consumed by clock tree. However, it may slightly 
+// reduces the clock rate of RX4281/RX5281 and requires additional 
+// synthesis scripts, depending on cell library.
+//
+// default: LOW_POWER_CORE = "YES";
+//
+///////////////////////////////////////////////////////
+
+LOW_POWER_CORE = "YES";
+
+
+///////////////////////////////////////////////////////
+//
+// TECHNOLOGY -- Identifies target technology
+//
+// configuration choices:  CUSTOM T65GP T65LP U65SP T55LP_SVT_LVT U55SP U55SP_HVT U55SP_RVT_HVT_SHVT U55SP_RVT_HVT U55SP_HVT_RVT U55SP_HVT_MINI U55SP_UHS VIRAGE_T40G_SVT VIRAGE_T40G_LVT VIRAGE_T40G_HVT
+//
+//     "CUSTOM"  --  Customer defined technology (any name beginning with CUSTOM)
+//      "T65GP"  --  TSMC 65nm generic process
+//      "T65LP"  --  TSMC 65nm LP process
+//      "U65SP"  --  UMC 65nm standard process
+// "T55LP_SVT_LVT"  --  UMC 65nm standard process
+//      "U55SP"  --  UMC 55nm standard process
+//  "U55SP_HVT"  --  UMC 55nm standard process with HVT
+// "U55SP_RVT_HVT_SHVT"  --  UMC 55nm multi-Vt flow (one-pass)
+// "U55SP_RVT_HVT"  --  UMC 55nm multi-Vt flow (favor timing)
+// "U55SP_HVT_RVT"  --  UMC 55nm multi-Vt flow (favor power)
+// "U55SP_HVT_MINI"  --  UMC 55nm standard process with HVT mini library
+//  "U55SP_UHS"  --  UMC 55nm standard process with UHS library
+// "VIRAGE_T40G_SVT"  --  Virage TSMC 40nm standard process with SVt library
+// "VIRAGE_T40G_LVT"  --  Virage TSMC 40nm standard process with SVt library
+// "VIRAGE_T40G_HVT"  --  Virage TSMC 40nm standard process with SVt library
+//
+// You may define custom technologies by choosing a technology name that
+// begins with the string "CUSTOM" and consists of all uppercase characters
+// numbers and an underscore (e.g., CUSTOM_FOO65).  Within the RX4281/RX5281 
+// project directory, sub-directories with this same name may then
+// contain technology-customized implementations of RTL files.  Note 
+// that the sub-directory names will be in lowercase (e.g., custom_foo). 
+// When lconfig is run, it will use the customized version in place of 
+// the standard model of the same name for both simulation and
+// synthesis purposes.
+//
+// default: TECHNOLOGY = "CUSTOM";
+//
+///////////////////////////////////////////////////////
+
+TECHNOLOGY = "CUSTOM";
+
+
+///////////////////////////////////////////////////////
+//
+// RADIAX_ZOVLP -- Configuration on Radiax zero-overhead loop
+//
+// configuration choices:  LEXRA_STYLE NONE
+//
+// "LEXRA_STYLE"  --  Follow Lexra defintion
+//       "NONE"  --  Do not use zero-overhead
+//
+// The following settings are required when RADIAX_ZOVLP = LEXRA_STYLE:
+//
+//           PRODUCT = RX5281
+//
+//
+// The following settings are required when RADIAX_ZOVLP = NONE:
+//
+//           PRODUCT = RX4281
+//
+//
+// default: RADIAX_ZOVLP = "LEXRA_STYLE";
+//
+///////////////////////////////////////////////////////
+
+RADIAX_ZOVLP = "LEXRA_STYLE";
+
+
+///////////////////////////////////////////////////////
+//
+// RADIAX_CB_ADDRESSING -- Configuration on Radiax circular buffer addressing support
+//
+// configuration choices:  YES NO
+//
+//        "YES"  --  Use circular buffer
+//         "NO"  --  Do not use circular buffer
+//
+// The following settings are required when RADIAX_CB_ADDRESSING = YES:
+//
+//           PRODUCT = RX5281
+//
+//
+// default: RADIAX_CB_ADDRESSING = "YES";
+//
+///////////////////////////////////////////////////////
+
+RADIAX_CB_ADDRESSING = "YES";
+
+
+///////////////////////////////////////////////////////
+//
+// UNIQUE_NAME -- Apply a unique name to the RTL
+//
+// configuration choices:  NONE <string>
+//
+//       "NONE"  --  Do not apply a unique name to the RTL
+//     <string>  --  Apply the given name as a prefix to the RTL
+//
+// This parameter allows an unique prefix to be added to the
+// RTL module names of rx2 and below.  The prefix is lower-
+// cased and a tailing underscore '_' is applied.  For example,
+// if "foo" were chosen for the unique name, "foo_rx2" will
+// be the rx2 module name in the rtl.
+//
+// default: UNIQUE_NAME = "NONE";
+//
+///////////////////////////////////////////////////////
+
+UNIQUE_NAME = "AC";
+

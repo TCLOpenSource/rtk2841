@@ -1,0 +1,215 @@
+/dts-v1/;
+
+#include <dt-bindings/gpio/gpio.h>
+
+/ {
+	#address-cells = <1>;
+	#size-cells = <1>;
+
+	model = "LG Electronics, DTV SoC LG1311";
+	compatible = "lge,lg1311";
+	interrupt-parent = <&gic>;
+
+	memory@0 {
+		reg = <0x00000000 0x50000000>;
+	};
+
+	chosen {
+		bootargs = "";
+	};
+
+	cpus {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		cpu0: cpu@0 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a9";
+			reg = <0>;
+			next-level-cache = <&L2>;
+		};
+		cpu1: cpu@1 {
+			device_type = "cpu";
+			compatible = "arm,cortex-a9";
+			reg = <1>;
+			next-level-cache = <&L2>;
+		};
+	};
+
+	scu: scu@f0000000 {
+		compatible = "arm,cortex-a9-scu";
+		reg = <0xf0000000 0x0100>;
+	};
+
+	twd: timer@f0000600 {
+		compatible = "arm,cortex-a9-twd-timer";
+		reg = <0xf0000600 0x0020>;
+		interrupts = <1 13 0x0304>;
+		clocks = <&clk_peri>;
+		clock-names = "smp_twd";
+	};
+
+	gic: interrupt-controller@f0000100 {
+		#interrupt-cells = <3>;
+
+		compatible = "arm,cortex-a9-gic";
+		interrupt-controller;
+		reg = <0xf0001000 0x1000>,
+		      <0xf0000100 0x0100>;
+	};
+
+	L2: cache-controller@f1000000 {
+		compatible = "arm,pl310-cache", "lg115x-pl310-cache";
+		reg = <0xf1000000 0x1000>;
+		cache-level = <2>;
+		cache-unified;
+		tag-latency-ctrl = <0x011>;
+		data-latency-ctrl = <0x022>;
+		prefetch-ctrl = <0x1000000f>;
+		debug-ctrl = <0x0>;
+		static-map;
+	};
+
+	pmu {
+		compatible = "arm,cortex-a9-pmu";
+		interrupts = <0 86 4>,
+			     <0 87 4>;
+	};
+
+	ctrl_regs {
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		compatible = "simple-bus";
+		ranges;
+
+		chip_ctrl: chip_ctrl {
+			reg = <0xc001b000 0x1000>;
+			static-map;
+		};
+		core_ctrl: core_ctrl {
+			reg = <0xfd300000 0x1000>;
+			static-map;
+		};
+	};
+
+	clocks {
+		clk_xtal: clk_xtal {
+			#clock-cells = <0>;
+
+			compatible = "fixed-clock";
+			clock-frequency = <24000000>;
+			clock-output-names = "XTAL";
+		};
+		clk_cpu: clk_cpu {
+			#clock-cells = <0>;
+
+			compatible = "lge,lg1154-clock";
+			clock-output-names = "CLK";
+			clocks = <&clk_xtal>;
+			clock-names = "XTAL";
+			npc-fix = <0x02>;
+			nsc-fix = <0x02>;
+		};
+		clk_peri: clk_peri {
+			#clock-cells = <0>;
+
+			compatible = "fixed-factor-clock";
+			clock-div = <2>;
+			clock-mult = <1>;
+			clock-output-names = "PERIPHCLK";
+			clocks = <&clk_cpu>;
+			clock-names = "CLK";
+		};
+		clk_bus: clk_bus {
+			#clock-cells = <0>;
+
+			compatible = "fixed-clock";
+			clock-frequency = <198000000>;
+			clock-output-names = "BUSCLK";
+		};
+	};
+
+	soc {
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		compatible = "simple-bus";
+		interrupt-parent = <&gic>;
+		ranges;
+
+		sdhci: mmc@ff000000 {
+			compatible = "lge,lg1154-sdhci";
+			reg = <0xff000000 0x1000>;
+			interrupts = <0 18 0>;
+		};
+
+		xhci0: usb@f6000000 {
+			compatible = "lge,lg115x-xhci";
+			reg = <0xf6000000 0x1000>;
+			interrupts = <0 27 0>;
+			status = "skip";
+		};
+		
+		ehci0: usb@fb000000 {
+			compatible = "lge,lg115x-ehci", "ehci-platform";
+			reg = <0xfb000000 0x1000>;
+			interrupts = <0 20 0>;
+			status = "skip";
+		};
+		ehci1: usb@fc000000 {
+			compatible = "lge,lg115x-ehci", "ehci-platform";
+			reg = <0xfc000000 0x1000>;
+			interrupts = <0 22 0>;
+			status = "skip";
+		};
+		ehci2: usb@f8000000 {
+			compatible = "lge,lg115x-ehci", "ehci-platform";
+			reg = <0xf8000000 0x1000>;
+			interrupts = <0 24 0>;
+			status = "skip";
+		};
+
+		ohci0: usb@fb004000 {
+			compatible = "lge,lg115x-ohci", "ohci-platform";
+			reg = <0xfb004000 0x1000>;
+			interrupts = <0 19 0>;
+			status = "skip";
+		};
+		ohci1: usb@fc004000 {
+			compatible = "lge,lg115x-ohci", "ohci-platform";
+			reg = <0xfc004000 0x1000>;
+			interrupts = <0 21 0>;
+			status = "skip";
+		};
+		ohci2: usb@f8004000 {
+			compatible = "lge,lg115x-ohci", "ohci-platform";
+			reg = <0xf8004000 0x1000>;
+			interrupts = <0 23 0>;
+			status = "skip";
+		};
+
+		eth0: ethernet@fa000000 {
+			compatible = "arasan,emac";
+			reg = <0xfa000000 0x1000>,
+				<0xfd430000 0x1000>;
+			reset-gpio-num = <29>;
+			interrupts = <0 26 0>;
+			phy-mode = "rmii";
+			/* Filled in by lxboot */
+			mac-address = [ 00 00 00 00 00 00 ];
+			status = "skip";
+
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			phy0: ethernet-phy@3 {
+				compatible = "realtek,rtl8201f";
+				reg = <3>;
+				reset-gpios = <&gpio3 5 GPIO_ACTIVE_LOW>;
+			};
+		};
+	};
+
+	/include/ "lg1k.dtsi"
+};

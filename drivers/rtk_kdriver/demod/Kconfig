@@ -1,0 +1,12 @@
+config RTK_KDRV_DEMOD
+	bool "DTV Demod Driver"
+	depends on RTK_KDRIVER_SUPPORT	
+	default n
+	help	  
+
+config RTK_KDRV_DEMOD_TEST
+	bool "DTV Demod Test"
+	depends on RTK_KDRV_DEMOD	
+	default n
+	help
+	  Dummy flag

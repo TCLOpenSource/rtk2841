@@ -1,0 +1,158 @@
+#################################################################
+#
+#         .cshrc.realtek => for verification dvr project
+#
+#################################################################
+
+#umask 077                # create new files with rwx------  realtek default
+umask 022                 #cosistencs with realcom
+
+############ C-Model and RSDK ##################
+set path=($PROJECT_HOME/verification/scripts/new_bin $PROJECT_HOME/c_model/build $PROJECT_HOME/hardware/script $PROJECT_HOME/hardware/script/check_floating_bin $PROJECT_HOME/verification/bin $PROJECT_HOME/verification/scripts $PROJECT_HOME/verification/scripts/system $PROJECT_HOME/verification/scripts/tests_tool $PROJECT_HOME/verification/scripts/regression $PROJECT_HOME/verification/scripts/cmodel_tool $PROJECT_HOME/verification/scripts/image_tool $PROJECT_HOME/verification/scripts_dv2 $PROJECT_HOME/bringup/bin /home/STools/MIPS/sde6/bin/ /project/RL6363/.workshop/ws_tool_chain/rsdk-1.5.8/linux/newlib/bin $path)
+
+
+setenv PROJECT_NAME			Mac3
+# if(!($?ProENV)) then
+#     ## DONT set PROTECT_RTL again if it is under run_test.
+#     echo "define default PROTECTED RTL: rtl"
+#     setenv PROTECT_RTL          rtl
+# endif
+setenv DVR 
+setenv TB_DVR                           tb_dvr_ve
+
+setenv TB_DVR_MARS_SYSTEM               $PROJECT_HOME/verification/common/c-model
+
+setenv TB_DVR_MARS_ACPU_LARA_CONFIG     lara_config_acpu.h
+setenv TB_DVR_MARS_ACPU_LCONFIG         RL6319_LX5280_AC_20121026.form
+setenv TB_DVR_MARS_ACPU_RESET_SCRIPT    reset_ae.ini
+
+setenv TB_DVR_MARS_VCPU_LARA_CONFIG    lara_config_vcpu.h
+setenv TB_DVR_MARS_VCPU_LCONFIG        RL6319_LX5280_VC_20120921.form
+setenv TB_DVR_MARS_VCPU_RESET_SCRIPT   reset_ve.ini
+
+setenv LD_LIBRARY_PATH ${PROJECT_HOME}/random/tv_lib/scv/lib-linux:$LD_LIBRARY_PATH
+
+#################################################################
+#
+#         .cshrc file for Realtek
+#
+#################################################################
+#####   Software Setting   ######################
+#setenv HOSTNAME `hostname`
+
+# NC-Verilog
+# if (-f /home/Cadence/IUS/cshrc.ius.82.s20) then
+#   source /home/Cadence/IUS/cshrc.ius.82.s20
+# endif
+# 
+
+if (-f /home/Cadence/IUS/cshrc.ius.11.1s069) then
+  source /home/Cadence/IUS/cshrc.ius.11.1s069
+endif
+
+#####   SystemC 2.2.x Setting   ######################
+setenv SC_SIGNAL_WRITE_CHECK DISABLE
+
+#######################################
+# Default compiler
+#
+if (($?SCPU_TRACE_ON)) then
+    echo "SCPU_TRACE_ON"
+    setenv DV_PLATFORM i686_RH6
+else if (-f /user/lang/gcc/4.1.2/cshrc-4.1.2-i686_RH63) then
+    source /user/lang/gcc/4.1.2/cshrc-4.1.2-i686_RH63
+    setenv DV_PLATFORM i686_RH6
+#if (-f /user/lang/gcc/4.0.3/cshrc-4.0.3-i686) then
+#    source /user/lang/gcc/4.0.3/cshrc-4.0.3-i686
+#    setenv DV_PLATFORM i686_RH5
+else if (-f /home/STools/RLX/cshrc.gcc-3.4.6) then
+    source /home/STools/RLX/cshrc.gcc-3.4.6
+    setenv DV_PLATFORM i686_RH5
+endif
+
+if(($?USB3_INTEG)) then
+    echo "USB3.0 INTEG sim"    
+    #turn on new begin
+    if (-f /home/synopsys/VCS/CSHRC.vcs.2011.12-SP1-1 ) then
+        source /home/synopsys/VCS/CSHRC.vcs.2011.12-SP1-1
+    endif
+    if (-f /home/synopsys/Vera/cshrc.vera_64.2009.12-15 ) then
+        source /home/synopsys/Vera/cshrc.vera_64.2009.12-15
+    endif
+    if (-f /home/STools/OCP/DW_IP/cshrc.usb3 ) then
+        source /home/STools/OCP/DW_IP/cshrc.usb3
+    endif
+    set path=(/usr/bin $path); rehash
+else
+    if (-f /home/synopsys/Vera/cshrc.vera_64.2009.12-15 ) then
+        source /home/synopsys/Vera/cshrc.vera_64.2009.12-15
+    endif
+endif
+
+setenv LD_LIBRARY_PATH ${PROJECT_HOME}/random/tv_lib/scv/lib/${DV_PLATFORM}:$LD_LIBRARY_PATH
+
+
+alias indent 'indent -kr -bl -bli0 -ts4 -bls -lp -nut -nce -ncdw -nprs -l 1024'
+alias du 'du -h --max-depth=1'
+alias run_chip_rs 'run_chip -rsq'
+
+#if (-f /home/STools/MIPS/cshrc.mips-saturn) then
+#    #setenv MIPSCPU MIPS24K
+#    #setenv MIPSCPU MIPS34Kc
+#    setenv MIPSCPU MIPS24Kf
+#    #setenv MIPSCPU MIPS4Ke
+#    source /home/STools/MIPS/cshrc.mips-saturn
+#    alias rtlSort /home/STools/MIPS/mipsutil-4ke/bin/rtlSort
+#endif
+setenv SCPU_ARM 1
+if(($?SCPU_ARM)) then
+    #################################################################
+    # ARM setting
+    #################################################################
+    echo "SCPU_ARM"
+    setenv SCPU_TYPE SCPU_ARM
+    setenv TB_DVR_MARS_SCPU_LCONFIG         arm_scpu.cfg
+    setenv TB_DVR_MARS_SCPU_RESET_SCRIPT    reset_arm_scpu.ini
+
+    setenv ARM_PROCESSORS "A12"
+    #setenv DSM_MODEL_PATH_CORTEXA12_DSM /home/STools/ARM/simulation_models/DSM/cadence_nc_verilog_Linux-64/CORTEXA12DSM
+    if (-f /home/STools/ARM/cshrc.arm) then
+        source /home/STools/ARM/cshrc.arm
+    endif
+    if (-f /home/STools/ARM/cshrc.asdk-4.6) then
+        source /home/STools/ARM/cshrc.asdk-4.6
+    endif
+
+    if (-f /home/STools/ARM/cshrc.fast-model_8.2) then
+        source /home/STools/ARM/cshrc.fast-model_8.2
+    endif
+    setenv DV_ARM_LIB /project/RL6363/.workshop/arm_lib
+
+    setenv DW_WAIT_LICENSE 1
+else
+    ################################################################
+    # MIPS setting
+    #################################################################
+    echo "SCPU_MIPS"
+    setenv SCPU_TYPE SCPU_MIPS
+    setenv TB_DVR_MARS_SCPU_LCONFIG         mips24kc_scpu.cfg
+    setenv TB_DVR_MARS_SCPU_RESET_SCRIPT    reset_scpu.ini
+
+    setenv MIPSCPU MIPS24KfL2
+    setenv MIPSSIM_32BIT_ON_64BIT 1
+    setenv MIPSTOOLCHAIN SDE6
+    if (-f /home/STools/MIPS/cshrc.mips) then
+    source /home/STools/MIPS/cshrc.mips
+    endif
+    alias rtlSort /home/STools/MIPS/mipsutil-24kfl2/bin/rtlSort
+endif
+
+setenv DW_WAIT_LICENSE 1
+
+
+
+if (-f /usr/bin/make) then
+    alias make /usr/bin/make
+endif
+alias run_chip_rs 'run_chip -rsq'
+

@@ -1,0 +1,24 @@
+
+excp_handler_bev1.o:     file format elf32-bigmips
+
+
+Disassembly of section .text:
+
+bfc00180 <excp_handler_bev1>:
+bfc00180:	401a6000 	mfc0	k0,$12
+bfc00184:	00000000 	nop
+bfc00188:	401a4000 	mfc0	k0,$8
+bfc0018c:	00000000 	nop
+bfc00190:	401a6800 	mfc0	k0,$13
+bfc00194:	00000000 	nop
+bfc00198:	3c1b8000 	lui	k1,0x8000
+bfc0019c:	377b1040 	ori	k1,k1,0x1040
+bfc001a0:	8f7a0000 	lw	k0,0(k1)
+bfc001a4:	00000000 	nop
+bfc001a8:	17400004 	bnez	k0,bfc001bc <excp_handler_bev1+0x3c>
+bfc001ac:	00000000 	nop
+bfc001b0:	401a7000 	mfc0	k0,$14
+bfc001b4:	00000000 	nop
+bfc001b8:	235a0004 	addi	k0,k0,4
+bfc001bc:	03400008 	jr	k0
+bfc001c0:	42000010 	rfe

@@ -1,0 +1,20 @@
+
+pll_map_ddr2.o:     file format elf32-bigmips
+
+
+Disassembly of section .text:
+
+bfc01000 <pll_param>:
+bfc01000:	bfc01000 	cache	0x0,4096(s8)
+bfc01004:	00351b52 	0x351b52
+bfc01008:	00000000 	nop
+bfc0100c:	02aa2104 	0x2aa2104
+bfc01010:	00123613 	0x123613
+bfc01014:	00262713 	0x262713
+bfc01018:	0250f5d4 	0x250f5d4
+bfc0101c:	06bd1b52 	0x6bd1b52
+bfc01020:	06c0742a 	bltz	s6,bfc1e0cc <_gp+0x1509c>
+bfc01024:	0065c000 	0x65c000
+bfc01028:	00000000 	nop
+bfc0102c:	01c71604 	0x1c71604
+bfc01030:	00262713 	0x262713
